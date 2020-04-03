@@ -1,0 +1,27 @@
+package com.capgemini.librarymanagementsystemhibernate.service;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import com.capgemini.librarymanagementsystemhibernate.dto.BookBean;
+import com.capgemini.librarymanagementsystemhibernate.dto.RequestBean;
+import com.capgemini.librarymanagementsystemhibernate.dto.UsersBean;
+
+public interface UsersServiceDAO {
+	boolean register(UsersBean info);
+	UsersBean auth(String email, String password);
+	boolean addBook(BookBean book);
+	BookBean searchBookTitle(String bname);
+	BookBean searchBookAuthor(String bAuthor);
+	BookBean searchBookType(int bid);
+	boolean updateBook(BookBean bean);
+	boolean removeBook(int bid);
+	LinkedList<Integer> getBookIds();
+	LinkedList<BookBean> getBooksInfo();
+	List<UsersBean> showUsers();
+	List<RequestBean> showRequests();
+	boolean bookIssue(UsersBean student,BookBean book);
+	boolean isBookReceived(UsersBean student,BookBean book);
+	RequestBean requestBook(UsersBean student, BookBean book);
+	boolean returnBook(UsersBean student, BookBean book);
+}

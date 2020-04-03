@@ -1,0 +1,51 @@
+package com.capgemini.librarymanagementsystemjdbc.dto;
+
+import java.util.Date;
+
+public class BookIssueDetails {
+	private BookBean bookInfo;
+	private UsersBean usersInfo;
+	public BookBean getBookInfo() {
+		return bookInfo;
+	}
+	public void setBookInfo(BookBean bookInfo) {
+		this.bookInfo = bookInfo;
+	}
+	public UsersBean getUsersInfo() {
+		return usersInfo;
+	}
+	public void setUsersInfo(UsersBean usersInfo) {
+		this.usersInfo = usersInfo;
+	}
+	public boolean isIssued() {
+		return isIssued;
+	}
+	public void setIssued(boolean isIssued) {
+		this.isIssued = isIssued;
+	}
+	public boolean isReturned() {
+		return isReturned;
+	}
+	public void setReturned(boolean isReturned) {
+		this.isReturned = isReturned;
+	}
+	public Date getIssueDate() {
+		return issueDate;
+	}
+	public void setIssueDate(Date issueDate) {
+		this.issueDate = issueDate;
+	}
+	public Date getReturnDate() {
+		return returnDate;
+	}
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
+	}
+	private boolean isIssued;
+	private boolean isReturned;
+	private Date issueDate;
+	private Date returnDate;
+	
+	
+}
+

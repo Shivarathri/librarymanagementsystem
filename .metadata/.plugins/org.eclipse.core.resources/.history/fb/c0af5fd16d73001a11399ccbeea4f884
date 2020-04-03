@@ -1,0 +1,5 @@
+package com.capgemini.librarymanagementsystemhibernate.service;
+
+public interface UsersServiceDAO {
+
+}

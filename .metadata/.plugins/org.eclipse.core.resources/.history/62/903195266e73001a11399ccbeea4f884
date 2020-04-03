@@ -1,0 +1,5 @@
+package com.capgemini.librarymanagementsystemhibernate.dao;
+
+public class UsersDAOImp {
+
+}

@@ -1,0 +1,93 @@
+package com.capgemini.librarymanagementsystemhibernate.service;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import com.capgemini.librarymanagementsystemhibernate.dto.BookBean;
+import com.capgemini.librarymanagementsystemhibernate.dto.RequestBean;
+import com.capgemini.librarymanagementsystemhibernate.dto.UsersBean;
+
+public class UsersServiceImp implements UsersServiceDAO {
+
+	public boolean register(UsersBean info) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public UsersBean auth(String email, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean addBook(BookBean book) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public BookBean searchBookTitle(String bname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public BookBean searchBookAuthor(String bAuthor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public BookBean searchBookType(int bid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean updateBook(BookBean bean) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean removeBook(int bid) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public LinkedList<Integer> getBookIds() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public LinkedList<BookBean> getBooksInfo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<UsersBean> showUsers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<RequestBean> showRequests() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean bookIssue(UsersBean student, BookBean book) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isBookReceived(UsersBean student, BookBean book) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public RequestBean requestBook(UsersBean student, BookBean book) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean returnBook(UsersBean student, BookBean book) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	
+}
