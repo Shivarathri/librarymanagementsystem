@@ -16,6 +16,7 @@ import com.capgemini.librarymanagement.service.AdminServiceDAO;
 import com.capgemini.librarymanagement.service.StudentServiceDAO;
 import com.capgemini.librarymanagement.validation.ValidationAdminStudent;
 
+
 public class TestProject {
 	public static void main(String[] args) {
 		doReg();
@@ -300,7 +301,7 @@ public class TestProject {
 													System.out.println("Book already exist");
 												}
 												break;
-											
+
 											case 2:
 												System.out.println("Search the book by the Author Name:");
 												String author = scanner.next();
@@ -633,7 +634,7 @@ public class TestProject {
 											System.out.println("--------------------------------------------");
 											System.out.println("Press 1 to Search the Book by Author");
 											System.out.println("Press 2 to Search the Book by Title");
-											System.out.println("Press 3 to Search the Book by Id");
+											System.out.println("Press 3 to Search the Book by category");
 											System.out.println("Press 4 to Get the Book Id's");
 											System.out.println("Press 5 to Get the Books Information");
 											System.out.println("Press 6 to Request the Book");
@@ -643,8 +644,22 @@ public class TestProject {
 											int choice2 = scanner.nextInt();
 											switch (choice2) {
 											case 1:
-												System.out.println("Search the book by the Author Name :");
-												String author = scanner.next();
+
+												String author = null;
+												System.out.println("Search the book by the Author Name:");
+												do {
+													try {
+														author = scanner.next();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
 
 												BookBean bean2 = new BookBean();
 												bean2.setBauthor(author);
@@ -664,8 +679,22 @@ public class TestProject {
 												}
 												break;
 											case 2:
+
+												String btitle = null;
 												System.out.println("Search the book by the Book_Title :");
-												String btitle = scanner.next();
+												do {
+													try {
+														btitle = scanner.next();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
 
 												BookBean bean3 = new BookBean();
 												bean3.setBauthor(btitle);
@@ -684,12 +713,25 @@ public class TestProject {
 												}
 												break;
 											case 3:
-												System.out.println("  Search the book by the Book_Id's :");
-												String bids = scanner.next();
+												String category = null;
+												System.out.println("Search the book by the Book_Category :");
+												do {
+													try {
+														category = scanner.next();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
 
 												BookBean bean4 = new BookBean();
-												bean4.setBauthor(bids);
-												List<BookBean> bookIds = service1.searchBookAuthor(bids);
+												bean4.setCategory(category);;
+												List<BookBean> bookIds = service1.searchBookType(category);
 												for (BookBean bookBean : bookIds) {
 													if (bookBean != null) {
 														System.out.println("-----------------------------------");
@@ -699,7 +741,7 @@ public class TestProject {
 														System.out.println("Book_Category is-->"+bookBean.getCategory());
 														System.out.println("Book_PublisherName is-->"+bookBean.getPublishername());
 													} else {
-														System.out.println("No books are available with this Id.");
+														System.out.println("No books are available with this category.");
 													}
 												}
 												break;
@@ -733,16 +775,46 @@ public class TestProject {
 												}
 												break;
 											case 6:
-												System.out.println("Enter book id");
-												int bId = scanner.nextInt();
+
+
+
+												int bId = 0;
 												BookBean bookBean = new BookBean();
 												bookBean.setBid(bId);
+												System.out.println("Enter the Book-Id:");
+												do {
+													try {
+														bId = scanner.nextInt();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
 
 
-												System.out.println("Enter user id");
-												int userId = scanner.nextInt();
+												int userId = 0;
 												StudentBean userBean = new StudentBean();
 												userBean.setSid(userId);
+
+												System.out.println("Enter User-Id:");
+												do {
+													try {
+														userId = scanner.nextInt();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
 
 
 												try {
@@ -763,14 +835,44 @@ public class TestProject {
 
 												System.out.println("Returning a book:");
 												System.out.println("------------------");
-												System.out.println("Enter User Id :");
-												int user  = scanner.nextInt();
-												System.out.println("Enter Book Id : ");
-												int book = scanner.nextInt();
+
+												int user = 0;
 												StudentBean userBean7 = new StudentBean();
 												userBean7.setSid(user);
+												System.out.println("Enter User-Id:");
+												do {
+													try {
+														user = scanner.nextInt();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
+
+
+												int book = 0;
 												BookBean bookBean7 = new BookBean();
 												bookBean7.setBid(book);
+												System.out.println("Enter the Book-Id:");
+												do {
+													try {
+														book = scanner.nextInt();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
+
 
 												try {
 													RequestBean requestInfo = service1.bookReturn(userBean7, bookBean7);

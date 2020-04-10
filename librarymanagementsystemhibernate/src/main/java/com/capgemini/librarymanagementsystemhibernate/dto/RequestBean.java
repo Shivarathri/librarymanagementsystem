@@ -3,80 +3,84 @@ package com.capgemini.librarymanagementsystemhibernate.dto;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
+
+import lombok.EqualsAndHashCode.Exclude;
 @Inheritance
 @Entity
-@Table (name = "RequestBean")
+@Table (name = "request_details")
 public class RequestBean implements Serializable {
-	@Id
-	//@SequenceGenerator(name="seq", sequenceName="seq") @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//	@Column(name = "id", updatable = false, nullable = false)
+	@EmbeddedId
+	private CompositePK compositePK;
+	@Column
+	private String name;
+	@Column
+	private String bookName;
+	
+	
+	
+	public CompositePK getCompositePK() {
+		return compositePK;
+	}
 
-	@Column
-	private int rid;
-	@Column
-	@GeneratedValue
-	private BookBean bookInfo;
-	@Column
-	private UsersBean usersInfo;
-	@GeneratedValue
-	@Column
-	private boolean isIssued;
-	@Column
-	private boolean isReturned;
-	@Column
+	public void setCompositePK(CompositePK compositePK) {
+		this.compositePK = compositePK;
+	}
 
-	private LocalDate issuedDate;
-	@Column
-	private LocalDate returnedDate;
+	public String getName() {
+		return name;
+	}
 
-	public int getRid() {
-		return rid;
+	public void setName(String name) {
+		this.name = name;
 	}
-	public void setRid(int rid) {
-		this.rid = rid;
+
+	public String getBookName() {
+		return bookName;
 	}
-	public BookBean getBookInfo() {
-		return bookInfo;
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
 	}
-	public void setBookInfo(BookBean bookInfo) {
-		this.bookInfo = bookInfo;
+
+	public BookBean getBooks() {
+		return books;
 	}
-	public UsersBean getUsersInfo() {
-		return usersInfo;
+
+	public void setBooks(BookBean books) {
+		this.books = books;
 	}
-	public void setUsersInfo(UsersBean usersInfo) {
-		this.usersInfo = usersInfo;
+
+	public UsersBean getUsers() {
+		return users;
 	}
-	public boolean isIssued() {
-		return isIssued;
+
+	public void setUsers(UsersBean users) {
+		this.users = users;
 	}
-	public void setIssued(boolean isIssued) {
-		this.isIssued = isIssued;
-	}
-	public boolean isReturned() {
-		return isReturned;
-	}
-	public void setReturned(boolean isReturned) {
-		this.isReturned = isReturned;
-	}
-	public LocalDate getIssuedDate() {
-		return issuedDate;
-	}
-	public void setIssuedDate(LocalDate issuedDate) {
-		this.issuedDate = issuedDate;
-	}
-	public LocalDate getReturnedDate() {
-		return returnedDate;
-	}
-	public void setReturnedDate(LocalDate returnedDate) {
-		this.returnedDate = returnedDate;
-	}
+
+	@Exclude
+	@MapsId("bId")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="bId")
+	private BookBean books;
+	
+	@Exclude
+	@MapsId("uId")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="uId")
+	private UsersBean users;
+
+	
 }

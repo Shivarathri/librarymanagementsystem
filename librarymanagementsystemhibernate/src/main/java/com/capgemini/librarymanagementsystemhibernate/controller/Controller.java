@@ -1,21 +1,20 @@
-package com.capgemini.librarymanagementsystemjdbc.controller;
+package com.capgemini.librarymanagementsystemhibernate.controller;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.capgemini.librarymanagementsystemhibernate.dto.BookBean;
+import com.capgemini.librarymanagementsystemhibernate.dto.BookIssueDetails;
+import com.capgemini.librarymanagementsystemhibernate.dto.BorrowedBooks;
+import com.capgemini.librarymanagementsystemhibernate.dto.RequestBean;
+import com.capgemini.librarymanagementsystemhibernate.dto.UsersBean;
+import com.capgemini.librarymanagementsystemhibernate.exception.LMSException;
+import com.capgemini.librarymanagementsystemhibernate.factory.UsersFactory;
+import com.capgemini.librarymanagementsystemhibernate.service.UsersService;
+import com.capgemini.librarymanagementsystemhibernate.validation.Validation;
 
-import com.capgemini.librarymanagementsystemjdbc.dto.BookBean;
-import com.capgemini.librarymanagementsystemjdbc.dto.BookIssueDetails;
-import com.capgemini.librarymanagementsystemjdbc.dto.BorrowedBooks;
-import com.capgemini.librarymanagementsystemjdbc.dto.RequestDetails;
-import com.capgemini.librarymanagementsystemjdbc.dto.UsersBean;
-import com.capgemini.librarymanagementsystemjdbc.exception.LMSException;
-import com.capgemini.librarymanagementsystemjdbc.factory.LibraryFactory;
-import com.capgemini.librarymanagementsystemjdbc.service.UsersService;
-import com.capgemini.librarymanagementsystemjdbc.validation.Validation;
 
 public class Controller {
 	public static void main(String[] args) {
@@ -25,8 +24,7 @@ public class Controller {
 		boolean flag = false;
 
 		int regId = 0; 
-		String regFirstName = null; 
-		String regLastName = null; 
+		String regName = null;  
 		String regMobile = null;
 		String regEmail = null;
 		String regPassword = null;
@@ -53,7 +51,7 @@ public class Controller {
 			System.out.println("Press 3 to EXIT");
 			System.out.println("---------------------------------------");
 
-			UsersService service1= LibraryFactory.getUsersService();
+			UsersService service1 = UsersFactory.getUsersService();
 			//do {
 			try {
 				int choice = scanner.nextInt();
@@ -76,9 +74,9 @@ public class Controller {
 
 					do {
 						try {
-							System.out.println("Enter First Name :");
-							regFirstName = scanner.next();
-							validation.validatedName(regFirstName);
+							System.out.println("Enter  Name :");
+							regName = scanner.next();
+							validation.validatedName(regName);
 							flag = true;
 						} catch (InputMismatchException e) {
 							flag = false;
@@ -88,20 +86,7 @@ public class Controller {
 							System.err.println(e.getMessage());
 						}
 					} while (!flag);
-					do {
-						try {
-							System.out.println("Enter Last Name :");
-							regLastName = scanner.next();
-							validation.validatedName(regLastName);
-							flag = true;
-						} catch (InputMismatchException e) {
-							flag = false;
-							System.err.println("Name should contains only Alphabates");
-						} catch (LMSException e) {
-							flag = false;
-							System.err.println(e.getMessage());
-						}
-					} while (!flag);
+					
 
 					do {
 						try {
@@ -151,9 +136,8 @@ public class Controller {
 					String regRole = scanner.next();
 
 					UsersBean ai = new UsersBean();
-					ai.setuId(regId);
-					ai.setFirstName(regFirstName);
-					ai.setLastName(regLastName);
+					ai.setId(regId);
+					ai.setName(regName);
 					ai.setEmail(regEmail);
 					ai.setPassword(regPassword);
 					ai.setMobile(regMobile);
@@ -171,7 +155,7 @@ public class Controller {
 					System.out.println("Enter Password");
 					String password=scanner.next();
 					try {
-						UsersBean loginInfo=service1.login(email, password);
+						UsersBean loginInfo=service1.auth(email, password);
 						if(loginInfo.getEmail().equals(email) && loginInfo.getPassword().equals(password)) {
 							System.out.println("Logged In");
 						}
@@ -276,16 +260,17 @@ public class Controller {
 										 * System.out.println("enter no of copies"); int addCopies = scanner.nextInt();
 										 */
 										BookBean bi =new BookBean();
-										bi.setbId(addBookId);
+										bi.setBId(addBookId);
 										bi.setBookName(addBookName);
 										bi.setAuthor(addBookAuthorName);
 										bi.setCategory(addBookCategory);
 										bi.setPublisher(addBookPublisher);
-										//bi.setCopies(addCopies);
 										boolean check2=service1.addBook(bi);
 										if(check2) {
+											System.out.println("-----------------------------------------------");
 											System.out.println("Added Book");
 										}else {
+											System.out.println("-----------------------------------------------");
 											System.out.println("Book not added");
 										}
 										break;	
@@ -367,7 +352,7 @@ public class Controller {
 										} while (!flag);
 
 										BookBean bean2 = new BookBean();
-										bean2.setbId(updateBookId);
+										bean2.setBId(updateBookId);
 										bean2.setBookName(updateBookName);
 										bean2.setAuthor(updateBookAuthorName);
 										bean2.setCategory(updateBookCategory);
@@ -411,7 +396,7 @@ public class Controller {
 
 											if (bookBean != null) {
 												System.out.println("-------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 											} else {
 												System.out.println("Books Ids is not present");
 											}
@@ -436,13 +421,13 @@ public class Controller {
 										} while (!flag);
 
 										BookBean bean4 = new BookBean();
-										bean4.setbId(id);
+										bean4.setBId(id);
 										List<BookBean> bookid = service1.searchBookById(id);
 										for (BookBean bookBean : bookid) {
 
 											if (bookBean != null) {
 												System.out.println("----------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 												System.out.println("Book_Name is-->"+bookBean.getBookName());
 												System.out.println("Book_Author is-->"+bookBean.getAuthor());
 												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
@@ -479,7 +464,7 @@ public class Controller {
 
 											if (bookBean != null) {
 												System.out.println("----------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 												System.out.println("Book_Name is-->"+bookBean.getBookName());
 												System.out.println("Book_Author is-->"+bookBean.getAuthor());
 												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
@@ -515,7 +500,7 @@ public class Controller {
 										for (BookBean bookBean : booktitle) {	
 											if (bookBean != null) {
 												System.out.println("----------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 												System.out.println("Book_Name is-->"+bookBean.getBookName());
 												System.out.println("Book_Author is-->"+bookBean.getAuthor());
 												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
@@ -534,7 +519,7 @@ public class Controller {
 
 											if (bookBean != null) {
 												System.out.println("-------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 												System.out.println("Book_Name is-->"+bookBean.getBookName());
 												System.out.println("Book_Author is-->"+bookBean.getAuthor());
 												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
@@ -590,48 +575,47 @@ public class Controller {
 										}
 										break;
 									case 10:
+										System.out.println("*****Users are*****");
 										try {
-											System.out.println("--------Users of Library are------------");
-
-											List<UsersBean> usersInfo = service1.showUsers();
-											for (UsersBean usersBean : usersInfo) {
-												if (usersBean != null) {
-													System.out.println("---------------------------------------");
-													System.out.println("User_Id is ---->"+usersBean.getuId());
-													System.out.println("User Firstname is ---->"+usersBean.getFirstName());
-													System.out.println("User Lastname is ---->"+usersBean.getLastName());
-													System.out.println("User Email is ---->"+usersBean.getEmail());
-													//System.out.println("User Password is ---->"+usersBean.getPassword());
-													System.out.println("User Mobile is ---->"+usersBean.getMobile());
-													System.out.println("User Role is ---->"+usersBean.getRole());
-													System.out.println("---------------------------------------");
+											List<UsersBean> users = service1.showUsers();
+											for (UsersBean Bean : users) {	
+												if (Bean != null) {
+													System.out.println("-----------------------------------------------");
+													System.out.println("User_Id is-->"+Bean.getId());
+													System.out.println("First_Name is-->"+Bean.getName());
+													System.out.println("Email_Id is-->"+Bean.getEmail());
+													System.out.println("Password is-->"+Bean.getPassword());
+													System.out.println("Mobile_No is-->"+Bean.getMobile());
+													System.out.println("User's_Role is-->"+Bean.getRole());
 												} else {
-													System.out.println("No user are there");
+													System.out.println("-----------------------------------------------");
+													System.out.println("No Users are present");
 												}
 											}
-										} catch (Exception e) {
-											System.out.println("No Users present in library");
+										}catch (LMSException e) {
+											System.err.println(e.getMessage());
 										}
 										break;
 									case 11:
+										System.out.println(" Requests received are:");
 										try {
-											System.out.println("*****Requests for Books are *****");
-											System.out.println("-------------------------------------");
-											List<RequestDetails> requestInfos = service1.showRequest();
-											for (RequestDetails infos : requestInfos) {
-												System.out.println("---------------------------------------");
-												System.out.println("Book id ---------- " + infos.getbId());
-												System.out.println("User id----------- " + infos.getuId());
-												/*
-												 * System.out.println("Book Issued ------" + infos.getbId());
-												 * System.out.println("Book Returned------" + infos.getBookName());
-												 */
-												System.out.println("---------------------------------------");
-
+											List<RequestBean> requests = service1.showRequest();
+											for (RequestBean requestBean : requests) {	
+												if (requestBean != null) {
+													System.out.println("-----------------------------------------------");
+													System.out.println("User_Id is-->"+requestBean.getUsers().getId());
+													System.out.println("User_Name is-->"+requestBean.getName());
+													System.out.println("Book_Id is-->"+requestBean.getBooks().getBId());
+													System.out.println("BookName is-->"+requestBean.getBookName());
+												} else {
+													System.out.println("-----------------------------------------------");
+													System.out.println("No Requests are received");
+												}
 											}
-										} catch (Exception e) {
-											System.out.println("no books present in library");
+										}catch (LMSException e) {
+											System.err.println(e.getMessage());
 										}
+										break;
 
 									case 12:
 
@@ -651,15 +635,19 @@ public class Controller {
 											} 
 										} while (!flag);
 
-										List<BookIssueDetails> uid = service1.bookHistoryDetails(user_Id);
-										for (BookIssueDetails issueDetails : uid) {
-											if(issueDetails != null) {
-												System.out.println("-----------------------------------------------");
-												System.out.println("No of books Borrowed :"+issueDetails.getUserId());
-											} else {
-												System.out.println("-----------------------------------------------");
-												System.out.println("Respective user hasn't borrowed any books");
+										try {
+											List<Integer> uid = service1.bookHistoryDetails(user_Id);
+											for (Integer issueDetails : uid) {
+												if(issueDetails != null) {
+													System.out.println("-----------------------------------------------");
+													System.out.println("No of books Borrowed :"+issueDetails);
+												} else {
+													System.out.println("-----------------------------------------------");
+													System.out.println("Respective user hasn't borrowed any books");
+												}
 											}
+										}catch (LMSException e) {
+											System.err.println(e.getMessage());
 										}
 										break;
 
@@ -699,7 +687,7 @@ public class Controller {
 
 											if (bookBean != null) {
 												System.out.println("-------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 											} else {
 												System.out.println("Books Ids is not present");
 											}
@@ -724,13 +712,13 @@ public class Controller {
 										} while (!flag);
 
 										BookBean bean4 = new BookBean();
-										bean4.setbId(id);
+										bean4.setBId(id);
 										List<BookBean> bookid = service1.searchBookById(id);
 										for (BookBean bookBean : bookid) {
 
 											if (bookBean != null) {
 												System.out.println("----------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 												System.out.println("Book_Name is-->"+bookBean.getBookName());
 												System.out.println("Book_Author is-->"+bookBean.getAuthor());
 												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
@@ -766,7 +754,7 @@ public class Controller {
 
 											if (bookBean != null) {
 												System.out.println("---------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 												System.out.println("Book_Name is-->"+bookBean.getBookName());
 												System.out.println("Book_Author is-->"+bookBean.getAuthor());
 												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
@@ -802,7 +790,7 @@ public class Controller {
 										for (BookBean bookBean : booktitle) {	
 											if (bookBean != null) {
 												System.out.println("---------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 												System.out.println("Book_Name is-->"+bookBean.getBookName());
 												System.out.println("Book_Author is-->"+bookBean.getAuthor());
 												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
@@ -820,7 +808,7 @@ public class Controller {
 
 											if (bookBean != null) {
 												System.out.println("---------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->"+bookBean.getBId());
 												System.out.println("Book_Name is-->"+bookBean.getBookName());
 												System.out.println("Book_Author is-->"+bookBean.getAuthor());
 												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
@@ -893,18 +881,27 @@ public class Controller {
 												System.err.println(e.getMessage());
 											} 
 										} while (!flag);
-										List<BorrowedBooks> borrowedBookList = service1.borrowedBook(user_Id);
-										for (BorrowedBooks bookBean : borrowedBookList) {
+										
+										try {
+											if (loginInfo.getId()==user_Id) {
+												List<BorrowedBooks> borrowedBookList = service1.borrowedBook(user_Id);
+												for (BorrowedBooks bookBean : borrowedBookList) {
 
-											if (bookBean != null) {
-												System.out.println("-----------------------------------------------");
-												System.out.println("User_Id is-->"+bookBean.getuId());
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Email Id is-->"+bookBean.getEmail());
+													if (bookBean != null) {
+														System.out.println("-----------------------------------------------");
+														System.out.println("User_Id is-->"+bookBean.getUsers().getId());
+														System.out.println("Book_Id is-->"+bookBean.getBooks().getBId());
+														System.out.println("Email Id is-->"+bookBean.getEmail());
+													} else {
+														System.out.println("-----------------------------------------------");
+														System.out.println("No books are borrowed by the user");
+													}
+												}
 											} else {
-												System.out.println("-----------------------------------------------");
-												System.out.println("No books are borrowed by the user");
+												System.out.println("Incorrect user_Id");
 											}
+										} catch (LMSException e) {
+											System.err.println(e.getMessage());
 										}
 										break;
 									case 8:
@@ -960,7 +957,7 @@ public class Controller {
 											} 
 										} while (!flag);
 										try {
-											if(loginInfo.getuId()==userId) {
+											if(loginInfo.getId()==userId) {
 												boolean returned = service1.returnBook(returnId,userId,status);
 												if (returned != false) {
 													System.out.println("-----------------------------------------------");

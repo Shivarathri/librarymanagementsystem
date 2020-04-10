@@ -1,57 +1,38 @@
 package com.capgemini.librarymanagementsystemhibernate.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import lombok.Data;
 @Entity
-@Table(name = "BookBean")
+@Data
+@Table(name = "bookbean")
 public class BookBean implements Serializable {
 	@Id
 	@Column (unique = true, nullable = false)
-	private int bid;
-	
+	private int bId;
 	@Column
-	private String bname;
-	
+	private String bookName;
 	@Column (nullable = false)
 	private String author;
 	@Column (nullable = false)
 	private String category;
 	@Column (nullable = false)
-	private String publishername;
+	private String publisher;
 	
-	public String getBname() {
-		return bname;
-	}
-	public void setBname(String bname) {
-		this.bname = bname;
-	}
-	public int getBid() {
-		return bid;
-	}
-	public void setBid(int bid) {
-		this.bid = bid;
-	}
-	public String getAuthor() {
-		return author;
-	}
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-	public String getCategory() {
-		return category;
-	}
-	public void setCategory(String category) {
-		this.category = category;
-	}
-	public String getPublishername() {
-		return publishername;
-	}
-	public void setPublishername(String publishername) {
-		this.publishername = publishername;
-	}
-
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "books")
+	private List<BookIssueDetails> issueDetails;
+	
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "books")
+	private List<RequestBean> requests;
+	
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "books")
+	private List<BorrowedBooks> borrowed;
 }

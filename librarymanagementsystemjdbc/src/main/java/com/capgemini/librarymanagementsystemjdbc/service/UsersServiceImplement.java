@@ -91,9 +91,9 @@ public class UsersServiceImplement implements UsersService {
 	}
 
 	@Override
-	public boolean returnBook(int bId, int uId) {
+	public boolean returnBook(int bId,int uId,String status) {
 		// TODO Auto-generated method stub
-		return dao.returnBook(bId, uId);
+		return dao.returnBook(bId, uId, status);
 	}
 
 	@Override

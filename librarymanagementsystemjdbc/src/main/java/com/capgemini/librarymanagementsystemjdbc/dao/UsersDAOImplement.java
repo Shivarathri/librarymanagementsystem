@@ -505,7 +505,7 @@ public class UsersDAOImplement implements UsersDAO {
 	}
 
 	@Override
-	public boolean returnBook(int bId, int uId) {
+	public boolean returnBook(int bId,int uId,String status) {
 
 		try(FileInputStream info = new FileInputStream("db.properties");){
 			Properties pro = new Properties();

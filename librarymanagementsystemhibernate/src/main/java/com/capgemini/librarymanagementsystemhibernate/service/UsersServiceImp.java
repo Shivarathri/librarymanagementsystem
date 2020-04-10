@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.capgemini.librarymanagementsystemhibernate.dao.UsersDAO;
 import com.capgemini.librarymanagementsystemhibernate.dto.BookBean;
+import com.capgemini.librarymanagementsystemhibernate.dto.BookIssueDetails;
+import com.capgemini.librarymanagementsystemhibernate.dto.BorrowedBooks;
 import com.capgemini.librarymanagementsystemhibernate.dto.RequestBean;
 import com.capgemini.librarymanagementsystemhibernate.dto.UsersBean;
 import com.capgemini.librarymanagementsystemhibernate.factory.UsersFactory;
@@ -26,34 +28,24 @@ public class UsersServiceImp implements UsersService {
 		return dao.addBook(book);
 	}
 
-	public BookBean searchBookTitle(String bname) {
-		// TODO Auto-generated method stub
-		return dao.searchBookTitle(bname);
-	}
-
-	public BookBean searchBookAuthor(String bAuthor) {
-		// TODO Auto-generated method stub
-		return dao.searchBookAuthor(bAuthor);
-	}
-
-	public BookBean searchBookType(int bid) {
-		// TODO Auto-generated method stub
-		return dao.searchBookType(bid);
-	}
-
-	public boolean updateBook(BookBean bean) {
-		// TODO Auto-generated method stub
-		return dao.updateBook(bean);
-	}
-
-	public boolean removeBook(int bid) {
-		// TODO Auto-generated method stub
-		return dao.removeBook(bid);
-	}
-
-	public LinkedList<Integer> getBookIds() {
+	public LinkedList<BookBean> getBookIds() {
 		// TODO Auto-generated method stub
 		return dao.getBookIds();
+	}
+
+	public LinkedList<BookBean> searchBookById(int bId) {
+		// TODO Auto-generated method stub
+		return dao.searchBookById(bId);
+	}
+
+	public LinkedList<BookBean> searchBookByTitle(String bookName) {
+		// TODO Auto-generated method stub
+		return dao.searchBookByTitle(bookName);
+	}
+
+	public LinkedList<BookBean> searchBookByAuthor(String author) {
+		// TODO Auto-generated method stub
+		return dao.searchBookByAuthor(author);
 	}
 
 	public LinkedList<BookBean> getBooksInfo() {
@@ -61,35 +53,51 @@ public class UsersServiceImp implements UsersService {
 		return dao.getBooksInfo();
 	}
 
+	public boolean updateBook(BookBean bean) {
+		// TODO Auto-generated method stub
+		return dao.updateBook(bean);
+	}
+
+	public boolean removeBook(int bId) {
+		// TODO Auto-generated method stub
+		return dao.removeBook(bId);
+	}
+
+	public boolean request(int uId, int bId) {
+		// TODO Auto-generated method stub
+		return dao.request(uId, bId);
+	}
+
+	public List<RequestBean> showRequest() {
+		// TODO Auto-generated method stub
+		return dao.showRequest();
+	}
+
+	public boolean issueBook(int bId, int uId) {
+		// TODO Auto-generated method stub
+		return dao.issueBook(bId, uId);
+	}
+
+	public List<BorrowedBooks> borrowedBook(int uId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean returnBook(int bId, int uId, String status) {
+		// TODO Auto-generated method stub
+		return dao.returnBook(bId, uId, status);
+	}
+
 	public List<UsersBean> showUsers() {
 		// TODO Auto-generated method stub
 		return dao.showUsers();
 	}
 
-	public List<RequestBean> showRequests() {
+	public LinkedList<Integer> bookHistoryDetails(int uId) {
 		// TODO Auto-generated method stub
-		return dao.showRequests();
+		return dao.bookHistoryDetails(uId);
 	}
 
-	public boolean bookIssue(UsersBean student, BookBean book) {
-		// TODO Auto-generated method stub
-		return dao.bookIssue(student, book);
-	}
-
-	public boolean isBookReceived(UsersBean student, BookBean book) {
-		// TODO Auto-generated method stub
-		return dao.isBookReceived(student, book);
-	}
-
-	public RequestBean requestBook(UsersBean student, BookBean book) {
-		// TODO Auto-generated method stub
-		return dao.requestBook(student, book);
-	}
-
-	public boolean returnBook(UsersBean student, BookBean book) {
-		// TODO Auto-generated method stub
-		return dao.returnBook(student, book);
-	}
 
 	
 }

@@ -19,7 +19,6 @@
 <fullyQualifiedTypeName name="java.util.regex.Pattern"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagement.validation.ValidationAdminStudent"/>
 <fullyQualifiedTypeName name="java.util.InputMismatchException"/>
-<fullyQualifiedTypeName name="com.capgemini.librarymanagement.exception.ValidationException"/>
 <fullyQualifiedTypeName name="java.lang.String"/>
 <fullyQualifiedTypeName name="java.util.regex.Matcher"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagement.dto.BookBean"/>
@@ -41,12 +40,10 @@
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.dto.UsersBean"/>
 <fullyQualifiedTypeName name="java.util.List"/>
-<fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.dto.RequestBean"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.service.UsersServiceDAO"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.dao.UsersDAOImp"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.service.UsersService"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.service.UsersServiceImp"/>
-<fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.factory.UsersFactory"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.dao.UsersDAO"/>
 <fullyQualifiedTypeName name="java.lang.RuntimeException"/>
 <fullyQualifiedTypeName name="javax.persistence.EntityManagerFactory"/>
@@ -60,4 +57,7 @@
 <fullyQualifiedTypeName name="javax.persistence.Query"/>
 <fullyQualifiedTypeName name="java.io.Serializable"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemjdbc.dto.BorrowedBooks"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.factory.UsersFactory"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.dto.RequestBean"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.exception.ValidationException"/>
 </qualifiedTypeNameHistroy>

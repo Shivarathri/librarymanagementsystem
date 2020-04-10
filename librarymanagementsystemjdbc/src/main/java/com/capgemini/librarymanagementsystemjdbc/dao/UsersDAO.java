@@ -24,7 +24,7 @@ public interface UsersDAO {
 	List<RequestDetails> showRequest();
 	boolean issueBook(int bId,int uId);
 	List<BorrowedBooks> borrowedBook(int uId);
-	boolean returnBook(int bId, int uId);
+	boolean returnBook(int bId,int uId,String status);
 	List<UsersBean> showUsers();
 	LinkedList<BookIssueDetails> bookHistoryDetails(int uId);
 }

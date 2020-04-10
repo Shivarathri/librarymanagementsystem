@@ -27,6 +27,7 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
+			<item value="com.capgemini.hibernate"/>
 			<item value="com.capgemini.librarymanagementsystemhibernate"/>
 			<item value="com.capgemini.librarymanagementjdbc"/>
 			<item value="com.capgemini.librarymanagement"/>
@@ -35,6 +36,7 @@
 			<item value="com.capgemini"/>
 		</list>
 		<list key="artifactId">
+			<item value="hibernate"/>
 			<item value="librarymanagementsystemhibernate"/>
 			<item value="librarymanagementjdbc"/>
 			<item value="librarymanagement"/>

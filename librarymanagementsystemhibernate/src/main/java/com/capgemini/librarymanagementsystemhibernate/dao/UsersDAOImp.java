@@ -1,5 +1,8 @@
 package com.capgemini.librarymanagementsystemhibernate.dao;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,17 +15,21 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.capgemini.librarymanagementsystemhibernate.dto.BookBean;
+import com.capgemini.librarymanagementsystemhibernate.dto.BookIssueDetails;
+import com.capgemini.librarymanagementsystemhibernate.dto.BorrowedBooks;
 import com.capgemini.librarymanagementsystemhibernate.dto.RequestBean;
 import com.capgemini.librarymanagementsystemhibernate.dto.UsersBean;
 import com.capgemini.librarymanagementsystemhibernate.exception.LMSException;
 
 public class UsersDAOImp implements UsersDAO {
+	EntityManagerFactory factory = Persistence.createEntityManagerFactory("TestPersistence");
+	EntityManager manager = null;
+	EntityTransaction transaction = null;
+	int noOfBooks;
 	public boolean register(UsersBean info) {
-		EntityManagerFactory factory = null;
-		EntityManager manager = null;
-		EntityTransaction transaction = null;
+
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
@@ -38,169 +45,191 @@ public class UsersDAOImp implements UsersDAO {
 
 			e.printStackTrace();
 			transaction.rollback();
+		} finally {
+			manager.close();
+			factory.close();
+			return false;
 		}
-		manager.close();
-		factory.close();
-		return false;
 	}
 
 	public UsersBean auth(String email, String password) {
-		EntityManagerFactory factory = null;
-		EntityManager manager = null;
-		EntityTransaction transaction = null;
+
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
-			UsersBean bean2= manager.find(UsersBean.class, email);
-			bean2.setEmail(email);
-			manager.persist(bean2);
-			if(bean2.getPassword().equals(password)) {
-				return bean2;
-			}
-			transaction.commit();
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			transaction.rollback();
+			String jpql="select u from UsersBean u where u.email=:email and u.password=:password";
+			TypedQuery<UsersBean> query = manager.createQuery(jpql,UsersBean.class);
+			query.setParameter("email", email);
+			query.setParameter("password", password);
+			UsersBean bean = query.getSingleResult();
+			return bean;
+		} catch(Exception e) {
+			System.err.println(e.getMessage());
+			return null;
+		} finally {
+			manager.close();
+			factory.close();
 		}
-		manager.close();
-		factory.close();
-		return null;
-	
+
 	}
 	public boolean addBook(BookBean book) {
-		EntityManagerFactory factory = null;
-		EntityManager manager = null;
-		EntityTransaction transaction = null;
+
 		try {
+
 			factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
-			BookBean bean = manager.find(BookBean.class, book.getBid());
-			//			if(bean == null) {
-			//				System.out.println("Book Added");
-			//			} else {
-			//				throw new BookException("Book Already Exist");
-			//			}
-			manager.persist(book);
+			String jpql = "insert into BookBean (bId,bookName,author,category,publisher) values (:bId,:bookName,:author,:category,:publisher)";
+			Query query = manager.createQuery(jpql);
+			query.setParameter("bId",book.getBId());
+			query.setParameter("bookName",book.getBookName());
+			query.setParameter("author",book.getAuthor());
+			query.setParameter("category", book.getCategory());
+			query.setParameter("publisher", book.getPublisher());
+			int count = query.executeUpdate();
 			transaction.commit();
-		} catch (Exception e) {
-
-			e.printStackTrace();
+			if(count!=0) {
+				return true;
+			} else {
+				return false;
+			}
+		}catch (Exception e) {
+			System.err.println(e.getMessage());
 			transaction.rollback();
+			return false;
+		} finally {
+			manager.close();
+			factory.close();
 		}
-		manager.close();
-		factory.close();
-		return false;
-	
+
 	}
 
-	public BookBean searchBookTitle(String bname) {
-		EntityManagerFactory factory = null;
-		EntityManager manager = null;
-		EntityTransaction transaction = null;
+	public LinkedList<BookBean> searchBookByTitle(String bookName) {
+
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
-			transaction.begin();
-			BookBean bean = manager.find(BookBean.class, bname);
-			manager.persist(bname);
-			transaction.commit();
-			return bean;
+			manager = factory.createEntityManager();
+			transaction = manager.getTransaction();
+			String jpql="select m from bookBean m where bookName=:bookName";
+			TypedQuery<BookBean> query=manager.createQuery(jpql, BookBean.class);
+			query.setParameter("bName", bookName);
+			LinkedList<BookBean> list=(LinkedList<BookBean>) query.getResultList();
+			if(list!=null) {
+				return list;
+			}else {
+				return null;
+			}
 		} catch (Exception e) {
 
 			e.printStackTrace();
 			transaction.rollback();
+			return null;
+		} finally {
+			manager.close();
+			factory.close();
 		}
-		manager.close();
-		factory.close();
-		return null;
+		
 	}
 
-	public BookBean searchBookAuthor(String bAuthor) {
-		EntityManagerFactory factory = null;
-		EntityManager manager = null;
-		EntityTransaction transaction = null;
+	public LinkedList<BookBean> searchBookByAuthor(String author) {
+
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
-			transaction.begin();
-			BookBean bean = manager.find(BookBean.class, bAuthor);
-			//manager.persist(bAuthor);
-			manager.persist(bean);
-			transaction.commit();
-			return bean;
+			manager = factory.createEntityManager();
+			transaction = manager.getTransaction();
+			String jpql="select m from bookBean m where author=:author";
+			TypedQuery<BookBean> query=manager.createQuery(jpql, BookBean.class);
+			query.setParameter("bauthor", author);
+			LinkedList<BookBean> list=(LinkedList<BookBean>) query.getResultList();
+			if (list!=null) {
+				return list;
+			} else {
+				return null;
+			}
 		} catch (Exception e) {
 
 			e.printStackTrace();
 			transaction.rollback();
-		}
+			return null;
+		} finally {
+		
 		manager.close();
 		factory.close();
-		return null;
+		
+		}
 	}
 
-	public BookBean searchBookType(int bid) {
-		EntityManagerFactory factory = null;
-		EntityManager manager = null;
-		EntityTransaction transaction = null;
+
+	public LinkedList<BookBean> searchBookById(int bId) {
+
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
-			transaction.begin();
-			BookBean bean = manager.find(BookBean.class, bid);
-			manager.persist(bean);
-			transaction.commit();
-			return bean;
+			manager = factory.createEntityManager();
+			transaction = manager.getTransaction();
+			String jpql="select m from bookBean m where bId=:bId";
+			TypedQuery<BookBean> query=manager.createQuery(jpql, BookBean.class);
+			query.setParameter("bId", bId);
+			LinkedList<BookBean> list=(LinkedList<BookBean>) query.getResultList();
+			if(list!=null) {
+				return list;
+			}else {
+				return null;
+			}
 		} catch (Exception e) {
 
 			e.printStackTrace();
 			transaction.rollback();
-		}
+
+			return null;
+		} finally {
+		
 		manager.close();
 		factory.close();
-		return null;
+		
+		}
+
 	}
 
 	public boolean updateBook(BookBean bean) {
-		EntityManagerFactory factory = null;
-		EntityManager manager = null;
-		EntityTransaction transaction = null;
+
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
-			BookBean bean2 = manager.find(BookBean.class, bean.getBid());
-			bean2.setBname(bean.getBname());
-			manager.persist(bean);
-			System.out.println("updated");
+			BookBean record = manager.find(BookBean.class, bean.getBId());
+			record.setBookName(bean.getBookName());
 			transaction.commit();
+			return true;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			transaction.rollback();
+		} finally {
+			manager.close();
+			factory.close();
 		}
 		return false;
 	}
 
 	public boolean removeBook(int bid) {
-		EntityManagerFactory factory = null;
-		EntityManager manager = null;
-		EntityTransaction transaction = null;
+
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
 			BookBean bean = manager.find(BookBean.class, bid);
-			bean.setBid(bid);
+			bean.setBId(bid);
 			manager.remove(bean);
 			//manager.persist(bean);
 			transaction.commit();
@@ -208,277 +237,397 @@ public class UsersDAOImp implements UsersDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			transaction.rollback();
-		}
+		} finally {
+		
 		manager.close();
 		factory.close();
+		}
 		return false;
 	}
 
-	public LinkedList<Integer> getBookIds() {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("TestPersistence");
-		EntityManager manager = factory.createEntityManager();
-		EntityTransaction transaction = manager.getTransaction();
-		try {
-			transaction.begin();
-			String jpql = "select * from bookbean";
-			Query query =  manager.createNativeQuery(jpql, BookBean.class);
-			List<Integer> recordList = query.getResultList();
-			Iterator it = recordList.iterator();
-			while (it.hasNext()){
-				BookBean bean = (BookBean) it.next();
-				System.out.println("----------------------");
-				System.out.println("Id:---"+bean.getBid());
-			}
-			transaction.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.rollback();
-		}
-		manager.close();
-		factory.close();
-		return null;
-	}
+
 
 	public LinkedList<BookBean> getBooksInfo() {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("TestPersistence");
-		EntityManager manager = factory.createEntityManager();
-		EntityTransaction transaction = manager.getTransaction();
+
 		try {
-			transaction.begin();
-			String jpql = "select * from bookbean";
-			TypedQuery<BookBean> query = (TypedQuery<BookBean>) manager.createNativeQuery(jpql, BookBean.class);
-			List<BookBean> recordList = query.getResultList();
-			Iterator it = recordList.iterator();
-			while (it.hasNext()){
-				BookBean bean = (BookBean) it.next();
-				System.out.println("----------------------");
-				System.out.print("Id:---"+bean.getBid());
-				System.out.print(" Name:---"+bean.getBname());
-				System.out.println(" Author:---"+bean.getAuthor());
-				System.out.println("PublisherName:---"+bean.getPublishername());
-				System.out.println("Category:---"+bean.getCategory());
+
+			manager = factory.createEntityManager();
+			transaction = manager.getTransaction();
+			manager = factory.createEntityManager();
+			transaction = manager.getTransaction();
+			String jpql="select m from bookBean";
+			TypedQuery<BookBean> query=manager.createQuery(jpql, BookBean.class);
+			LinkedList<BookBean> list=(LinkedList<BookBean>) query.getResultList();
+			if (list!=null) {
+				return list;
+			} else {
+				return null;
 			}
-			transaction.commit();
 		} catch (Exception e) {
+
 			e.printStackTrace();
 			transaction.rollback();
-		}
+		} finally {
+		
 		manager.close();
 		factory.close();
+		}
 		return null;
 	}
 
 	public List<UsersBean> showUsers() {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("TestPersistence");
-		EntityManager manager = factory.createEntityManager();
-		EntityTransaction transaction = manager.getTransaction();
+
 		try {
 			transaction.begin();
 			String jpql = "select * from usersbean";
 			TypedQuery<UsersBean> query = (TypedQuery<UsersBean>) manager.createNativeQuery(jpql, UsersBean.class);
 			List<UsersBean> recordList = query.getResultList();
-			Iterator it = recordList.iterator();
-			while (it.hasNext()){
-				UsersBean bean = (UsersBean) it.next();
-				System.out.println("----------------------");
-				System.out.print("Id:---"+bean.getId());
-				System.out.print(" Name:---"+bean.getName());
-				System.out.println(" Email:---"+bean.getEmail());
-				System.out.println("Mobile:---"+bean.getMobile());
-				System.out.println("Role:---"+bean.getRole());
+			if(recordList!=null) {
+				return recordList;
+			}else {
+				return null;
 			}
-			transaction.commit();
 		} catch (Exception e) {
+
 			e.printStackTrace();
 			transaction.rollback();
 		}
 		manager.close();
 		factory.close();
+
 		return null;
 	}
 
-	public List<RequestBean> showRequests() {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("TestPersistence");
-		EntityManager manager = factory.createEntityManager();
-		EntityTransaction transaction = manager.getTransaction();
+	public List<RequestBean> showRequest() {
+
 		try {
 			transaction.begin();
 			String jpql = "select * from requestbean";
 			TypedQuery<RequestBean> query = (TypedQuery<RequestBean>) manager.createNativeQuery(jpql, RequestBean.class);
 			//manager.persist(query);
 			List<RequestBean> recordList = query.getResultList();
-			Iterator it = recordList.iterator();
-			while (it.hasNext()){
-				RequestBean bean = (RequestBean) it.next();
-				System.out.println("----------------------");
-				System.out.print("BookId:---"+bean.getBookInfo().getBid());
-				System.out.print("BookName:---"+bean.getBookInfo().getBname());
-				System.out.println(" UserId:---"+bean.getUsersInfo().getId());
-				System.out.println("UserName:---"+bean.getUsersInfo().getName());
-				manager.persist(bean);
+			if(recordList!=null) {
+				return recordList;
+			}else {
+				return null;
 			}
-			//manager.persist(query);
-			transaction.commit();
 		} catch (Exception e) {
+
 			e.printStackTrace();
 			transaction.rollback();
 		}
 		manager.close();
 		factory.close();
 		return null;
+
 	}
 
-	public boolean bookIssue(UsersBean student, BookBean book) {
-//		EntityManagerFactory factory = null;
-//		EntityManager manager = null;
-//		EntityTransaction transaction = null;
-//		try {
-//			factory = Persistence.createEntityManagerFactory("TestPersistence");
-//			manager = factory.createEntityManager();
-//			transaction = manager.getTransaction();
-//			transaction.begin();
-//			UsersBean bean = new UsersBean();
-//			UsersBean bean2= manager.find(UsersBean.class, bean.getRole());
-//			
-//			manager.persist(bean2);
-//			if(bean2.getRole().equals("student")) {
-//				BookBean bookBean = new BookBean();
-//			}
-//			transaction.commit();
-//		} catch (Exception e) {
-//
-//			e.printStackTrace();
-//			transaction.rollback();
-//		}
-//		manager.close();
-//		factory.close();
-		return false;
-	
-	}
-
-	public boolean isBookReceived(UsersBean student, BookBean book) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public RequestBean requestBook(UsersBean student, BookBean book) {
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("TestPersistence");
-		EntityManager manager = factory.createEntityManager();
-		EntityTransaction transaction = manager.getTransaction();
+	public boolean issueBook(int bId, int uId) {
 		try {
-			//			transaction.begin();
-			//			RequestBean requestInfo = new RequestBean();
-			//			//manager.persist(requestInfo);
-			//			UsersBean usersInfo = new UsersBean();
-			//			BookBean bookInfo = new BookBean();
-			//			boolean flag = false;
-			//			boolean isRequestExists = false;
-			//
-			//			RequestBean bean = manager.find(RequestBean.class, requestInfo.getRid() );
-			//			//manager.persist(bean);
-			//			manager.merge(bean);
-			//			if(bookInfo.getBid() == bean.getBookInfo().getBid()) {
-			//				isRequestExists = true;
-			//			}
-			//
-			//			if (!isRequestExists) {
-			//				UsersBean usersBean = manager.find(UsersBean.class, student.getEmail());
-			//				//manager.persist(usersBean);
-			//				manager.merge(usersBean);
-			//				if(usersInfo.getId() == usersBean.getId()){
-			//					BookBean bookBean = manager.find(BookBean.class, book.getBid());
-			//					//manager.persist(bookBean);
-			//					manager.merge(bookBean);
-			//					if(bookInfo.getBid() == bookBean.getBid()) {
-			//						usersInfo = usersBean;
-			//						bookInfo = bookBean;
-			//						flag = true;
-			//					}
-			//				}
-			//			}
-			//
-			//			if(flag == true) {
-			//				requestInfo.setBookInfo(bookInfo);
-			//				requestInfo.setUsersInfo(usersInfo);
-			//				RequestBean requestBean = manager.find(RequestBean.class, requestInfo.getRid());
-			//				//manager.persist(requestBean);
-			//				//manager.persist(requestInfo);
-			//				manager.merge(requestBean);
-			//				return requestBean;
-			//			}
-			//			
-			//			transaction.commit();
-			//		}
-
-
-
-			transaction.begin();
-			boolean flag = false;
-			boolean isRequestExists = false;
-			//RequestBean requestInfo = new RequestBean();
-			UsersBean usersInfo = new UsersBean();
-			BookBean bookInfo = new BookBean();
-			//BookBean bean = manager.find(BookBean.class, book.getBid());
-			RequestBean requestBean = manager.find(RequestBean.class, book);
-			RequestBean  bean = new RequestBean();
-			String jpql = "select * from requestbean";
-			TypedQuery<RequestBean> query = (TypedQuery<RequestBean>) manager.createNativeQuery(jpql, RequestBean.class);
-			List<RequestBean> recordList = query.getResultList();
-			Iterator it = recordList.iterator();
-			while (it.hasNext()){
-				RequestBean bean1 = (RequestBean) it.next();
-				manager.merge(bean1);
-				if(book.getBid() == bean.getBookInfo().getBid()) {
-					isRequestExists = true;
+			manager = factory.createEntityManager();
+			transaction = manager.getTransaction();
+			String jpql = "select b from BookBean b where b.bId=:bId";
+			TypedQuery<BookBean> query = manager.createQuery(jpql,BookBean.class);
+			query.setParameter("bId", bId);
+			BookBean rs = query.getSingleResult();
+			if (rs != null) {
+				String jpql1 = "select r from RequestDetails r where r.uId=:uId and r.bId=:bId and r.email=(select u.email from u.UsersBean where u.uId=:userId)";
+				TypedQuery<RequestBean> query1 = manager.createQuery(jpql1,RequestBean.class);
+				query1.setParameter("uId", uId);
+				query1.setParameter("bId", bId);
+				query1.setParameter("userId", uId);
+				RequestBean rs1 = query1.getSingleResult();
+				if (rs1 != null) {
+					transaction.begin();
+					String jpql2 = "insert into BookIssueDetails(bId,uId,issueDate,returnDate) values(:bId,:uId,:issueDate,:returnDate)";
+					Query query2 = manager.createQuery(jpql2);
+					query2.setParameter("bId", bId);
+					query2.setParameter("uId", uId);
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+					Calendar cal = Calendar.getInstance();
+					String issueDate = sdf.format(cal.getTime());
+					query2.setParameter("issueDate", java.sql.Date.valueOf(issueDate));
+					cal.add(Calendar.DAY_OF_MONTH, 7);
+					String returnDate = sdf.format(cal.getTime());
+					query2.setParameter("returnDate", java.sql.Date.valueOf(returnDate));
+					int count = query2.executeUpdate();
+					transaction.commit();
+					if (count != 0) {
+						transaction.begin();
+						String jpql3 = "Insert into BorrowedBooks(bId,uId,email) values(:bId,:uId,(select u.email from UsersBean u where u.uId=:userId))";
+						Query query3 = manager.createQuery(jpql3);
+						query3.setParameter("bId", bId);
+						query3.setParameter("uId", uId);
+						query3.setParameter("userId", uId);
+						int count1 = query3.executeUpdate();
+						transaction.commit();
+						if (count1 != 0) {
+							return true;
+						} else {
+							return false;
+						}
+					} else {
+						throw new LMSException("Book Not issued");
+					}
+				} else {
+					throw new LMSException("The respective user have not placed any request");
 				}
-				if (!isRequestExists) {
-					String jpql1 = "select * from userbean";
-					TypedQuery<UsersBean> query1 = (TypedQuery<UsersBean>) manager.createNativeQuery(jpql, UsersBean.class);
-					List<UsersBean> recordList1 = query1.getResultList();
-					Iterator it1 = recordList1.iterator();
-					while (it1.hasNext()){
-						UsersBean bean2 = (UsersBean) it.next();
-						manager.merge(bean2);
-						if(bean2.getId() == student.getId()) {
-							String jpql2 = "select * from bookbean";
-							TypedQuery<BookBean> query2 = (TypedQuery<BookBean>) manager.createNativeQuery(jpql, BookBean.class);
-							List<BookBean> recordList2 = query2.getResultList();
-							Iterator it2 = recordList2.iterator();
-							while (it2.hasNext()){
-								BookBean bean3 = (BookBean) it.next();
-								manager.merge(bean3);
-								if(bean3.getBid() == book.getBid()) {
-									student = usersInfo;
-									book = bookInfo;
-									flag = true;
-								}
-							}
-						}
-						if(flag == true) {
-							bean1.setBookInfo(bookInfo);
-							bean1.setUsersInfo(usersInfo);
-							manager.merge(bean1);
+			} else {
+				throw new LMSException("There is no book exist with bookId"+bId);
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			transaction.rollback();
+			return false;
+		} finally {
+			manager.close();
+			factory.close();
+		}
+
+	}
+
+
+	public boolean request(int uId, int bId) {
+
+		int count = 0;
+		
+		try {
+
+			manager = factory.createEntityManager();
+			transaction = manager.getTransaction();
+			String jpql = "select b from BookBean where b.bId=:bId";
+			TypedQuery<BookBean> query = manager.createQuery(jpql,BookBean.class);
+			query.setParameter("bId", bId);
+			BookBean rs = query.getSingleResult();
+			if (rs != null) {
+				String jpql1 = "select b from BorrowedBooks b where b.uId=:uId and b.bId=:bId and b.email=(select u.email from UsersBean u where u.uId=:userId)";
+				TypedQuery<BorrowedBooks> query1 = manager.createQuery(jpql1,BorrowedBooks.class);
+				query1.setParameter("uId", uId);
+				query1.setParameter("bId", bId);
+				query1.setParameter("userId", uId);
+				BorrowedBooks rs1 = query1.getSingleResult();
+				if (rs1 == null) {
+					String jpql2 = "select b from BookIssueDetails b where b.uId=:uId";
+					TypedQuery<BookIssueDetails> query2 = manager.createQuery(jpql2,BookIssueDetails.class);
+					query2.setParameter("uId", uId);
+					List<BookIssueDetails> rs2 = query2.getResultList();
+					for (BookIssueDetails p : rs2) {
+						noOfBooks = count++;
+					}
+					if (noOfBooks<3) {
+						transaction.begin();
+						String jpql3 = "insert into RequestDetails(uId,fullName,bId,bookName,email) values(:uId,(select u.firstName from UsersBean u where u.uId=:userId),:bId,"
+								+ "(select b.bookName from BookBean b where b.bId=:bookId),(select u.email from UsersBean where u.uId=:user_Id))" ;
+						Query query3 = manager.createQuery(jpql3);
+						query3.setParameter("uId", uId);
+						query3.setParameter("userId", uId);
+						query3.setParameter("bId", bId);
+						query3.setParameter("bookId", bId);
+						query3.setParameter("user_Id", uId);
+						int count1 = query3.executeUpdate();
+						transaction.commit();
+						if (count1 != 0) {
+							return true;
+						} else {
+							return false;
 						}
 
+					} else {
+						throw new LMSException("You have crossed the book limit");
+					}
+				} else {
+					throw new LMSException("You have already borrowed the requested book");
+				}
+			} else {
+				throw new LMSException("The book with requested id is not present");
+			}
+		
+	} catch (Exception e) {
+		System.err.println(e.getMessage());
+		transaction.rollback();
+		return false;
+	} finally {
+		manager.close();
+		factory.close();
+	}
+}
+
+
+public List<BorrowedBooks> borrowedBook(int uId) {
+	try {
+		manager = factory.createEntityManager();
+		String jpql = "select b from BorrowedBooks b where b.uId=:uId";
+		TypedQuery<BorrowedBooks> query = manager.createQuery(jpql,BorrowedBooks.class);
+		query.setParameter("uId", uId);
+		List<BorrowedBooks> recordList = query.getResultList();
+		return recordList; 
+	} catch (Exception e) {
+		System.err.println(e.getMessage());
+		return null;
+	} finally {
+		manager.close();
+		factory.close();
+	}
+}
+
+public boolean returnBook(int bId, int uId, String status) {
+	try {
+		manager = factory.createEntityManager();
+		transaction = manager.getTransaction();
+		String jpql = "select b from BookBean b where b.bId=:bId";
+		TypedQuery<BookBean> query = manager.createQuery(jpql,BookBean.class);
+		query.setParameter("bId", bId);
+		BookBean rs = query.getSingleResult();
+		if (rs != null) {
+			String jpql1 = "select b from BookIssueDetails b where b.bId=:bId and b.uId=uId ";
+			TypedQuery<BookIssueDetails> query1 = manager.createQuery(jpql,BookIssueDetails.class);
+			query1.setParameter("bId", bId);
+			query1.setParameter("uId", uId);
+			BookIssueDetails rs1 = query1.getSingleResult();
+			if (rs1 != null) {
+				Date issueDate = rs1.getIssueDate();
+				Calendar cal = Calendar.getInstance();
+				Date returnDate = cal.getTime();
+				long difference = issueDate.getTime() - returnDate.getTime();
+				float daysBetween = (difference / (1000*60*60*24));
+				if (daysBetween>7) {
+					float fine = daysBetween*5;
+					System.out.println("The user has to pay the fine of the respective book of Rs:"+fine);
+					if (status=="yes") {
+						transaction.begin();
+						String jpql2 = "delete from BookIssueDetails b where b.bId=:bId and u.uId=:uId";
+						Query query2 = manager.createQuery(jpql2);
+						query2.setParameter("bId", bId);
+						query2.setParameter("uId", uId);
+						int count1 = query2.executeUpdate();
+						transaction.commit();
+						if (count1 != 0) {
+							transaction.begin();
+							String jpql3 = "delete from BorrowedBooks b where b.bId=:bId and b.uId=:uId";
+							Query query3 = manager.createQuery(jpql3);
+							query3.setParameter("bId", bId);
+							query3.setParameter("uId", uId);
+							int count2 = query3.executeUpdate();
+							transaction.commit();
+							if (count2 != 0) {
+								transaction.begin();
+								String jpql4 = "delete from BorrowedBooks b where b.bId=:bId and b.uId=:uId";
+								Query query4 = manager.createQuery(jpql4);
+								query4.setParameter("bId", bId);
+								query4.setParameter("uId", uId);
+								int count3 = query4.executeUpdate();
+								transaction.commit();
+								if (count3 != 0) {
+									return true;
+								} else {
+									return false;
+								}
+							} else {
+								return false;
+							}
+
+						} else {
+							return false;
+						}
+
+					} else {
+						throw new LMSException("The User has to pay fine for delaying book return");
+					}
+				} else {
+					transaction.begin();
+					String jpql2 = "delete from BookIssueDetails b where b.bId=:bId and u.uId=:uId";
+					Query query2 = manager.createQuery(jpql2);
+					query2.setParameter("bId", bId);
+					query2.setParameter("uId", uId);
+					int count1 = query2.executeUpdate();
+					transaction.commit();
+					if (count1 != 0) {
+						transaction.begin();
+						String jpql3 = "delete from BorrowedBooks b where b.bId=:bId and b.uId=:uId";
+						Query query3 = manager.createQuery(jpql3);
+						query3.setParameter("bId", bId);
+						query3.setParameter("uId", uId);
+						int count2 = query3.executeUpdate();
+						transaction.commit();
+						if (count2 != 0) {
+							transaction.begin();
+							String jpql4 = "delete from BorrowedBooks b where b.bId=:bId and b.uId=:uId";
+							Query query4 = manager.createQuery(jpql4);
+							query4.setParameter("bId", bId);
+							query4.setParameter("uId", uId);
+							int count3 = query4.executeUpdate();
+							transaction.commit();
+							if (count3 != 0) {
+								return true;
+							} else {
+								return false;
+							}
+						} else {
+							return false;
+						}
+
+					} else {
+						return false;
 					}
 				}
-				transaction.commit();
 
+			} else {
+				throw new LMSException("This respective user hasn't borrowed any book");
 			}
-
-		}catch (Exception e) {
-			e.printStackTrace();
-			transaction.rollback();
+		} else {
+			throw new LMSException("book doesnt exist");
 		}
+
+	} catch (Exception e) {
+		System.err.println(e.getMessage());
+		transaction.rollback();
+		return false;
+	} finally {
 		manager.close();
 		factory.close();
-		return null;
 	}
+}
 
-	public boolean returnBook(UsersBean student, BookBean book) {
-		// TODO Auto-generated method stub
-		return false;
+public LinkedList<Integer> bookHistoryDetails(int uId) {
+	int count=0;
+	manager = factory.createEntityManager();
+	String jpql = "select b from BookIssueDetails b";
+	TypedQuery<BookIssueDetails> query = manager.createQuery(jpql,BookIssueDetails.class);
+	LinkedList<BookIssueDetails> recordList = (LinkedList<BookIssueDetails>)query.getResultList();
+	for(BookIssueDetails p : recordList) {
+		noOfBooks = count++;
 	}
+	LinkedList<Integer> list = new LinkedList<Integer>();
+	list.add(noOfBooks);
+	manager.close();
+	factory.close();
+	return list;
+}
+
+public LinkedList<BookBean> getBookIds() {
+	try {
+
+		manager = factory.createEntityManager();
+		transaction = manager.getTransaction();
+		manager = factory.createEntityManager();
+		transaction = manager.getTransaction();
+		String jpql="select m from bookBean";
+		TypedQuery<BookBean> query=manager.createQuery(jpql, BookBean.class);
+		LinkedList<BookBean> list=(LinkedList<BookBean>) query.getResultList();
+		if (list!=null) {
+			return list;
+		} else {
+			return null;
+		}
+	} catch (Exception e) {
+
+		e.printStackTrace();
+		transaction.rollback();
+	}
+	manager.close();
+	factory.close();
+	return null;
+}
 
 
 }

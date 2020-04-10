@@ -10,7 +10,6 @@ public class BookBean implements Serializable {
 	private String publishername;
 	private String issuedate;
 	private String returndate;
-
 	public int getBid() {
 		return bid;
 	}
@@ -53,9 +52,6 @@ public class BookBean implements Serializable {
 	public void setReturndate(String returndate) {
 		this.returndate = returndate;
 	}
-
-
-
 
 
 }
