@@ -30,15 +30,13 @@ public class Validation {
 		return result;
 	}
 
-	public boolean validatedMobile(String regMobile) throws LMSException {
+	public boolean validatedMobile(long regMobile) throws LMSException {
 		String mobileRegEx = "(0/91)?[6-9][0-9]{9}" ;
 		boolean result = false;
-		Pattern pattern = Pattern.compile(mobileRegEx);
-		Matcher matcher = pattern.matcher(regMobile);
-		if (matcher.matches()) {
+		if (Pattern.matches(mobileRegEx, String.valueOf(regMobile))) {
 			result = true;
 		} else {
-			throw new LMSException("Mobile Number  will start with  6 or 9 and It should contains 10 numbers ");
+			throw new LMSException("Mobile Number  will start with  6 to 9 and It should contains 10 numbers");
 		}
 		return result;
 	}

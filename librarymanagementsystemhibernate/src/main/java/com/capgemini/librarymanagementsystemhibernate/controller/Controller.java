@@ -25,7 +25,7 @@ public class Controller {
 
 		int regId = 0; 
 		String regName = null;  
-		String regMobile = null;
+		long regMobile = 0;
 		String regEmail = null;
 		String regPassword = null;
 
@@ -86,7 +86,7 @@ public class Controller {
 							System.err.println(e.getMessage());
 						}
 					} while (!flag);
-					
+
 
 					do {
 						try {
@@ -121,7 +121,7 @@ public class Controller {
 					do {
 						try {
 							System.out.println("Enter Mobile :");
-							regMobile = scanner.next();
+							regMobile = scanner.nextLong();
 							validation.validatedMobile(regMobile);
 							flag = true;
 						} catch (InputMismatchException e) {
@@ -136,7 +136,7 @@ public class Controller {
 					String regRole = scanner.next();
 
 					UsersBean ai = new UsersBean();
-					ai.setId(regId);
+					ai.setUId(regId);
 					ai.setName(regName);
 					ai.setEmail(regEmail);
 					ai.setPassword(regPassword);
@@ -581,8 +581,8 @@ public class Controller {
 											for (UsersBean Bean : users) {	
 												if (Bean != null) {
 													System.out.println("-----------------------------------------------");
-													System.out.println("User_Id is-->"+Bean.getId());
-													System.out.println("First_Name is-->"+Bean.getName());
+													System.out.println("User_Id is-->"+Bean.getUId());
+													System.out.println("User Name is-->"+Bean.getName());
 													System.out.println("Email_Id is-->"+Bean.getEmail());
 													System.out.println("Password is-->"+Bean.getPassword());
 													System.out.println("Mobile_No is-->"+Bean.getMobile());
@@ -592,7 +592,7 @@ public class Controller {
 													System.out.println("No Users are present");
 												}
 											}
-										}catch (LMSException e) {
+										} catch (LMSException e) {
 											System.err.println(e.getMessage());
 										}
 										break;
@@ -603,7 +603,7 @@ public class Controller {
 											for (RequestBean requestBean : requests) {	
 												if (requestBean != null) {
 													System.out.println("-----------------------------------------------");
-													System.out.println("User_Id is-->"+requestBean.getUsers().getId());
+													System.out.println("User_Id is-->"+requestBean.getUsers().getUId());
 													System.out.println("User_Name is-->"+requestBean.getName());
 													System.out.println("Book_Id is-->"+requestBean.getBooks().getBId());
 													System.out.println("BookName is-->"+requestBean.getBookName());
@@ -612,7 +612,7 @@ public class Controller {
 													System.out.println("No Requests are received");
 												}
 											}
-										}catch (LMSException e) {
+										} catch (LMSException e) {
 											System.err.println(e.getMessage());
 										}
 										break;
@@ -646,7 +646,7 @@ public class Controller {
 													System.out.println("Respective user hasn't borrowed any books");
 												}
 											}
-										}catch (LMSException e) {
+										} catch (LMSException e) {
 											System.err.println(e.getMessage());
 										}
 										break;
@@ -658,13 +658,13 @@ public class Controller {
 										System.out.println("Invalid Choice");
 										break;
 									}
-								}   catch (InputMismatchException ex)   {
+								} catch (InputMismatchException ex)   {
 									System.out.println("Incorrect entry. Please input only a positive integer.");
 									scanner.nextLine();
 								}
-							}while(true);
+							} while(true);
 						}
-						else if(loginInfo.getRole().equals("student")) {
+						else if (loginInfo.getRole().equals("student")) {
 							do {
 								try {
 									System.out.println("------------------------------------");
@@ -881,15 +881,15 @@ public class Controller {
 												System.err.println(e.getMessage());
 											} 
 										} while (!flag);
-										
+
 										try {
-											if (loginInfo.getId()==user_Id) {
+											if (loginInfo.getUId()==user_Id) {
 												List<BorrowedBooks> borrowedBookList = service1.borrowedBook(user_Id);
 												for (BorrowedBooks bookBean : borrowedBookList) {
 
 													if (bookBean != null) {
 														System.out.println("-----------------------------------------------");
-														System.out.println("User_Id is-->"+bookBean.getUsers().getId());
+														System.out.println("User_Id is-->"+bookBean.getUsers().getUId());
 														System.out.println("Book_Id is-->"+bookBean.getBooks().getBId());
 														System.out.println("Email Id is-->"+bookBean.getEmail());
 													} else {
@@ -957,7 +957,7 @@ public class Controller {
 											} 
 										} while (!flag);
 										try {
-											if(loginInfo.getId()==userId) {
+											if(loginInfo.getUId()==userId) {
 												boolean returned = service1.returnBook(returnId,userId,status);
 												if (returned != false) {
 													System.out.println("-----------------------------------------------");

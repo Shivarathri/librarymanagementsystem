@@ -29,33 +29,25 @@ public class UsersDAOImp implements UsersDAO {
 	public boolean register(UsersBean info) {
 
 		try {
-
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
-			UsersBean bean = manager.find(UsersBean.class, info.getEmail());
-			if(bean== null) {
-				System.out.println("Record Saved");
-			} else {
-				throw new LMSException("User already Exist");
-			}
 			manager.persist(info);
 			transaction.commit();
+			return true;
 		} catch (Exception e) {
-
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 			transaction.rollback();
+			return false;
 		} finally {
 			manager.close();
 			factory.close();
-			return false;
 		}
 	}
 
 	public UsersBean auth(String email, String password) {
 
 		try {
-
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
@@ -75,10 +67,7 @@ public class UsersDAOImp implements UsersDAO {
 
 	}
 	public boolean addBook(BookBean book) {
-
 		try {
-
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
@@ -91,12 +80,12 @@ public class UsersDAOImp implements UsersDAO {
 			query.setParameter("publisher", book.getPublisher());
 			int count = query.executeUpdate();
 			transaction.commit();
-			if(count!=0) {
+			if (count!=0) {
 				return true;
 			} else {
 				return false;
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			transaction.rollback();
 			return false;
@@ -110,14 +99,11 @@ public class UsersDAOImp implements UsersDAO {
 	public LinkedList<BookBean> searchBookByTitle(String bookName) {
 
 		try {
-
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
-			manager = factory.createEntityManager();
-			transaction = manager.getTransaction();
-			String jpql="select m from bookBean m where bookName=:bookName";
+			String jpql="select m from BookBean m where m.bookName=:bookName";
 			TypedQuery<BookBean> query=manager.createQuery(jpql, BookBean.class);
-			query.setParameter("bName", bookName);
+			query.setParameter("bookName", bookName);
 			LinkedList<BookBean> list=(LinkedList<BookBean>) query.getResultList();
 			if(list!=null) {
 				return list;
@@ -139,14 +125,13 @@ public class UsersDAOImp implements UsersDAO {
 	public LinkedList<BookBean> searchBookByAuthor(String author) {
 
 		try {
-
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
-			String jpql="select m from bookBean m where author=:author";
+			String jpql="select m from bookBean m where m.author=:author";
 			TypedQuery<BookBean> query=manager.createQuery(jpql, BookBean.class);
-			query.setParameter("bauthor", author);
+			query.setParameter("author", author);
 			LinkedList<BookBean> list=(LinkedList<BookBean>) query.getResultList();
 			if (list!=null) {
 				return list;
@@ -168,14 +153,12 @@ public class UsersDAOImp implements UsersDAO {
 
 
 	public LinkedList<BookBean> searchBookById(int bId) {
-
 		try {
-
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
-			String jpql="select m from bookBean m where bId=:bId";
+			String jpql="select m from BookBean m where m.bId = :bId";
 			TypedQuery<BookBean> query=manager.createQuery(jpql, BookBean.class);
 			query.setParameter("bId", bId);
 			LinkedList<BookBean> list=(LinkedList<BookBean>) query.getResultList();
@@ -188,10 +171,8 @@ public class UsersDAOImp implements UsersDAO {
 
 			e.printStackTrace();
 			transaction.rollback();
-
 			return null;
 		} finally {
-		
 		manager.close();
 		factory.close();
 		
@@ -202,7 +183,6 @@ public class UsersDAOImp implements UsersDAO {
 	public boolean updateBook(BookBean bean) {
 
 		try {
-
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
@@ -214,17 +194,17 @@ public class UsersDAOImp implements UsersDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 			transaction.rollback();
+			return false;
 		} finally {
 			manager.close();
 			factory.close();
 		}
-		return false;
+		
 	}
 
 	public boolean removeBook(int bid) {
 
 		try {
-
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
@@ -255,7 +235,7 @@ public class UsersDAOImp implements UsersDAO {
 			transaction = manager.getTransaction();
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
-			String jpql="select m from bookBean";
+			String jpql="select m from BookBean m";
 			TypedQuery<BookBean> query=manager.createQuery(jpql, BookBean.class);
 			LinkedList<BookBean> list=(LinkedList<BookBean>) query.getResultList();
 			if (list!=null) {
@@ -267,19 +247,20 @@ public class UsersDAOImp implements UsersDAO {
 
 			e.printStackTrace();
 			transaction.rollback();
+			return null;
 		} finally {
 		
 		manager.close();
 		factory.close();
 		}
-		return null;
+		
 	}
 
 	public List<UsersBean> showUsers() {
 
 		try {
 			transaction.begin();
-			String jpql = "select * from usersbean";
+			String jpql = "select m from UsersBean m";
 			TypedQuery<UsersBean> query = (TypedQuery<UsersBean>) manager.createNativeQuery(jpql, UsersBean.class);
 			List<UsersBean> recordList = query.getResultList();
 			if(recordList!=null) {
@@ -302,7 +283,7 @@ public class UsersDAOImp implements UsersDAO {
 
 		try {
 			transaction.begin();
-			String jpql = "select * from requestbean";
+			String jpql = "select m from RequestBean m";
 			TypedQuery<RequestBean> query = (TypedQuery<RequestBean>) manager.createNativeQuery(jpql, RequestBean.class);
 			//manager.persist(query);
 			List<RequestBean> recordList = query.getResultList();
@@ -331,7 +312,7 @@ public class UsersDAOImp implements UsersDAO {
 			query.setParameter("bId", bId);
 			BookBean rs = query.getSingleResult();
 			if (rs != null) {
-				String jpql1 = "select r from RequestDetails r where r.uId=:uId and r.bId=:bId and r.email=(select u.email from u.UsersBean where u.uId=:userId)";
+				String jpql1 = "select r from RequestDetails r join r.users u on r.uId=u.uId join r.books b on r.bId=b.bId where u.uId=:uId and b.bId=:bId";
 				TypedQuery<RequestBean> query1 = manager.createQuery(jpql1,RequestBean.class);
 				query1.setParameter("uId", uId);
 				query1.setParameter("bId", bId);
@@ -340,7 +321,7 @@ public class UsersDAOImp implements UsersDAO {
 				if (rs1 != null) {
 					transaction.begin();
 					String jpql2 = "insert into BookIssueDetails(bId,uId,issueDate,returnDate) values(:bId,:uId,:issueDate,:returnDate)";
-					Query query2 = manager.createQuery(jpql2);
+					Query query2 = manager.createNativeQuery(jpql2);
 					query2.setParameter("bId", bId);
 					query2.setParameter("uId", uId);
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
@@ -355,7 +336,7 @@ public class UsersDAOImp implements UsersDAO {
 					if (count != 0) {
 						transaction.begin();
 						String jpql3 = "Insert into BorrowedBooks(bId,uId,email) values(:bId,:uId,(select u.email from UsersBean u where u.uId=:userId))";
-						Query query3 = manager.createQuery(jpql3);
+						Query query3 = manager.createNativeQuery(jpql3);
 						query3.setParameter("bId", bId);
 						query3.setParameter("uId", uId);
 						query3.setParameter("userId", uId);
@@ -383,42 +364,37 @@ public class UsersDAOImp implements UsersDAO {
 			manager.close();
 			factory.close();
 		}
-
 	}
 
 
 	public boolean request(int uId, int bId) {
-
-		int count = 0;
-		
+		int count=0;
 		try {
-
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
-			String jpql = "select b from BookBean where b.bId=:bId";
+			String jpql = "select b from BookBean b where b.bId=:bId";
 			TypedQuery<BookBean> query = manager.createQuery(jpql,BookBean.class);
 			query.setParameter("bId", bId);
 			BookBean rs = query.getSingleResult();
-			if (rs != null) {
-				String jpql1 = "select b from BorrowedBooks b where b.uId=:uId and b.bId=:bId and b.email=(select u.email from UsersBean u where u.uId=:userId)";
-				TypedQuery<BorrowedBooks> query1 = manager.createQuery(jpql1,BorrowedBooks.class);
+			if(rs != null) {
+				String jpql1 = "select b from BorrowedBooks b join UsersBean u on u.uId=b.users.uId join BookBean bk on bk.bId=b.books.bId where u.uId=:uId and bk.bId=:bId";
+				TypedQuery<BorrowedBooks> query1 = (TypedQuery<BorrowedBooks>) manager.createNativeQuery(jpql1,BorrowedBooks.class);
 				query1.setParameter("uId", uId);
 				query1.setParameter("bId", bId);
-				query1.setParameter("userId", uId);
 				BorrowedBooks rs1 = query1.getSingleResult();
-				if (rs1 == null) {
-					String jpql2 = "select b from BookIssueDetails b where b.uId=:uId";
-					TypedQuery<BookIssueDetails> query2 = manager.createQuery(jpql2,BookIssueDetails.class);
+				if(rs1 == null) {
+					String jpql2 = "select b from BookIssueDetails b join b.users u on u.uId=b.uId where u.uId=:uId";
+					TypedQuery<BookIssueDetails> query2 = (TypedQuery<BookIssueDetails>) manager.createNativeQuery(jpql2,BookIssueDetails.class);
 					query2.setParameter("uId", uId);
 					List<BookIssueDetails> rs2 = query2.getResultList();
-					for (BookIssueDetails p : rs2) {
+					for(BookIssueDetails p : rs2) {
 						noOfBooks = count++;
 					}
-					if (noOfBooks<3) {
+					if(noOfBooks<3) {
 						transaction.begin();
 						String jpql3 = "insert into RequestDetails(uId,fullName,bId,bookName,email) values(:uId,(select u.firstName from UsersBean u where u.uId=:userId),:bId,"
 								+ "(select b.bookName from BookBean b where b.bId=:bookId),(select u.email from UsersBean where u.uId=:user_Id))" ;
-						Query query3 = manager.createQuery(jpql3);
+						Query query3 = manager.createNativeQuery(jpql3);
 						query3.setParameter("uId", uId);
 						query3.setParameter("userId", uId);
 						query3.setParameter("bId", bId);
@@ -441,15 +417,16 @@ public class UsersDAOImp implements UsersDAO {
 			} else {
 				throw new LMSException("The book with requested id is not present");
 			}
-		
-	} catch (Exception e) {
-		System.err.println(e.getMessage());
-		transaction.rollback();
-		return false;
-	} finally {
-		manager.close();
-		factory.close();
-	}
+
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			transaction.rollback();
+			return false;
+		} finally {
+			manager.close();
+			factory.close();
+		}
+
 }
 
 
@@ -474,12 +451,12 @@ public boolean returnBook(int bId, int uId, String status) {
 	try {
 		manager = factory.createEntityManager();
 		transaction = manager.getTransaction();
-		String jpql = "select b from BookBean b where b.bId=:bId";
+		String jpql = "select m from BookBean m where m.bId=:bId";
 		TypedQuery<BookBean> query = manager.createQuery(jpql,BookBean.class);
 		query.setParameter("bId", bId);
 		BookBean rs = query.getSingleResult();
-		if (rs != null) {
-			String jpql1 = "select b from BookIssueDetails b where b.bId=:bId and b.uId=uId ";
+		if(rs != null) {
+			String jpql1 = "select m from BookIssueDetails m where m.bId=:bId and m.uId=uId ";
 			TypedQuery<BookIssueDetails> query1 = manager.createQuery(jpql,BookIssueDetails.class);
 			query1.setParameter("bId", bId);
 			query1.setParameter("uId", uId);
@@ -495,24 +472,24 @@ public boolean returnBook(int bId, int uId, String status) {
 					System.out.println("The user has to pay the fine of the respective book of Rs:"+fine);
 					if (status=="yes") {
 						transaction.begin();
-						String jpql2 = "delete from BookIssueDetails b where b.bId=:bId and u.uId=:uId";
-						Query query2 = manager.createQuery(jpql2);
+						String jpql2 = "delete from BookIssueDetails m where m.bId=:bId and m.uId=:uId";
+						Query query2 = manager.createNativeQuery(jpql2);
 						query2.setParameter("bId", bId);
 						query2.setParameter("uId", uId);
 						int count1 = query2.executeUpdate();
 						transaction.commit();
 						if (count1 != 0) {
 							transaction.begin();
-							String jpql3 = "delete from BorrowedBooks b where b.bId=:bId and b.uId=:uId";
-							Query query3 = manager.createQuery(jpql3);
+							String jpql3 = "delete from BorrowedBooks m where m.bId=:bId and m.uId=:uId";
+							Query query3 = manager.createNativeQuery(jpql3);
 							query3.setParameter("bId", bId);
 							query3.setParameter("uId", uId);
 							int count2 = query3.executeUpdate();
 							transaction.commit();
 							if (count2 != 0) {
 								transaction.begin();
-								String jpql4 = "delete from BorrowedBooks b where b.bId=:bId and b.uId=:uId";
-								Query query4 = manager.createQuery(jpql4);
+								String jpql4 = "delete from BorrowedBooks m where m.bId=:bId and m.uId=:uId";
+								Query query4 = manager.createNativeQuery(jpql4);
 								query4.setParameter("bId", bId);
 								query4.setParameter("uId", uId);
 								int count3 = query4.executeUpdate();
@@ -536,7 +513,7 @@ public boolean returnBook(int bId, int uId, String status) {
 				} else {
 					transaction.begin();
 					String jpql2 = "delete from BookIssueDetails b where b.bId=:bId and u.uId=:uId";
-					Query query2 = manager.createQuery(jpql2);
+					Query query2 = manager.createNativeQuery(jpql2);
 					query2.setParameter("bId", bId);
 					query2.setParameter("uId", uId);
 					int count1 = query2.executeUpdate();
@@ -544,7 +521,7 @@ public boolean returnBook(int bId, int uId, String status) {
 					if (count1 != 0) {
 						transaction.begin();
 						String jpql3 = "delete from BorrowedBooks b where b.bId=:bId and b.uId=:uId";
-						Query query3 = manager.createQuery(jpql3);
+						Query query3 = manager.createNativeQuery(jpql3);
 						query3.setParameter("bId", bId);
 						query3.setParameter("uId", uId);
 						int count2 = query3.executeUpdate();
@@ -552,7 +529,7 @@ public boolean returnBook(int bId, int uId, String status) {
 						if (count2 != 0) {
 							transaction.begin();
 							String jpql4 = "delete from BorrowedBooks b where b.bId=:bId and b.uId=:uId";
-							Query query4 = manager.createQuery(jpql4);
+							Query query4 = manager.createNativeQuery(jpql4);
 							query4.setParameter("bId", bId);
 							query4.setParameter("uId", uId);
 							int count3 = query4.executeUpdate();
@@ -591,7 +568,7 @@ public boolean returnBook(int bId, int uId, String status) {
 public LinkedList<Integer> bookHistoryDetails(int uId) {
 	int count=0;
 	manager = factory.createEntityManager();
-	String jpql = "select b from BookIssueDetails b";
+	String jpql = "select m from BookIssueDetails m";
 	TypedQuery<BookIssueDetails> query = manager.createQuery(jpql,BookIssueDetails.class);
 	LinkedList<BookIssueDetails> recordList = (LinkedList<BookIssueDetails>)query.getResultList();
 	for(BookIssueDetails p : recordList) {
