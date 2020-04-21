@@ -6261,3 +6261,5 @@ org.eclipse.core.runtime.CoreException: Launch configuration Test2 references no
 2020-04-21 15:24:59,460 [Worker-152: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\shahensha\Desktop\New folder\project\librarymanagementsystemjdbc\src\test\resources
 2020-04-21 15:25:09,507 [Worker-149: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2020-04-21 15:25:09,508 [Worker-149: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\shahensha\Desktop\New folder\project\librarymanagementsystemjdbc\src\main\resources
+2020-04-21 15:25:09,510 [Worker-149: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-04-21 15:25:09,511 [Worker-149: Building workspace] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\shahensha\Desktop\New folder\project\librarymanagementsystemjdbc\src\test\resources
