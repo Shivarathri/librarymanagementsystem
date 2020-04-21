@@ -29,6 +29,18 @@ public class Validation {
 		}
 		return result;
 	}
+	public boolean validatedRole(String role) throws LMSException {
+		String nameRegEx = "^[A-Za-z\\s]" ;
+		boolean result = false;
+		Pattern pattern = Pattern.compile(nameRegEx);
+		Matcher matcher = pattern.matcher(role);
+		if (matcher.matches()) {
+			result = true;
+		} else {
+			throw new LMSException("Role should  contains only Alphabates");
+		}
+		return result;
+	}
 
 	public boolean validatedMobile(String regMobile) throws LMSException {
 		String mobileRegEx = "(0/91)?[6-9][0-9]{9}" ;

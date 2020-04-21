@@ -17,6 +17,8 @@ import com.capgemini.librarymanagement.service.StudentServiceDAO;
 import com.capgemini.librarymanagement.validation.ValidationAdminStudent;
 
 
+
+
 public class TestProject {
 	public static void main(String[] args) {
 		doReg();
@@ -55,13 +57,13 @@ public class TestProject {
 				System.out.println("----------WELCOME TO LIBRARY-----------");
 				System.out.println("Press 1 to Admin Page");
 				System.out.println("Press 2 to Student Page");
-				System.out.println("-----------------------------------");
+				System.out.println("---------------------------------------");
 
 				int i = scanner.nextInt();
 				switch(i) {
 				case 1:
 					AdminServiceDAO service = AdminFactory.getAdminServiceDAO();
-					do{
+					do {
 						try {
 							System.out.println("-----------------------------------");
 							System.out.println("Press 1 to Admin Register");
@@ -71,6 +73,7 @@ public class TestProject {
 							int choice = scanner.nextInt();
 							switch (choice) {
 							case 1:
+								
 								do {
 									try {
 										System.out.println("Enter ID :");
@@ -80,13 +83,12 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Id should contains only digits");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
 									}
 								} while (!flag);
-
-
 
 								do {
 									try {
@@ -97,13 +99,12 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Name should contains only Alphabates");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
 									}
 								} while (!flag);
-
-
 
 								do {
 									try {
@@ -114,13 +115,12 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Mobile Number  should contains only numbers");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
 									}
 								} while (!flag);
-
-
 
 								do {
 									try {
@@ -131,13 +131,12 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Email should be proper ");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
 									}
 								} while (!flag);
-
-
 
 								do {
 									try {
@@ -148,6 +147,7 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Enter correct Password ");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
@@ -162,7 +162,7 @@ public class TestProject {
 								bean.setPassword(regPassword);
 
 								boolean check = service.register(bean);
-								if(check) {
+								if (check) {
 									System.out.println("Registered");
 								} else {
 									System.out.println("Email already exist");
@@ -208,6 +208,7 @@ public class TestProject {
 													} catch (InputMismatchException e) {
 														flag = false;
 														System.err.println("Id should contains only digits");
+														scanner.nextLine();
 													} catch (ValidationException e) {
 														flag = false;
 														System.err.println(e.getMessage());
@@ -223,6 +224,7 @@ public class TestProject {
 													} catch (InputMismatchException e) {
 														flag = false;
 														System.err.println("Book-Name should contains only Alphabates");
+														scanner.nextLine();
 													} catch (ValidationException e) {
 														flag = false;
 														System.err.println(e.getMessage());
@@ -240,6 +242,7 @@ public class TestProject {
 													} catch (InputMismatchException e) {
 														flag = false;
 														System.err.println("Author Name should contains only Alphabates");
+														scanner.nextLine();
 													} catch (ValidationException e) {
 														flag = false;
 														System.err.println(e.getMessage());
@@ -256,6 +259,7 @@ public class TestProject {
 													} catch (InputMismatchException e) {
 														flag = false;
 														System.err.println("Book-Category should contains only Alphabates");
+														scanner.nextLine();
 													} catch (ValidationException e) {
 														flag = false;
 														System.err.println(e.getMessage());
@@ -272,20 +276,13 @@ public class TestProject {
 													} catch (InputMismatchException e) {
 														flag = false;
 														System.err.println("Book-PublisherName should contains only Alphabates");
+														scanner.nextLine();
 													} catch (ValidationException e) {
 														flag = false;
 														System.err.println(e.getMessage());
 													}
 												} while (!flag);
 
-												/*
-												 * do { try { System.out.println("Enter IssueDate :"); bookIssuedate =
-												 * scanner.next(); validation.validatedDate(bookIssuedate); flag = true; } catch
-												 * (InputMismatchException e) { flag = false;
-												 * System.err.println("Book-Issue Date should be in dd/mm/yyyy format"); } catch
-												 * (ValidationException e) { flag = false; System.err.println(e.getMessage()); }
-												 * } while (!flag);
-												 */
 
 												BookBean bean1 = new BookBean();
 												bean1.setBid(bookId);	
@@ -303,12 +300,26 @@ public class TestProject {
 												break;
 
 											case 2:
-												System.out.println("Search the book by the Author Name:");
-												String author = scanner.next();
+												
+												do {
+													try {
+														System.out.println("Search the book by the Author Name:");
+														bookAuthor = scanner.next();
+														validation.validatedName(bookAuthor);
+														flag = true;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Book-PublisherName should contains only Alphabates");
+														scanner.nextLine();
+													} catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													}
+												} while (!flag);
 
 												BookBean bean3 = new BookBean();
-												bean3.setBauthor(author);
-												List<BookBean> bookauthor = service.searchBookAuthor(author);
+												bean3.setBauthor(bookAuthor);
+												List<BookBean> bookauthor = service.searchBookAuthor(bookAuthor);
 												for (BookBean bookBean : bookauthor) {
 
 													if (bookBean != null) {
@@ -324,12 +335,26 @@ public class TestProject {
 												}
 												break;
 											case 3:
-												System.out.println("  Search the book by the Book_Title :");
-												String btitle = scanner.next();
+												
+												do {
+													try {
+														System.out.println("  Search the book by the Book-Title :");
+														bookName = scanner.next();
+														validation.validatedName(bookName);
+														flag = true;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Book-PublisherName should contains only Alphabates");
+														scanner.nextLine();
+													} catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													}
+												} while (!flag);
 
 												BookBean bean4 = new BookBean();
-												bean4.setBauthor(btitle);
-												List<BookBean> booktitle = service.searchBookTitle(btitle);
+												bean4.setBauthor(bookName);
+												List<BookBean> booktitle = service.searchBookTitle(bookName);
 												for (BookBean bookBean : booktitle) {	
 													if (bookBean != null) {
 														System.out.println("-----------------------------------");
@@ -344,12 +369,26 @@ public class TestProject {
 												}
 												break;
 											case 4:
-												System.out.println("Search the book by the Book_Category :");
-												String bids = scanner.next();
-
+												String category = null;
+												do {
+													try {
+														System.out.println("Search the book by the Book_Category :");
+														category = scanner.next();
+														validation.validatedName(category);
+														flag = true;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Book-Category should contains only Alphabates");
+														scanner.nextLine();
+													} catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													}
+												} while (!flag);
+												
 												BookBean bean5 = new BookBean();
-												bean5.setBauthor(bids);
-												List<BookBean> bookIds = service.searchBookType(bids);
+												bean5.setBauthor(category);
+												List<BookBean> bookIds = service.searchBookType(category);
 												for (BookBean bookBean : bookIds) {
 													if (bookBean != null) {
 														System.out.println("-----------------------------------");
@@ -364,14 +403,30 @@ public class TestProject {
 												}
 												break;
 											case 5:
-												System.out.println("Enter the book_Id to delete :");
-												int book_Id = scanner.nextInt();
-												if (book_Id == 0) {
+												
+												int removeId = 0;
+												System.out.println("Enter Book-Id to Remove:");
+												do {
+													try {
+														removeId=scanner.nextInt();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													} catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
+												
+												
+												if (removeId == 0) {
 													System.out.println("Enter the Valid Book_Id");
 												} else {
 													BookBean bean6 = new BookBean();
-													bean6.setBid(book_Id);
-													boolean remove = service.removeBook(book_Id);
+													bean6.setBid(removeId);
+													boolean remove = service.removeBook(removeId);
 													if (remove) {
 														System.out.println("The Book is removed");
 													} else {
@@ -407,15 +462,44 @@ public class TestProject {
 												}
 												break;
 											case 8:
-												StudentBean userBean2 = new StudentBean();
-												BookBean bookBean2 = new BookBean();
-												System.out.println("enter Book Id");
-												int bId = scanner.nextInt();
-												System.out.println("enter User Id");
-												int uId = scanner.nextInt();
+												
+												int issueId = 0;
+												System.out.println("Enter the Book-Id:");
+												do {
+													try {
+														issueId = scanner.nextInt();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
 
-												bookBean2.setBid(bId);;
-												userBean2.setSid(uId);
+												int studentId = 0;
+												System.out.println("Enter the Student-Id:");
+												do {
+													try {
+														studentId = scanner.nextInt();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
+												
+												StudentBean userBean2 = new StudentBean();
+												userBean2.setSid(studentId);
+												BookBean bookBean2 = new BookBean();
+												bookBean2.setBid(issueId);
+												
 
 												try {
 													boolean isIssued = service.bookIssue(userBean2, bookBean2);
@@ -469,20 +553,48 @@ public class TestProject {
 												break;
 											case 11:
 												System.out.println("*****Receive Returned Book*****");
-												System.out.println("-----------------------");
-												System.out.println("Enter Student Id");
-												int user1 = scanner.nextInt();
-												System.out.println("Enter Book Id");
-												int book1 = scanner.nextInt();
-
+												System.out.println("-----------------------------------");
+												int user1 = 0;
+												System.out.println("Enter the Student-Id:");
+												do {
+													try {
+														user1 = scanner.nextInt();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													} catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
+												
+												
+												int book1 = 0;
+												System.out.println("Enter the Book-Id:");
+												do {
+													try {
+														book1 = scanner.nextInt();
+														flag = true ;
+													} catch (InputMismatchException e) {
+														flag = false;
+														System.err.println("Error on the input, try again. ");
+														scanner.nextLine();
+													}  catch (ValidationException e) {
+														flag = false;
+														System.err.println(e.getMessage());
+													} 
+												} while (!flag);
+												
 												StudentBean student = new StudentBean();
 												BookBean book = new BookBean();
 												student.setSid(user1);
 												book.setBid(book1);
 												boolean isReceive = service.isBookReceived(student, book);
-												if(isReceive) {
+												if (isReceive) {
 													System.out.println(" Received Returned book");
-												}else {
+												} else {
 													System.out.println("Invalid ! Admin unable to receive");
 												}
 												break;
@@ -496,7 +608,7 @@ public class TestProject {
 											System.out.println("Incorrect entry. Please input only a positive integer.");
 											scanner.nextLine();
 										}
-									} while(true);
+									} while (true);
 								} catch (Exception e) {
 									System.out.println("Invalid Credentials");
 								}
@@ -513,7 +625,7 @@ public class TestProject {
 							System.out.println("Incorrect entry. Please input only a positive integer.");
 							scanner.nextLine();
 						}
-					} while(true);
+					} while (true);
 
 				case 2:
 					StudentServiceDAO service1 = StudentFactory.getStudentServiceDAO();
@@ -528,6 +640,7 @@ public class TestProject {
 							switch (choice) {
 							case 1:
 								do {
+									 
 									try {
 										System.out.println("Enter ID :");
 										regId1 = scanner.nextInt();
@@ -536,13 +649,13 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Id should contains only digits");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
 									}
+								
 								} while (!flag);
-
-
 
 
 								do {
@@ -554,6 +667,7 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Name should contains only Alphabates");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
@@ -570,6 +684,7 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Mobile Number  should contains only numbers");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
@@ -586,6 +701,7 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Email should be proper ");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
@@ -601,6 +717,7 @@ public class TestProject {
 									} catch (InputMismatchException e) {
 										flag = false;
 										System.err.println("Enter correct Password ");
+										scanner.nextLine();
 									} catch (ValidationException e) {
 										flag = false;
 										System.err.println(e.getMessage());
@@ -615,19 +732,49 @@ public class TestProject {
 								bean1.setPassword(regPassword1);
 
 								boolean check = service1.register(bean1);
-								if(check) {
+								if (check) {
 									System.out.println("Registered");
 								} else {
 									System.out.println("Email already exist");
 								}
 								break;
 							case 2:
-								System.out.println("Enter email :");
-								String email = scanner.next();
-								System.out.println("Enter Password :");
-								String password = scanner.next();
+								
+								do {
+									try {
+										System.out.println("Enter Email :");
+										regEmail1 = scanner.next();
+										validation.validatedEmail(regEmail1);
+										flag = true;
+									} catch (InputMismatchException e) {
+										flag = false;
+										System.err.println("Email should be proper ");
+										scanner.nextLine();
+									} catch (ValidationException e) {
+										flag = false;
+										System.err.println(e.getMessage());
+									}
+								} while (!flag);
+								
+								
+								do {
+									try {
+										System.out.println("Enter Password :");
+										regPassword1 = scanner.next();
+										validation.validatedPassword(regPassword1);
+										flag = true;
+									} catch (InputMismatchException e) {
+										flag = false;
+										System.err.println("Enter correct Password ");
+										scanner.nextLine();
+									} catch (ValidationException e) {
+										flag = false;
+										System.err.println(e.getMessage());
+									}
+								} while (!flag);
+								
 								try {
-									StudentBean studentBean = service1.auth(email, password);
+									StudentBean studentBean = service1.auth(regEmail1, regPassword1);
 									System.out.println("Logged in");
 									do {
 										try {
@@ -758,10 +905,7 @@ public class TestProject {
 												break;
 											case 5:
 												LinkedList<BookBean> info = service1.getBooksInfo();
-
-
 												for (BookBean bookBean : info) {
-
 													if (bookBean != null) {
 														System.out.println("-----------------------------------");
 														System.out.println("Book_Id is-->"+bookBean.getBid());
@@ -776,11 +920,7 @@ public class TestProject {
 												break;
 											case 6:
 
-
-
-												int bId = 0;
-												BookBean bookBean = new BookBean();
-												bookBean.setBid(bId);
+												int bId = 0;	
 												System.out.println("Enter the Book-Id:");
 												do {
 													try {
@@ -795,12 +935,10 @@ public class TestProject {
 														System.err.println(e.getMessage());
 													} 
 												} while (!flag);
-
+												BookBean bookBean = new BookBean();
+												bookBean.setBid(bId);
 
 												int userId = 0;
-												StudentBean userBean = new StudentBean();
-												userBean.setSid(userId);
-
 												System.out.println("Enter User-Id:");
 												do {
 													try {
@@ -816,10 +954,12 @@ public class TestProject {
 													} 
 												} while (!flag);
 
-
+												StudentBean userBean = new StudentBean();
+												userBean.setSid(userId);
+												
 												try {
 													RequestBean request = service1.bookRequest(userBean, bookBean);
-													System.out.println("Request placed to admin");
+													System.out.println("*****Request placed to admin*****");
 													System.out.println("-----------------------------------");
 													System.out.println("User Id-----" + request.getStudentInfo().getSid());
 													System.out.println("User name---" + request.getStudentInfo().getSname());
@@ -833,12 +973,10 @@ public class TestProject {
 												break;
 											case 7:
 
-												System.out.println("Returning a book:");
-												System.out.println("------------------");
+												System.out.println("*****Returning a book*****");
+												System.out.println("----------------------------");
 
 												int user = 0;
-												StudentBean userBean7 = new StudentBean();
-												userBean7.setSid(user);
 												System.out.println("Enter User-Id:");
 												do {
 													try {
@@ -853,11 +991,10 @@ public class TestProject {
 														System.err.println(e.getMessage());
 													} 
 												} while (!flag);
-
+												StudentBean userBean7 = new StudentBean();
+												userBean7.setSid(user);
 
 												int book = 0;
-												BookBean bookBean7 = new BookBean();
-												bookBean7.setBid(book);
 												System.out.println("Enter the Book-Id:");
 												do {
 													try {
@@ -872,7 +1009,8 @@ public class TestProject {
 														System.err.println(e.getMessage());
 													} 
 												} while (!flag);
-
+												BookBean bookBean7 = new BookBean();
+												bookBean7.setBid(book);
 
 												try {
 													RequestBean requestInfo = service1.bookReturn(userBean7, bookBean7);
@@ -896,7 +1034,7 @@ public class TestProject {
 											System.out.println("Incorrect entry. Please input only a positive integer.");
 											scanner.nextLine();
 										}
-									} while(true);
+									} while (true);
 								} catch (Exception e) {
 									System.out.println("Invalid Credentials");
 								}
@@ -911,14 +1049,14 @@ public class TestProject {
 						} catch (InputMismatchException ex) {
 							System.out.println("Incorrect entry. Please input only a positive integer.");
 							scanner.nextLine();
-						}
-					} while(true);
+						} 
+					} while (true);
 				}
-			}   catch (InputMismatchException ex)   {
+			}   catch (InputMismatchException ex) {
 				System.out.println("Incorrect entry. Please input only a positive integer.");
 				scanner.nextLine();
 			}
-		}while(true);
+		} while (true);
 
 	}
 

@@ -28,6 +28,7 @@ public class Controller {
 		long regMobile = 0;
 		String regEmail = null;
 		String regPassword = null;
+		String regRole = null;
 
 		int addBookId = 0;
 		String addBookName = null; 
@@ -66,6 +67,7 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Id should contains only digits");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
@@ -81,6 +83,7 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Name should contains only Alphabates");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
@@ -97,6 +100,7 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Email should be proper ");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
@@ -112,6 +116,7 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Enter correct Password ");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
@@ -127,13 +132,28 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Mobile Number  should contains only numbers");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
 						}
 					} while (!flag);
-					System.out.println("Enter the role");
-					String regRole = scanner.next();
+
+					do {
+						try {
+							System.out.println("Enter the Role :");
+							regRole = scanner.next();
+							validation.validatedName(regRole);
+							flag = true;
+						} catch (InputMismatchException e) {
+							flag = false;
+							System.err.println("Role should contains only alphabates");
+							scanner.nextLine();
+						} catch (LMSException e) {
+							flag = false;
+							System.err.println(e.getMessage());
+						}
+					} while (!flag);
 
 					UsersBean ai = new UsersBean();
 					ai.setUId(regId);
@@ -143,7 +163,7 @@ public class Controller {
 					ai.setMobile(regMobile);
 					ai.setRole(regRole);
 					boolean check=service1.register(ai);
-					if(check) {
+					if (check) {
 						System.out.println("Registered");
 					}else {
 						System.out.println("Already user is registered");
@@ -156,10 +176,10 @@ public class Controller {
 					String password=scanner.next();
 					try {
 						UsersBean loginInfo=service1.auth(email, password);
-						if(loginInfo.getEmail().equals(email) && loginInfo.getPassword().equals(password)) {
+						if (loginInfo.getEmail().equals(email) && loginInfo.getPassword().equals(password)) {
 							System.out.println("Logged In");
 						}
-						if(loginInfo.getRole().equals("admin")) {
+						if (loginInfo.getRole().equals("admin")) {
 							do {
 								try {
 									System.out.println("------------------------------------");
@@ -190,6 +210,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Id should contains only digits");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -206,6 +227,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -221,6 +243,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -236,6 +259,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -251,6 +275,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -259,20 +284,24 @@ public class Controller {
 										/*
 										 * System.out.println("enter no of copies"); int addCopies = scanner.nextInt();
 										 */
+
 										BookBean bi =new BookBean();
 										bi.setBId(addBookId);
 										bi.setBookName(addBookName);
 										bi.setAuthor(addBookAuthorName);
 										bi.setCategory(addBookCategory);
 										bi.setPublisher(addBookPublisher);
+
+
 										boolean check2=service1.addBook(bi);
-										if(check2) {
+										if (check2) {
 											System.out.println("-----------------------------------------------");
-											System.out.println("Added Book");
-										}else {
+											System.out.println("Book is Added");
+										} else {
 											System.out.println("-----------------------------------------------");
-											System.out.println("Book not added");
+											System.out.println("Book  is not added");
 										}
+
 										break;	
 									case 2:
 										do {
@@ -284,6 +313,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Id should contains only digits");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -300,6 +330,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -315,6 +346,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -330,6 +362,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -345,6 +378,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -566,10 +600,10 @@ public class Controller {
 											} 
 										} while (!flag);
 										boolean check4=service1.issueBook(issueId,userId);
-										if(check4) {
+										if (check4) {
 											System.out.println("-----------------------------------------------");
 											System.out.println("Book Issued");
-										}else {
+										} else {
 											System.out.println("-----------------------------------------------");
 											System.out.println("Book not issued");
 										}
@@ -742,7 +776,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -778,7 +812,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -832,7 +866,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -849,7 +883,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -918,7 +952,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -935,7 +969,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -951,7 +985,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -979,7 +1013,7 @@ public class Controller {
 									default:
 										break;
 									}
-								}   catch (InputMismatchException ex)   {
+								}   catch (InputMismatchException ex) {
 									System.out.println("Incorrect entry. Please input only a positive integer.");
 									scanner.nextLine();
 								}

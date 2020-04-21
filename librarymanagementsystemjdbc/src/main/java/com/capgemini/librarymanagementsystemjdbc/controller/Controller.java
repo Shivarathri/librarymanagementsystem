@@ -1,6 +1,6 @@
 package com.capgemini.librarymanagementsystemjdbc.controller;
 
-import java.io.ObjectInputStream.GetField;
+
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,6 +30,7 @@ public class Controller {
 		String regMobile = null;
 		String regEmail = null;
 		String regPassword = null;
+		String regRole = null;
 
 		int addBookId = 0;
 		String addBookName = null; 
@@ -57,7 +58,7 @@ public class Controller {
 			//do {
 			try {
 				int choice = scanner.nextInt();
-				switch(choice) {
+				switch (choice) {
 				case 1:
 					do {
 						try {
@@ -68,6 +69,7 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Id should contains only digits");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
@@ -83,6 +85,7 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Name should contains only Alphabates");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
@@ -97,6 +100,7 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Name should contains only Alphabates");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
@@ -112,6 +116,7 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Email should be proper ");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
@@ -127,6 +132,7 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Enter correct Password ");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
@@ -142,13 +148,28 @@ public class Controller {
 						} catch (InputMismatchException e) {
 							flag = false;
 							System.err.println("Mobile Number  should contains only numbers");
+							scanner.nextLine();
 						} catch (LMSException e) {
 							flag = false;
 							System.err.println(e.getMessage());
 						}
 					} while (!flag);
-					System.out.println("Enter the role");
-					String regRole = scanner.next();
+
+					do {
+						try {
+							System.out.println("Enter the Role :");
+							regRole = scanner.next();
+							validation.validatedRole(regRole);
+							flag = true;
+						} catch (InputMismatchException e) {
+							flag = false;
+							System.err.println("Role should contains only alphabates");
+							scanner.nextLine();
+						} catch (LMSException e) {
+							flag = false;
+							System.err.println(e.getMessage());
+						}
+					} while (!flag);
 
 					UsersBean ai = new UsersBean();
 					ai.setuId(regId);
@@ -159,23 +180,53 @@ public class Controller {
 					ai.setMobile(regMobile);
 					ai.setRole(regRole);
 					boolean check=service1.register(ai);
-					if(check) {
+					if (check) {
 						System.out.println("Registered");
-					}else {
+					} else {
 						System.out.println("Already user is registered");
 					}
 					break;
 				case 2:
-					System.out.println("Enter Email for Login");
-					String email=scanner.next();
-					System.out.println("Enter Password");
-					String password=scanner.next();
+					String email = null;
+					do {
+						try {
+							System.out.println("Enter Email for Login :");
+							email = scanner.next();
+							validation.validatedEmail(email);
+							flag = true;
+						} catch (InputMismatchException e) {
+							flag = false;
+							System.err.println("Email should be proper ");
+							scanner.nextLine();
+						} catch (LMSException e) {
+							flag = false;
+							System.err.println(e.getMessage());
+						}
+					} while (!flag);
+
+
+					String password = null;
+					do {
+						try {
+							System.out.println("Enter Password :");
+							password = scanner.next();
+							validation.validatedPassword(password);
+							flag = true;
+						} catch (InputMismatchException e) {
+							flag = false;
+							System.err.println("Enter correct Password ");
+							scanner.nextLine();
+						} catch (LMSException e) {
+							flag = false;
+							System.err.println(e.getMessage());
+						}
+					} while (!flag);
 					try {
 						UsersBean loginInfo=service1.login(email, password);
-						if(loginInfo.getEmail().equals(email) && loginInfo.getPassword().equals(password)) {
+						if (loginInfo.getEmail().equals(email) && loginInfo.getPassword().equals(password)) {
 							System.out.println("Logged In");
 						}
-						if(loginInfo.getRole().equals("admin")) {
+						if (loginInfo.getRole().equals("admin")) {
 							do {
 								try {
 									System.out.println("------------------------------------");
@@ -206,6 +257,7 @@ public class Controller {
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Id should contains only digits");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -221,7 +273,8 @@ public class Controller {
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
-												System.err.println("Name should contains only Alphabates");
+												System.err.println("Book-Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -236,7 +289,8 @@ public class Controller {
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
-												System.err.println("Name should contains only Alphabates");
+												System.err.println("Author-Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -251,7 +305,8 @@ public class Controller {
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
-												System.err.println("Name should contains only Alphabates");
+												System.err.println("Category-Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -266,7 +321,8 @@ public class Controller {
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
-												System.err.println("Name should contains only Alphabates");
+												System.err.println("Publsher-Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -283,9 +339,9 @@ public class Controller {
 										bi.setPublisher(addBookPublisher);
 										//bi.setCopies(addCopies);
 										boolean check2=service1.addBook(bi);
-										if(check2) {
+										if (check2) {
 											System.out.println("Added Book");
-										}else {
+										} else {
 											System.out.println("Book not added");
 										}
 										break;	
@@ -294,11 +350,12 @@ public class Controller {
 											try {
 												System.out.println("Enter the updated id :");
 												updateBookId=scanner.nextInt();
-												validation.validatedId(updateBookId);
+												validation.validatedBookId(updateBookId);
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
-												System.err.println("Id should contains only digits");
+												System.err.println("Error in the input,try again.");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -308,13 +365,14 @@ public class Controller {
 
 										do {
 											try {
-												System.out.println("Enter BookName to be Updtaed :");
+												System.out.println("Enter BookName to be Updated :");
 												updateBookName=scanner.next();
 												validation.validatedName(updateBookName);
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
-												System.err.println("Name should contains only Alphabates");
+												System.err.println("Book-Name should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -329,7 +387,8 @@ public class Controller {
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
-												System.err.println("Name should contains only Alphabates");
+												System.err.println("Book-AuthorName should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -344,7 +403,8 @@ public class Controller {
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
-												System.err.println("Name should contains only Alphabates");
+												System.err.println("Book-Category should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -359,7 +419,8 @@ public class Controller {
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
-												System.err.println("Name should contains only Alphabates");
+												System.err.println("Book-publisher should contains only Alphabates");
+												scanner.nextLine();
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
@@ -391,16 +452,16 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
 										} while (!flag);
 
 										boolean check3=service1.removeBook(removeId );
-										if(check3) {
+										if (check3) {
 											System.out.println("Removed Book");
-										}else {
+										} else {
 											System.out.println("Book not removed");
 										}
 										break;
@@ -429,7 +490,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -466,7 +527,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -503,7 +564,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -559,7 +620,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -575,16 +636,16 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
 										} while (!flag);
 										boolean check4=service1.issueBook(issueId,userId);
-										if(check4) {
+										if (check4) {
 											System.out.println("-----------------------------------------------");
 											System.out.println("Book Issued");
-										}else {
+										} else {
 											System.out.println("-----------------------------------------------");
 											System.out.println("Book not issued");
 										}
@@ -645,7 +706,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -653,7 +714,7 @@ public class Controller {
 
 										List<BookIssueDetails> uid = service1.bookHistoryDetails(user_Id);
 										for (BookIssueDetails issueDetails : uid) {
-											if(issueDetails != null) {
+											if (issueDetails != null) {
 												System.out.println("-----------------------------------------------");
 												System.out.println("No of books Borrowed :"+issueDetails.getUserId());
 											} else {
@@ -670,13 +731,13 @@ public class Controller {
 										System.out.println("Invalid Choice");
 										break;
 									}
-								}   catch (InputMismatchException ex)   {
+								} catch (InputMismatchException ex)   {
 									System.out.println("Incorrect entry. Please input only a positive integer.");
 									scanner.nextLine();
 								}
-							}while(true);
+							} while (true);
 						}
-						else if(loginInfo.getRole().equals("student")) {
+						else if (loginInfo.getRole().equals("student")) {
 							do {
 								try {
 									System.out.println("------------------------------------");
@@ -717,7 +778,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -754,7 +815,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -790,7 +851,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -844,7 +905,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -861,7 +922,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -888,7 +949,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -921,7 +982,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -938,7 +999,7 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
@@ -954,13 +1015,13 @@ public class Controller {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
 												scanner.nextLine();
-											}  catch (LMSException e) {
+											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
 											} 
 										} while (!flag);
 										try {
-											if(loginInfo.getuId()==userId) {
+											if (loginInfo.getuId()==userId) {
 												boolean returned = service1.returnBook(returnId,userId,status);
 												if (returned != false) {
 													System.out.println("-----------------------------------------------");
@@ -982,14 +1043,14 @@ public class Controller {
 									default:
 										break;
 									}
-								}   catch (InputMismatchException ex)   {
+								} catch (InputMismatchException ex)   {
 									System.out.println("Incorrect entry. Please input only a positive integer.");
 									scanner.nextLine();
 								}
-							} while(true);
+							} while (true);
 						}
 
-					} catch(Exception e) {
+					} catch (Exception e) {
 						System.out.println("Invalid Credentials");
 						System.out.println("Try login again,Press 2 to login");
 						//scanner.nextLine();
@@ -1006,7 +1067,7 @@ public class Controller {
 				scanner.nextLine();
 			}
 
-		} while(loginStatus);
+		} while (loginStatus);
 		//	}while(true);
 
 	}
