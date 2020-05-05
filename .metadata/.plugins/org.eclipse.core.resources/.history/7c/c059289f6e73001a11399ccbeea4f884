@@ -1,5 +1,0 @@
-package com.capgemini.librarymanagementsystemhibernate.service;
-
-public class UsersServiceDAOImp {
-
-}

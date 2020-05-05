@@ -26,20 +26,27 @@ public class AdminDAOImplementation implements AdminDAO {
 
 	public AdminBean auth(String regEmail, String regPassword) {
 		for (AdminBean bean : DB.admin) {
-			if (bean.getEmail().equals(regEmail) && bean.getPassword().equals(regPassword)) {
-				System.out.println("Login succssful");
-				return bean;
-			} 
-			throw new AdminException ("Invalid email and password");
+			if (bean.getEmail().equals(regEmail)) {
+				if (bean.getPassword().equals(regPassword)) {
+
+					// System.out.println("Login succssful");
+					return bean;
+				} else {
+					System.err.println("You have entered wrong Password");
+				}
+			} else {
+				System.err.println("Email doesnot exist");
+			}
+
+			throw new AdminException("Please give a valid credintials");
 
 		}
 		return null;
 	}
 
-
 	public boolean delete(BookBean book) {
 		for (BookBean bean : DB.book) {
-			if (bean.getBid()==book.getBid()) {
+			if (bean.getBid() == book.getBid()) {
 				return false;
 			}
 
@@ -48,10 +55,9 @@ public class AdminDAOImplementation implements AdminDAO {
 		return true;
 	}
 
-
 	public boolean addBook(BookBean book) {
 		for (BookBean bean : DB.book) {
-			if (bean.getBid()==book.getBid()) {
+			if (bean.getBid() == book.getBid()) {
 				return false;
 			}
 		}
@@ -60,23 +66,18 @@ public class AdminDAOImplementation implements AdminDAO {
 	}
 
 	public LinkedList<BookBean> searchBookTitle(String bname) {
-		LinkedList<BookBean> searchList=new LinkedList<BookBean>();
-		for(int i=0;i<=DB.book.size()-1;i++)
-		{
-			BookBean retrievedBook=DB.book.get(i);
-			String retrievedBname=retrievedBook.getBname();
-			if(bname.equals(retrievedBname))
-			{
-				searchList.add(retrievedBook);	
+		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+		for (int i = 0; i <= DB.book.size() - 1; i++) {
+			BookBean retrievedBook = DB.book.get(i);
+			String retrievedBname = retrievedBook.getBname();
+			if (bname.equals(retrievedBname)) {
+				searchList.add(retrievedBook);
 				return searchList;
 			}
 		}
-		if(searchList.size()==0)
-		{
+		if (searchList.size() == 0) {
 			throw new AdminException("Book not found");
-		}
-		else
-		{
+		} else {
 			return searchList;
 		}
 
@@ -84,57 +85,45 @@ public class AdminDAOImplementation implements AdminDAO {
 
 	public LinkedList<BookBean> searchBookAuthor(String bAuthor) {
 
-		LinkedList<BookBean> searchList=new LinkedList<BookBean>();
-		for(int i=0;i<=DB.book.size()-1;i++)
-		{
-			BookBean retrievedBook=DB.book.get(i);
-			String retrievedBAuthor=retrievedBook.getBauthor();
-			if(bAuthor.equals(retrievedBAuthor))
-			{
-				searchList.add(retrievedBook);	
+		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+		for (int i = 0; i <= DB.book.size() - 1; i++) {
+			BookBean retrievedBook = DB.book.get(i);
+			String retrievedBAuthor = retrievedBook.getBauthor();
+			if (bAuthor.equals(retrievedBAuthor)) {
+				searchList.add(retrievedBook);
 			}
 		}
-		if(searchList.size()==0)
-		{
+		if (searchList.size() == 0) {
 			throw new AdminException("Book not found");
-		}
-		else
-		{
+		} else {
 			return searchList;
-		}		
+		}
 
 	}
 
 	public LinkedList<BookBean> searchBookType(String bookType) {
-		LinkedList<BookBean> searchList=new LinkedList<BookBean>();
-		for(int i=0;i<=DB.book.size()-1;i++)
-		{
-			BookBean retrievedBook=DB.book.get(i);
-			String retrievedBookType=retrievedBook.getCategory();
-			if(bookType.equals(retrievedBookType))
-			{
-				searchList.add(retrievedBook);	
+		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+		for (int i = 0; i <= DB.book.size() - 1; i++) {
+			BookBean retrievedBook = DB.book.get(i);
+			String retrievedBookType = retrievedBook.getCategory();
+			if (bookType.equals(retrievedBookType)) {
+				searchList.add(retrievedBook);
 			}
 		}
-		if(searchList.size()==0)
-		{
+		if (searchList.size() == 0) {
 			throw new AdminException("Book not found");
-		}
-		else
-		{
+		} else {
 			return searchList;
-		}		
+		}
 	}
 
 	public boolean removeBook(int bid) {
-		boolean status=false;
-		for(int i=0;i<=DB.book.size()-1;i++)
-		{
-			BookBean retrievedBook=DB.book.get(i);
-			int retrievedId=retrievedBook.getBid();
-			if(bid==retrievedId)
-			{
-				status=true;
+		boolean status = false;
+		for (int i = 0; i <= DB.book.size() - 1; i++) {
+			BookBean retrievedBook = DB.book.get(i);
+			int retrievedId = retrievedBook.getBid();
+			if (bid == retrievedId) {
+				status = true;
 				DB.book.remove(i);
 				break;
 			}
@@ -144,11 +133,10 @@ public class AdminDAOImplementation implements AdminDAO {
 	}
 
 	public LinkedList<Integer> getBookIds() {
-		LinkedList<Integer> idList=new LinkedList<Integer>();
-		for(int i=0;i<=DB.book.size()-1;i++)
-		{
-			BookBean retrievedBook=DB.book.get(i);
-			int retrievedBookId=retrievedBook.getBid();
+		LinkedList<Integer> idList = new LinkedList<Integer>();
+		for (int i = 0; i <= DB.book.size() - 1; i++) {
+			BookBean retrievedBook = DB.book.get(i);
+			int retrievedBookId = retrievedBook.getBid();
 			idList.add(retrievedBookId);
 		}
 		return idList;
@@ -205,7 +193,6 @@ public class AdminDAOImplementation implements AdminDAO {
 
 		{
 
-
 			for (BookBean info2 : DB.book) {
 				if (info2.getBid() == book.getBid()) {
 					book = info2;
@@ -254,8 +241,7 @@ public class AdminDAOImplementation implements AdminDAO {
 		for (RequestBean requestInfo : DB.request) {
 
 			if (requestInfo.getBookInfo().getBid() == book.getBid()
-					&& requestInfo.getStudentInfo().getSid() == student.getSid() 
-					&& requestInfo.isReturned() == true) {
+					&& requestInfo.getStudentInfo().getSid() == student.getSid() && requestInfo.isReturned() == true) {
 				isValid = true;
 				requestInfo1 = requestInfo;
 			}
@@ -266,7 +252,6 @@ public class AdminDAOImplementation implements AdminDAO {
 			book.setBname(requestInfo1.getBookInfo().getBname());
 			DB.book.add(book);
 			DB.request.remove(requestInfo1);
-
 
 			for (StudentBean userInfo2 : DB.student) {
 				if (userInfo2.getSid() == student.getSid()) {

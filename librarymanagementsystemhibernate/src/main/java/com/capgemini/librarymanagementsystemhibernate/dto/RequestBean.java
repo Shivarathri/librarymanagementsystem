@@ -1,15 +1,10 @@
 package com.capgemini.librarymanagementsystemhibernate.dto;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,25 +12,25 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 
 import lombok.EqualsAndHashCode.Exclude;
+
+@SuppressWarnings("serial")
 @Inheritance
 @Entity
-@Table (name = "request_details")
+@Table(name = "request_details")
 public class RequestBean implements Serializable {
 	@EmbeddedId
-	private CompositePK compositePK;
+	private CompositePrimaryKeyBean compositePrimaryKeyBean;
 	@Column
 	private String name;
 	@Column
 	private String bookName;
-	
-	
-	
-	public CompositePK getCompositePK() {
-		return compositePK;
+
+	public CompositePrimaryKeyBean getCompositePK() {
+		return compositePrimaryKeyBean;
 	}
 
-	public void setCompositePK(CompositePK compositePK) {
-		this.compositePK = compositePK;
+	public void setCompositePK(CompositePrimaryKeyBean compositePrimaryKeyBean) {
+		this.compositePrimaryKeyBean = compositePrimaryKeyBean;
 	}
 
 	public String getName() {
@@ -73,14 +68,13 @@ public class RequestBean implements Serializable {
 	@Exclude
 	@MapsId("bId")
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="bId")
+	@JoinColumn(name = "bId")
 	private BookBean books;
-	
+
 	@Exclude
 	@MapsId("uId")
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="uId")
+	@JoinColumn(name = "uId")
 	private UsersBean users;
 
-	
 }

@@ -9,7 +9,8 @@ public class UsersFactory {
 	public static UsersDAO getUsersDAO() {
 		return new UsersDAOImp();
 	}
-	public static UsersService  getUsersService() {
+
+	public static UsersService getUsersService() {
 		return new UsersServiceImp();
 	}
 }

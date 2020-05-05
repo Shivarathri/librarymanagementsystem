@@ -9,9 +9,9 @@ public class AdminFactory {
 	public static AdminDAO getAdminDAO() {
 		return new AdminDAOImplementation();
 	}
+
 	public static AdminServiceDAO getAdminServiceDAO() {
 		return new AdminServiceImplementation();
 	}
-	
 
 }

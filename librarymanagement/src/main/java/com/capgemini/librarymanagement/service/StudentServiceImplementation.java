@@ -1,8 +1,6 @@
 package com.capgemini.librarymanagement.service;
 
 import java.util.LinkedList;
-import java.util.List;
-
 import com.capgemini.librarymanagement.dao.StudentDAO;
 import com.capgemini.librarymanagement.dto.BookBean;
 import com.capgemini.librarymanagement.dto.RequestBean;
@@ -11,7 +9,7 @@ import com.capgemini.librarymanagement.factory.StudentFactory;
 
 public class StudentServiceImplementation implements StudentServiceDAO {
 
-	private StudentDAO dao=StudentFactory.getStudentDAO();
+	private StudentDAO dao = StudentFactory.getStudentDAO();
 
 	public boolean register(StudentBean std) {
 		return dao.register(std);
@@ -42,18 +40,13 @@ public class StudentServiceImplementation implements StudentServiceDAO {
 	}
 
 	public RequestBean bookRequest(StudentBean student, BookBean book) {
-		
+
 		return dao.bookRequest(student, book);
 	}
 
 	public RequestBean bookReturn(StudentBean student, BookBean book) {
-		
+
 		return dao.bookReturn(student, book);
 	}
-	
-	
-
-	
-
 
 }

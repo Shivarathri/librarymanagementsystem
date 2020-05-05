@@ -10,8 +10,8 @@ import com.capgemini.librarymanagement.dto.RequestBean;
 import com.capgemini.librarymanagement.dto.StudentBean;
 import com.capgemini.librarymanagement.factory.AdminFactory;
 
-public class AdminServiceImplementation  implements AdminServiceDAO {
-	private AdminDAO dao =  AdminFactory.getAdminDAO();
+public class AdminServiceImplementation implements AdminServiceDAO {
+	private AdminDAO dao = AdminFactory.getAdminDAO();
 
 	public boolean register(AdminBean adm) {
 		return dao.register(adm);
@@ -56,27 +56,23 @@ public class AdminServiceImplementation  implements AdminServiceDAO {
 	}
 
 	public List<StudentBean> showUsers() {
-		
+
 		return dao.showUsers();
 	}
 
 	public List<RequestBean> showRequests() {
-		
+
 		return dao.showRequests();
 	}
 
 	public boolean bookIssue(StudentBean student, BookBean book) {
-	
+
 		return dao.bookIssue(student, book);
 	}
 
 	public boolean isBookReceived(StudentBean student, BookBean book) {
-		
+
 		return dao.isBookReceived(student, book);
 	}
-
-	
-
-
 
 }

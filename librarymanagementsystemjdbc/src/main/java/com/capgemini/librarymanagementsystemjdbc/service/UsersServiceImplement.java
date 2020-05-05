@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.capgemini.librarymanagementsystemjdbc.dao.UsersDAO;
 import com.capgemini.librarymanagementsystemjdbc.dto.BookBean;
-import com.capgemini.librarymanagementsystemjdbc.dto.BookIssueDetails;
-import com.capgemini.librarymanagementsystemjdbc.dto.BorrowedBooks;
-import com.capgemini.librarymanagementsystemjdbc.dto.RequestDetails;
+import com.capgemini.librarymanagementsystemjdbc.dto.IssueBookDetailsBean;
+import com.capgemini.librarymanagementsystemjdbc.dto.BorrowedBooksBean;
+import com.capgemini.librarymanagementsystemjdbc.dto.RequestBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.UsersBean;
 import com.capgemini.librarymanagementsystemjdbc.factory.LibraryFactory;
 
@@ -37,11 +37,13 @@ public class UsersServiceImplement implements UsersService {
 		// TODO Auto-generated method stub
 		return dao.updateBook(book);
 	}
+
 	@Override
 	public LinkedList<BookBean> getBookIds() {
 		// TODO Auto-generated method stub
 		return dao.getBookIds();
 	}
+
 	@Override
 	public LinkedList<BookBean> searchBookById(int bId) {
 		// TODO Auto-generated method stub
@@ -71,13 +73,13 @@ public class UsersServiceImplement implements UsersService {
 		// TODO Auto-generated method stub
 		return dao.request(uId, bId);
 	}
+
 	@Override
-	public List<RequestDetails> showRequest() {
+	public List<RequestBookDetailsBean> showRequest() {
 		// TODO Auto-generated method stub
 		return dao.showRequest();
 	}
 
-	
 	@Override
 	public boolean issueBook(int bId, int uId) {
 		// TODO Auto-generated method stub
@@ -85,13 +87,13 @@ public class UsersServiceImplement implements UsersService {
 	}
 
 	@Override
-	public List<BorrowedBooks> borrowedBook(int uId) {
+	public List<BorrowedBooksBean> borrowedBook(int uId) {
 		// TODO Auto-generated method stub
 		return dao.borrowedBook(uId);
 	}
 
 	@Override
-	public boolean returnBook(int bId,int uId,String status) {
+	public boolean returnBook(int bId, int uId, String status) {
 		// TODO Auto-generated method stub
 		return dao.returnBook(bId, uId, status);
 	}
@@ -102,8 +104,6 @@ public class UsersServiceImplement implements UsersService {
 		return dao.removeBook(bId);
 	}
 
-
-
 	@Override
 	public List<UsersBean> showUsers() {
 		// TODO Auto-generated method stub
@@ -111,13 +111,9 @@ public class UsersServiceImplement implements UsersService {
 	}
 
 	@Override
-	public LinkedList<BookIssueDetails> bookHistoryDetails(int uId) {
+	public LinkedList<IssueBookDetailsBean> bookHistoryDetails(int uId) {
 		// TODO Auto-generated method stub
 		return dao.bookHistoryDetails(uId);
 	}
-
-	
-
-	
 
 }

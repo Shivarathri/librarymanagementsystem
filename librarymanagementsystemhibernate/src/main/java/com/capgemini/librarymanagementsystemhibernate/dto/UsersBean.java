@@ -10,9 +10,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
+
 @Data
 @Entity
-@Table (name = "users")
+@Table(name = "users")
 public class UsersBean {
 	@Id
 	@Column
@@ -27,13 +28,13 @@ public class UsersBean {
 	private long mobile;
 	@Column
 	private String role;
-	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "users")
-	private List<BookIssueDetails> issueDetails;
-	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "users")
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+	private List<BookIssueDetailsBean> issueDetails;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
 	private List<RequestBean> requests;
-	
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "users")
-	private List<BorrowedBooks> borrowed;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+	private List<BorrowedBooksBean> borrowed;
 }

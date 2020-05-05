@@ -1,18 +1,17 @@
 package com.capgemini.librarymanagementsystemhibernate.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.capgemini.librarymanagementsystemhibernate.dao.UsersDAO;
 import com.capgemini.librarymanagementsystemhibernate.dto.BookBean;
-import com.capgemini.librarymanagementsystemhibernate.dto.BookIssueDetails;
-import com.capgemini.librarymanagementsystemhibernate.dto.BorrowedBooks;
+import com.capgemini.librarymanagementsystemhibernate.dto.BorrowedBooksBean;
 import com.capgemini.librarymanagementsystemhibernate.dto.RequestBean;
 import com.capgemini.librarymanagementsystemhibernate.dto.UsersBean;
 import com.capgemini.librarymanagementsystemhibernate.factory.UsersFactory;
 
 public class UsersServiceImp implements UsersService {
 	UsersDAO dao = UsersFactory.getUsersDAO();
+
 	public boolean register(UsersBean info) {
 		// TODO Auto-generated method stub
 		return dao.register(info);
@@ -28,27 +27,27 @@ public class UsersServiceImp implements UsersService {
 		return dao.addBook(book);
 	}
 
-	public LinkedList<BookBean> getBookIds() {
+	public List<Integer> getBookIds() {
 		// TODO Auto-generated method stub
 		return dao.getBookIds();
 	}
 
-	public LinkedList<BookBean> searchBookById(int bId) {
+	public List<BookBean> searchBookById(int bId) {
 		// TODO Auto-generated method stub
 		return dao.searchBookById(bId);
 	}
 
-	public LinkedList<BookBean> searchBookByTitle(String bookName) {
+	public List<BookBean> searchBookByTitle(String bookName) {
 		// TODO Auto-generated method stub
 		return dao.searchBookByTitle(bookName);
 	}
 
-	public LinkedList<BookBean> searchBookByAuthor(String author) {
+	public List<BookBean> searchBookByAuthor(String author) {
 		// TODO Auto-generated method stub
 		return dao.searchBookByAuthor(author);
 	}
 
-	public LinkedList<BookBean> getBooksInfo() {
+	public List<BookBean> getBooksInfo() {
 		// TODO Auto-generated method stub
 		return dao.getBooksInfo();
 	}
@@ -78,7 +77,7 @@ public class UsersServiceImp implements UsersService {
 		return dao.issueBook(bId, uId);
 	}
 
-	public List<BorrowedBooks> borrowedBook(int uId) {
+	public List<BorrowedBooksBean> borrowedBook(int uId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -93,11 +92,9 @@ public class UsersServiceImp implements UsersService {
 		return dao.showUsers();
 	}
 
-	public LinkedList<Integer> bookHistoryDetails(int uId) {
+	public List<Integer> bookHistoryDetails(int uId) {
 		// TODO Auto-generated method stub
 		return dao.bookHistoryDetails(uId);
 	}
 
-
-	
 }

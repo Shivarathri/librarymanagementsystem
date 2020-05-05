@@ -1,9 +1,8 @@
 package com.capgemini.librarymanagement.dao;
 
 import java.util.LinkedList;
-import java.util.List;
-
 import com.capgemini.librarymanagement.db.DB;
+import com.capgemini.librarymanagement.dto.AdminBean;
 import com.capgemini.librarymanagement.dto.BookBean;
 import com.capgemini.librarymanagement.dto.RequestBean;
 import com.capgemini.librarymanagement.dto.StudentBean;
@@ -23,110 +22,93 @@ public class StudentDAOImplementation implements StudentDAO {
 		return true;
 	}
 
-
 	public StudentBean auth(String regEmail1, String regPassword1) {
 		for (StudentBean bean : DB.student) {
-			if (bean.getEmail().equals(regEmail1) && bean.getPassword().equals(regPassword1)) {
-				System.out.println("Login succssful");
-				return bean;
-			} 
-			throw new StudentException ("Invalid email and password");
+			if (bean.getEmail().equals(regEmail1)) {
+				if (bean.getPassword().equals(regPassword1)) {
+
+					// System.out.println("Login succssful");
+					return bean;
+				} else {
+					System.err.println("You have entered wrong Password");
+				}
+			} else {
+				System.err.println("Email doesnot exist");
+			}
+
+			throw new AdminException("Please give a valid credintials");
 
 		}
 		return null;
 	}
 
-
 	public LinkedList<BookBean> searchBookTitle(String bname) {
-		LinkedList<BookBean> searchList=new LinkedList<BookBean>();
-		for(int i=0;i<=DB.book.size()-1;i++)
-		{
-			BookBean retrievedBook=DB.book.get(i);
-			String retrievedBname=retrievedBook.getBname();
-			if(bname.equals(retrievedBname))
-			{
-				searchList.add(retrievedBook);	
+		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+		for (int i = 0; i <= DB.book.size() - 1; i++) {
+			BookBean retrievedBook = DB.book.get(i);
+			String retrievedBname = retrievedBook.getBname();
+			if (bname.equals(retrievedBname)) {
+				searchList.add(retrievedBook);
 				return searchList;
 
-
 			}
 		}
-		if(searchList.size()==0)
-		{
-			throw new StudentException ("Book is not found");
-		}
-		else
-		{
+		if (searchList.size() == 0) {
+			throw new StudentException("Book is not found");
+		} else {
 			return searchList;
 		}
 	}
-
 
 	public LinkedList<BookBean> searchBookAuthor(String bAuthor) {
-		LinkedList<BookBean> searchList=new LinkedList<BookBean>();
-		for(int i=0;i<=DB.book.size()-1;i++)
-		{
-			BookBean retrievedBook=DB.book.get(i);
-			String retrievedBAuthor=retrievedBook.getBauthor();
-			if(bAuthor.equals(retrievedBAuthor))
-			{
-				searchList.add(retrievedBook);	
+		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+		for (int i = 0; i <= DB.book.size() - 1; i++) {
+			BookBean retrievedBook = DB.book.get(i);
+			String retrievedBAuthor = retrievedBook.getBauthor();
+			if (bAuthor.equals(retrievedBAuthor)) {
+				searchList.add(retrievedBook);
 			}
 		}
-		if(searchList.size()==0)
-		{
-			throw new StudentException ("Book is not found");
-		}
-		else
-		{
+		if (searchList.size() == 0) {
+			throw new StudentException("Book is not found");
+		} else {
 			return searchList;
-		}	
+		}
 	}
-
 
 	public LinkedList<BookBean> searchBookType(String bookType) {
-		LinkedList<BookBean> searchList=new LinkedList<BookBean>();
-		for(int i=0;i<=DB.book.size()-1;i++)
-		{
-			BookBean retrievedBook=DB.book.get(i);
-			String retrievedBookType=retrievedBook.getCategory();
-			if(bookType.equals(retrievedBookType))
-			{
-				searchList.add(retrievedBook);	
+		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+		for (int i = 0; i <= DB.book.size() - 1; i++) {
+			BookBean retrievedBook = DB.book.get(i);
+			String retrievedBookType = retrievedBook.getCategory();
+			if (bookType.equals(retrievedBookType)) {
+				searchList.add(retrievedBook);
 			}
 		}
-		if(searchList.size()==0)
-		{
+		if (searchList.size() == 0) {
 			throw new AdminException("Book not found");
-		}
-		else
-		{
+		} else {
 			return searchList;
-		}	
+		}
 	}
 
-
 	public LinkedList<Integer> getBookIds() {
-		LinkedList<Integer> idList=new LinkedList<Integer>();
-		for(int i=0;i<=DB.book.size()-1;i++)
-		{
-			BookBean retrievedBook=DB.book.get(i);
-			int retrievedBookId=retrievedBook.getBid();
+		LinkedList<Integer> idList = new LinkedList<Integer>();
+		for (int i = 0; i <= DB.book.size() - 1; i++) {
+			BookBean retrievedBook = DB.book.get(i);
+			int retrievedBookId = retrievedBook.getBid();
 			idList.add(retrievedBookId);
 		}
 		return idList;
 
 	}
 
-
 	public LinkedList<BookBean> getBooksInfo() {
 		return DB.book;
 	}
 
-
 	public RequestBean bookRequest(StudentBean student, BookBean book) {
-		boolean flag = false, 
-		isRequestExists = false;
+		boolean flag = false, isRequestExists = false;
 		RequestBean requestInfo = new RequestBean();
 		StudentBean userInfo2 = new StudentBean();
 		BookBean bookInfo2 = new BookBean();
@@ -163,25 +145,21 @@ public class StudentDAOImplementation implements StudentDAO {
 		throw new AdminException("Invalid request or you cannot request that book");
 	}
 
-
 	public RequestBean bookReturn(StudentBean student, BookBean book) {
 		for (RequestBean requestInfo : DB.request) {
 
-			if (requestInfo.getBookInfo().getBid() == book.getBid() &&
-					requestInfo.getStudentInfo().getSid() == student.getSid() &&
-					requestInfo.isIssued() == true) {
-
+			if (requestInfo.getBookInfo().getBid() == book.getBid()
+					&& requestInfo.getStudentInfo().getSid() == student.getSid() && requestInfo.isIssued() == true) {
 
 				System.out.println("Returning Issued book only");
 				requestInfo.setReturned(true);
-
 
 				return requestInfo;
 			}
 
 		}
 
-		throw new  AdminException("Invalid return ");
+		throw new AdminException("Invalid return ");
 	}
 
 }

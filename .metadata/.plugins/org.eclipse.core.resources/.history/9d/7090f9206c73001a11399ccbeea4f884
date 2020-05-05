@@ -1,5 +1,0 @@
-package com.capgemini.librarymanagementsystemhibernate.dto;
-
-public class UsersBean {
-
-}

@@ -9,19 +9,31 @@ import com.capgemini.librarymanagement.dto.RequestBean;
 import com.capgemini.librarymanagement.dto.StudentBean;
 
 public interface AdminServiceDAO {
-	
-	boolean register (AdminBean adm);
-	AdminBean auth(String email,String password);
+
+	boolean register(AdminBean adm);
+
+	AdminBean auth(String email, String password);
+
 	boolean addBook(BookBean book);
+
 	LinkedList<BookBean> searchBookTitle(String bname);
+
 	LinkedList<BookBean> searchBookAuthor(String bAuthor);
+
 	LinkedList<BookBean> searchBookType(String bookType);
+
 	boolean removeBook(int bid);
+
 	LinkedList<Integer> getBookIds();
+
 	LinkedList<BookBean> getBooksInfo();
+
 	List<StudentBean> showUsers();
+
 	List<RequestBean> showRequests();
-	boolean bookIssue(StudentBean student,BookBean book);
-	boolean isBookReceived(StudentBean student,BookBean book);
-	
+
+	boolean bookIssue(StudentBean student, BookBean book);
+
+	boolean isBookReceived(StudentBean student, BookBean book);
+
 }

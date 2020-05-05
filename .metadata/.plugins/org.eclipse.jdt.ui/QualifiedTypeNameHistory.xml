@@ -35,7 +35,6 @@
 <fullyQualifiedTypeName name="javax.persistence.GeneratedValue"/>
 <fullyQualifiedTypeName name="javax.persistence.GenerationType"/>
 <fullyQualifiedTypeName name="javax.persistence.Column"/>
-<fullyQualifiedTypeName name="java.time.LocalDate"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.dto.BookBean"/>
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.dto.UsersBean"/>
@@ -60,4 +59,5 @@
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.factory.UsersFactory"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagementsystemhibernate.dto.RequestBean"/>
 <fullyQualifiedTypeName name="com.capgemini.librarymanagement.exception.ValidationException"/>
+<fullyQualifiedTypeName name="java.time.LocalDate"/>
 </qualifiedTypeNameHistroy>

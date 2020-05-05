@@ -1,16 +1,14 @@
 package com.capgemini.librarymanagementsystemjdbc.controller;
 
-
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-
 import com.capgemini.librarymanagementsystemjdbc.dto.BookBean;
-import com.capgemini.librarymanagementsystemjdbc.dto.BookIssueDetails;
-import com.capgemini.librarymanagementsystemjdbc.dto.BorrowedBooks;
-import com.capgemini.librarymanagementsystemjdbc.dto.RequestDetails;
+import com.capgemini.librarymanagementsystemjdbc.dto.IssueBookDetailsBean;
+import com.capgemini.librarymanagementsystemjdbc.dto.BorrowedBooksBean;
+import com.capgemini.librarymanagementsystemjdbc.dto.RequestBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.UsersBean;
 import com.capgemini.librarymanagementsystemjdbc.exception.LMSException;
 import com.capgemini.librarymanagementsystemjdbc.factory.LibraryFactory;
@@ -21,26 +19,28 @@ public class Controller {
 	public static void main(String[] args) {
 		doReg();
 	}
+
+	@SuppressWarnings("resource")
 	public static void doReg() {
 		boolean flag = false;
 
-		int regId = 0; 
-		String regFirstName = null; 
-		String regLastName = null; 
+		int regId = 0;
+		String regFirstName = null;
+		String regLastName = null;
 		String regMobile = null;
 		String regEmail = null;
 		String regPassword = null;
 		String regRole = null;
 
 		int addBookId = 0;
-		String addBookName = null; 
-		String addBookAuthorName = null; 
+		String addBookName = null;
+		String addBookAuthorName = null;
 		String addBookCategory = null;
 		String addBookPublisher = null;
 
 		int updateBookId = 0;
-		String updateBookName = null; 
-		String updateBookAuthorName = null; 
+		String updateBookName = null;
+		String updateBookAuthorName = null;
 		String updateBookCategory = null;
 		String updateBookPublisher = null;
 
@@ -54,8 +54,8 @@ public class Controller {
 			System.out.println("Press 3 to EXIT");
 			System.out.println("---------------------------------------");
 
-			UsersService service1= LibraryFactory.getUsersService();
-			//do {
+			UsersService service1 = LibraryFactory.getUsersService();
+
 			try {
 				int choice = scanner.nextInt();
 				switch (choice) {
@@ -179,52 +179,33 @@ public class Controller {
 					ai.setPassword(regPassword);
 					ai.setMobile(regMobile);
 					ai.setRole(regRole);
-					boolean check=service1.register(ai);
+					boolean check = service1.register(ai);
 					if (check) {
 						System.out.println("Registered");
 					} else {
-						System.out.println("Already user is registered");
+						System.err.println("Already user is registered");
 					}
 					break;
 				case 2:
-					String email = null;
-					do {
-						try {
-							System.out.println("Enter Email for Login :");
-							email = scanner.next();
-							validation.validatedEmail(email);
-							flag = true;
-						} catch (InputMismatchException e) {
-							flag = false;
-							System.err.println("Email should be proper ");
-							scanner.nextLine();
-						} catch (LMSException e) {
-							flag = false;
-							System.err.println(e.getMessage());
-						}
-					} while (!flag);
 
+					System.out.println("Enter Email for Login :");
+					String email = scanner.next();
 
-					String password = null;
-					do {
-						try {
-							System.out.println("Enter Password :");
-							password = scanner.next();
-							validation.validatedPassword(password);
-							flag = true;
-						} catch (InputMismatchException e) {
-							flag = false;
-							System.err.println("Enter correct Password ");
-							scanner.nextLine();
-						} catch (LMSException e) {
-							flag = false;
-							System.err.println(e.getMessage());
-						}
-					} while (!flag);
+					System.out.println("Enter Password :");
+					String password = scanner.next();
+
 					try {
-						UsersBean loginInfo=service1.login(email, password);
-						if (loginInfo.getEmail().equals(email) && loginInfo.getPassword().equals(password)) {
-							System.out.println("Logged In");
+						UsersBean loginInfo = service1.login(email, password);
+						if (loginInfo.getEmail().equals(email)) {
+							if (loginInfo.getPassword().equals(password)) {
+
+								System.out.println("Logged In");
+							} else {
+								System.out.println("You have entered wrong Password");
+							}
+
+						} else {
+							System.out.println("Enter email doesnot exist");
 						}
 						if (loginInfo.getRole().equals("admin")) {
 							do {
@@ -251,8 +232,8 @@ public class Controller {
 										do {
 											try {
 												System.out.println("Enter Book-Id:");
-												addBookId=scanner.nextInt();
-												validation.validatedId(addBookId);
+												addBookId = scanner.nextInt();
+												validation.validatedBookId(addBookId);
 												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
@@ -264,11 +245,10 @@ public class Controller {
 											}
 										} while (!flag);
 
-
 										do {
 											try {
 												System.out.println("Enter Book Name :");
-												addBookName=scanner.next();
+												addBookName = scanner.next();
 												validation.validatedName(addBookName);
 												flag = true;
 											} catch (InputMismatchException e) {
@@ -284,7 +264,7 @@ public class Controller {
 										do {
 											try {
 												System.out.println("Enter Author Name :");
-												addBookAuthorName=scanner.next();
+												addBookAuthorName = scanner.next();
 												validation.validatedName(addBookAuthorName);
 												flag = true;
 											} catch (InputMismatchException e) {
@@ -300,7 +280,7 @@ public class Controller {
 										do {
 											try {
 												System.out.println("Enter Category Name :");
-												addBookCategory=scanner.next();
+												addBookCategory = scanner.next();
 												validation.validatedName(addBookCategory);
 												flag = true;
 											} catch (InputMismatchException e) {
@@ -316,7 +296,7 @@ public class Controller {
 										do {
 											try {
 												System.out.println("Enter Publisher Name :");
-												addBookPublisher=scanner.next();
+												addBookPublisher = scanner.next();
 												validation.validatedName(addBookPublisher);
 												flag = true;
 											} catch (InputMismatchException e) {
@@ -328,28 +308,25 @@ public class Controller {
 												System.err.println(e.getMessage());
 											}
 										} while (!flag);
-										/*
-										 * System.out.println("enter no of copies"); int addCopies = scanner.nextInt();
-										 */
-										BookBean bi =new BookBean();
+
+										BookBean bi = new BookBean();
 										bi.setbId(addBookId);
 										bi.setBookName(addBookName);
 										bi.setAuthor(addBookAuthorName);
 										bi.setCategory(addBookCategory);
 										bi.setPublisher(addBookPublisher);
-										//bi.setCopies(addCopies);
-										boolean check2=service1.addBook(bi);
+										boolean check2 = service1.addBook(bi);
 										if (check2) {
 											System.out.println("Added Book");
 										} else {
 											System.out.println("Book not added");
 										}
-										break;	
+										break;
 									case 2:
 										do {
 											try {
 												System.out.println("Enter the updated id :");
-												updateBookId=scanner.nextInt();
+												updateBookId = scanner.nextInt();
 												validation.validatedBookId(updateBookId);
 												flag = true;
 											} catch (InputMismatchException e) {
@@ -362,11 +339,10 @@ public class Controller {
 											}
 										} while (!flag);
 
-
 										do {
 											try {
 												System.out.println("Enter BookName to be Updated :");
-												updateBookName=scanner.next();
+												updateBookName = scanner.next();
 												validation.validatedName(updateBookName);
 												flag = true;
 											} catch (InputMismatchException e) {
@@ -382,7 +358,7 @@ public class Controller {
 										do {
 											try {
 												System.out.println("Enter BookAuthor to be Updtaed :");
-												updateBookAuthorName=scanner.next();
+												updateBookAuthorName = scanner.next();
 												validation.validatedName(updateBookAuthorName);
 												flag = true;
 											} catch (InputMismatchException e) {
@@ -398,7 +374,7 @@ public class Controller {
 										do {
 											try {
 												System.out.println("Enter BookCategory to be Updtaed :");
-												updateBookCategory=scanner.next();
+												updateBookCategory = scanner.next();
 												validation.validatedName(updateBookCategory);
 												flag = true;
 											} catch (InputMismatchException e) {
@@ -414,7 +390,7 @@ public class Controller {
 										do {
 											try {
 												System.out.println("Enter BookPublisher to be Updtaed :");
-												updateBookPublisher=scanner.next();
+												updateBookPublisher = scanner.next();
 												validation.validatedName(updateBookPublisher);
 												flag = true;
 											} catch (InputMismatchException e) {
@@ -424,7 +400,7 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
 										BookBean bean2 = new BookBean();
@@ -446,8 +422,8 @@ public class Controller {
 										System.out.println("Enter Book-Id to Remove:");
 										do {
 											try {
-												removeId=scanner.nextInt();
-												flag = true ;
+												removeId = scanner.nextInt();
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -455,10 +431,10 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
-										boolean check3=service1.removeBook(removeId );
+										boolean check3 = service1.removeBook(removeId);
 										if (check3) {
 											System.out.println("Removed Book");
 										} else {
@@ -472,7 +448,7 @@ public class Controller {
 
 											if (bookBean != null) {
 												System.out.println("-------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->" + bookBean.getbId());
 											} else {
 												System.out.println("Books Ids is not present");
 											}
@@ -485,7 +461,7 @@ public class Controller {
 										do {
 											try {
 												id = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -493,23 +469,32 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
 										BookBean bean4 = new BookBean();
 										bean4.setbId(id);
 										List<BookBean> bookid = service1.searchBookById(id);
+										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
+												"Name", "Author", "Category", "Publisher"));
+
 										for (BookBean bookBean : bookid) {
 
 											if (bookBean != null) {
-												System.out.println("----------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Book_Name is-->"+bookBean.getBookName());
-												System.out.println("Book_Author is-->"+bookBean.getAuthor());
-												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
-												System.out.println("Book_Category is-->"+bookBean.getCategory());
-												//System.out.println("No_Of_Copies are-->"+bookBean.getCopies());
-												System.out.println("----------------------------------------");
+
+												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
+														bookBean.getbId(), bookBean.getBookName(), bookBean.getAuthor(),
+														bookBean.getCategory(), bookBean.getPublisher()));
+
+												/*
+												 * System.out.println("-----------------------------------");
+												 * System.out.println("Book_Id is-->"+bookBean.getBid());
+												 * System.out.println("Book_Name is-->"+bookBean.getBname());
+												 * System.out.println("Book_Author is-->"+bookBean.getBauthor()) ;
+												 * System.out.println("Book_Category is-->"+bookBean.getCategory ());
+												 * System.out.println("Book_PublisherName is-->"+bookBean.
+												 * getPublishername());
+												 */
 											} else {
 												System.out.println("No books are available written by this author");
 											}
@@ -522,7 +507,7 @@ public class Controller {
 										do {
 											try {
 												author = scanner.next();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -530,23 +515,32 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
 										BookBean bean5 = new BookBean();
 										bean5.setAuthor(author);
 										List<BookBean> bookauthor = service1.searchBookByAuthor(author);
+										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
+												"Name", "Author", "Category", "Publisher"));
+
 										for (BookBean bookBean : bookauthor) {
 
 											if (bookBean != null) {
-												System.out.println("----------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Book_Name is-->"+bookBean.getBookName());
-												System.out.println("Book_Author is-->"+bookBean.getAuthor());
-												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
-												System.out.println("Book_Category is-->"+bookBean.getCategory());
-												//System.out.println("No_Of_Copies are-->"+bookBean.getCopies());
-												System.out.println("----------------------------------------");
+
+												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
+														bookBean.getbId(), bookBean.getBookName(), bookBean.getAuthor(),
+														bookBean.getCategory(), bookBean.getPublisher()));
+
+												/*
+												 * System.out.println("-----------------------------------");
+												 * System.out.println("Book_Id is-->"+bookBean.getBid());
+												 * System.out.println("Book_Name is-->"+bookBean.getBname());
+												 * System.out.println("Book_Author is-->"+bookBean.getBauthor()) ;
+												 * System.out.println("Book_Category is-->"+bookBean.getCategory ());
+												 * System.out.println("Book_PublisherName is-->"+bookBean.
+												 * getPublishername());
+												 */
 											} else {
 												System.out.println("No books are available written by this author");
 											}
@@ -559,7 +553,7 @@ public class Controller {
 										do {
 											try {
 												btitle = scanner.next();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -567,22 +561,32 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
 										BookBean bean6 = new BookBean();
 										bean6.setAuthor(btitle);
 										List<BookBean> booktitle = service1.searchBookByTitle(btitle);
-										for (BookBean bookBean : booktitle) {	
+										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
+												"Name", "Author", "Category", "Publisher"));
+
+										for (BookBean bookBean : booktitle) {
+
 											if (bookBean != null) {
-												System.out.println("----------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Book_Name is-->"+bookBean.getBookName());
-												System.out.println("Book_Author is-->"+bookBean.getAuthor());
-												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
-												System.out.println("Book_Category is-->"+bookBean.getCategory());
-												//System.out.println("No_Of_Copies are-->"+bookBean.getCopies());
-												System.out.println("----------------------------------------");
+
+												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
+														bookBean.getbId(), bookBean.getBookName(), bookBean.getAuthor(),
+														bookBean.getCategory(), bookBean.getPublisher()));
+
+												/*
+												 * System.out.println("-----------------------------------");
+												 * System.out.println("Book_Id is-->"+bookBean.getBid());
+												 * System.out.println("Book_Name is-->"+bookBean.getBname());
+												 * System.out.println("Book_Author is-->"+bookBean.getBauthor()) ;
+												 * System.out.println("Book_Category is-->"+bookBean.getCategory ());
+												 * System.out.println("Book_PublisherName is-->"+bookBean.
+												 * getPublishername());
+												 */
 											} else {
 												System.out.println("No books are available with this title.");
 											}
@@ -591,17 +595,25 @@ public class Controller {
 
 									case 8:
 										LinkedList<BookBean> info1 = service1.getBooksInfo();
+										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
+												"Name", "Author", "Category", "Publisher"));
 										for (BookBean bookBean : info1) {
 
 											if (bookBean != null) {
-												System.out.println("-------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Book_Name is-->"+bookBean.getBookName());
-												System.out.println("Book_Author is-->"+bookBean.getAuthor());
-												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
-												System.out.println("Book_Category is-->"+bookBean.getCategory());
-												//System.out.println("No_Of_Copies are-->"+bookBean.getCopies());
-												System.out.println("----------------------------------------------");
+
+												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
+														bookBean.getbId(), bookBean.getBookName(), bookBean.getAuthor(),
+														bookBean.getCategory(), bookBean.getPublisher()));
+												/*
+												 * System.out.println("-----------------------------------");
+												 * System.out.println("Book_Id is-->" + bookBean.getBid());
+												 * System.out.println("Book_Name is-->" + bookBean.getBname());
+												 * System.out.println("Book_Author is-->" + bookBean.getBauthor());
+												 * System.out.println("Book_Category is-->" + bookBean.getCategory());
+												 * System.out.println( "Book_PublisherName is-->" +
+												 * bookBean.getPublishername());
+												 */
+												System.out.println("----------------------------------------------------------");
 											} else {
 												System.out.println("Books info is not present");
 											}
@@ -615,7 +627,7 @@ public class Controller {
 										do {
 											try {
 												issueId = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -623,7 +635,7 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
 										int userId = 0;
@@ -631,7 +643,7 @@ public class Controller {
 										do {
 											try {
 												userId = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -639,9 +651,9 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
-										boolean check4=service1.issueBook(issueId,userId);
+										boolean check4 = service1.issueBook(issueId, userId);
 										if (check4) {
 											System.out.println("-----------------------------------------------");
 											System.out.println("Book Issued");
@@ -655,17 +667,29 @@ public class Controller {
 											System.out.println("--------Users of Library are------------");
 
 											List<UsersBean> usersInfo = service1.showUsers();
-											for (UsersBean usersBean : usersInfo) {
-												if (usersBean != null) {
-													System.out.println("---------------------------------------");
-													System.out.println("User_Id is ---->"+usersBean.getuId());
-													System.out.println("User Firstname is ---->"+usersBean.getFirstName());
-													System.out.println("User Lastname is ---->"+usersBean.getLastName());
-													System.out.println("User Email is ---->"+usersBean.getEmail());
-													//System.out.println("User Password is ---->"+usersBean.getPassword());
-													System.out.println("User Mobile is ---->"+usersBean.getMobile());
-													System.out.println("User Role is ---->"+usersBean.getRole());
-													System.out.println("---------------------------------------");
+
+											System.out.println(String.format("%-10s %-15s %-15s %-15s %-10s %-10s %s",
+													"UserId", "FirstName", "LastName", "Email", "Password", "Mobile",
+													"Role"));
+
+											for (UsersBean bean : usersInfo) {
+												if (bean != null) {
+
+													System.out.println(String.format(
+															"%-10s %-15s %-15s %-15s %-10s %-10s %s", bean.getuId(),
+															bean.getFirstName(), bean.getLastName(), bean.getEmail(),
+															bean.getPassword(), bean.getMobile(), bean.getRole()));
+													/*
+													 * System.out.println(
+													 * "-----------------------------------------------");
+													 * System.out.println("User_Id is-->" + bean.getUId());
+													 * System.out.println("User Name is-->" + bean.getName());
+													 * System.out.println("Email_Id is-->" + bean.getEmail());
+													 * System.out.println("Password is-->" + bean.getPassword());
+													 * System.out.println("Mobile_No is-->" + bean.getMobile());
+													 * System.out.println("User's_Role is-->" + bean.getRole());
+													 */
+													System.out.println("-----------------------------------------------------");
 												} else {
 													System.out.println("No user are there");
 												}
@@ -678,16 +702,16 @@ public class Controller {
 										try {
 											System.out.println("*****Requests for Books are *****");
 											System.out.println("-------------------------------------");
-											List<RequestDetails> requestInfos = service1.showRequest();
-											for (RequestDetails infos : requestInfos) {
+											List<RequestBookDetailsBean> requestInfos = service1.showRequest();
+											System.out.println(String.format("%-5s %s", "BookId", "UserId"));
+											for (RequestBookDetailsBean infos : requestInfos) {
 												System.out.println("---------------------------------------");
-												System.out.println("Book id ---------- " + infos.getbId());
-												System.out.println("User id----------- " + infos.getuId());
+												System.out.println(String.format("%-5s %s", infos.getbId(), infos.getuId()));
 												/*
-												 * System.out.println("Book Issued ------" + infos.getbId());
-												 * System.out.println("Book Returned------" + infos.getBookName());
+												 * System.out.println("Book id ---------- " + infos.getbId());
+												 * System.out.println("User id----------- " + infos.getuId());
+												 * System.out.println("---------------------------------------");
 												 */
-												System.out.println("---------------------------------------");
 
 											}
 										} catch (Exception e) {
@@ -701,7 +725,7 @@ public class Controller {
 										do {
 											try {
 												user_Id = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -709,14 +733,14 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
-										List<BookIssueDetails> uid = service1.bookHistoryDetails(user_Id);
-										for (BookIssueDetails issueDetails : uid) {
+										List<IssueBookDetailsBean> uid = service1.bookHistoryDetails(user_Id);
+										for (IssueBookDetailsBean issueDetails : uid) {
 											if (issueDetails != null) {
 												System.out.println("-----------------------------------------------");
-												System.out.println("No of books Borrowed :"+issueDetails.getUserId());
+												System.out.println("No of books Borrowed :" + issueDetails.getUserId());
 											} else {
 												System.out.println("-----------------------------------------------");
 												System.out.println("Respective user hasn't borrowed any books");
@@ -728,16 +752,15 @@ public class Controller {
 										doReg();
 
 									default:
-										System.out.println("Invalid Choice");
+										System.err.println("Invalid Choice.Please choose a number in between 1 to 13");
 										break;
 									}
-								} catch (InputMismatchException ex)   {
-									System.out.println("Incorrect entry. Please input only a positive integer.");
+								} catch (InputMismatchException ex) {
+									System.err.println("Incorrect entry. Please input only a positive integer.");
 									scanner.nextLine();
 								}
 							} while (true);
-						}
-						else if (loginInfo.getRole().equals("student")) {
+						} else if (loginInfo.getRole().equals("student")) {
 							do {
 								try {
 									System.out.println("------------------------------------");
@@ -760,7 +783,7 @@ public class Controller {
 
 											if (bookBean != null) {
 												System.out.println("-------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
+												System.out.println("Book_Id is-->" + bookBean.getbId());
 											} else {
 												System.out.println("Books Ids is not present");
 											}
@@ -773,7 +796,7 @@ public class Controller {
 										do {
 											try {
 												id = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -781,23 +804,33 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
 										BookBean bean4 = new BookBean();
 										bean4.setbId(id);
 										List<BookBean> bookid = service1.searchBookById(id);
+										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
+												"Name", "Author", "Category", "Publisher"));
+
 										for (BookBean bookBean : bookid) {
 
 											if (bookBean != null) {
-												System.out.println("----------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Book_Name is-->"+bookBean.getBookName());
-												System.out.println("Book_Author is-->"+bookBean.getAuthor());
-												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
-												System.out.println("Book_Category is-->"+bookBean.getCategory());
-												//System.out.println("No_Of_Copies are-->"+bookBean.getCopies());
-												System.out.println("----------------------------------------");
+
+												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
+														bookBean.getbId(), bookBean.getBookName(), bookBean.getAuthor(),
+														bookBean.getCategory(), bookBean.getPublisher()));
+
+												/*
+												 * System.out.println("-----------------------------------");
+												 * System.out.println("Book_Id is-->"+bookBean.getBid());
+												 * System.out.println("Book_Name is-->"+bookBean.getBname());
+												 * System.out.println("Book_Author is-->"+bookBean.getBauthor()) ;
+												 * System.out.println("Book_Category is-->"+bookBean.getCategory ());
+												 * System.out.println("Book_PublisherName is-->"+bookBean.
+												 * getPublishername());
+												 */
+												System.out.println("-----------------------------------------------------------------");
 											} else {
 												System.out.println("No books are available written by this author");
 											}
@@ -810,7 +843,7 @@ public class Controller {
 										do {
 											try {
 												author = scanner.next();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -818,22 +851,32 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 										BookBean bean2 = new BookBean();
 										bean2.setAuthor(author);
 										List<BookBean> bookauthor = service1.searchBookByAuthor(author);
+										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
+												"Name", "Author", "Category", "Publisher"));
+
 										for (BookBean bookBean : bookauthor) {
 
 											if (bookBean != null) {
-												System.out.println("---------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Book_Name is-->"+bookBean.getBookName());
-												System.out.println("Book_Author is-->"+bookBean.getAuthor());
-												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
-												System.out.println("Book_Category is-->"+bookBean.getCategory());
-												//System.out.println("No_Of_Copies are-->"+bookBean.getCopies());
-												System.out.println("---------------------------------------");
+
+												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
+														bookBean.getbId(), bookBean.getBookName(), bookBean.getAuthor(),
+														bookBean.getCategory(), bookBean.getPublisher()));
+
+												/*
+												 * System.out.println("-----------------------------------");
+												 * System.out.println("Book_Id is-->"+bookBean.getBid());
+												 * System.out.println("Book_Name is-->"+bookBean.getBname());
+												 * System.out.println("Book_Author is-->"+bookBean.getBauthor()) ;
+												 * System.out.println("Book_Category is-->"+bookBean.getCategory ());
+												 * System.out.println("Book_PublisherName is-->"+bookBean.
+												 * getPublishername());
+												 */
+												System.out.println("-----------------------------------------------------------");
 											} else {
 												System.out.println("No books are available written by this author");
 											}
@@ -846,7 +889,7 @@ public class Controller {
 										do {
 											try {
 												btitle = scanner.next();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -854,22 +897,33 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
 										BookBean bean3 = new BookBean();
 										bean3.setAuthor(btitle);
 										List<BookBean> booktitle = service1.searchBookByTitle(btitle);
-										for (BookBean bookBean : booktitle) {	
+										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
+												"Name", "Author", "Category", "Publisher"));
+
+										for (BookBean bookBean : booktitle) {
+
 											if (bookBean != null) {
-												System.out.println("---------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Book_Name is-->"+bookBean.getBookName());
-												System.out.println("Book_Author is-->"+bookBean.getAuthor());
-												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
-												System.out.println("Book_Category is-->"+bookBean.getCategory());
-												//System.out.println("No_Of_Copies are-->"+bookBean.getCopies());
-												System.out.println("---------------------------------------");
+
+												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
+														bookBean.getbId(), bookBean.getBookName(), bookBean.getAuthor(),
+														bookBean.getCategory(), bookBean.getPublisher()));
+
+												/*
+												 * System.out.println("-----------------------------------");
+												 * System.out.println("Book_Id is-->"+bookBean.getBid());
+												 * System.out.println("Book_Name is-->"+bookBean.getBname());
+												 * System.out.println("Book_Author is-->"+bookBean.getBauthor()) ;
+												 * System.out.println("Book_Category is-->"+bookBean.getCategory ());
+												 * System.out.println("Book_PublisherName is-->"+bookBean.
+												 * getPublishername());
+												 */
+												System.out.println("------------------------------------------------------------------");
 											} else {
 												System.out.println("No books are available with this title.");
 											}
@@ -877,17 +931,25 @@ public class Controller {
 										break;
 									case 5:
 										LinkedList<BookBean> info1 = service1.getBooksInfo();
+										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
+												"Name", "Author", "Category", "Publisher"));
 										for (BookBean bookBean : info1) {
 
 											if (bookBean != null) {
-												System.out.println("---------------------------------------");
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Book_Name is-->"+bookBean.getBookName());
-												System.out.println("Book_Author is-->"+bookBean.getAuthor());
-												System.out.println("Book_PublisherName is-->"+bookBean.getPublisher());
-												System.out.println("Book_Category is-->"+bookBean.getCategory());
-												//System.out.println("No_Of_Copies are-->"+bookBean.getCopies());
-												System.out.println("---------------------------------------");
+
+												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
+														bookBean.getbId(), bookBean.getBookName(), bookBean.getAuthor(),
+														bookBean.getCategory(), bookBean.getPublisher()));
+												/*
+												 * System.out.println("-----------------------------------");
+												 * System.out.println("Book_Id is-->" + bookBean.getBid());
+												 * System.out.println("Book_Name is-->" + bookBean.getBname());
+												 * System.out.println("Book_Author is-->" + bookBean.getBauthor());
+												 * System.out.println("Book_Category is-->" + bookBean.getCategory());
+												 * System.out.println( "Book_PublisherName is-->" +
+												 * bookBean.getPublishername());
+												 */
+												System.out.println("------------------------------------------------------------");
 											} else {
 												System.out.println("Books info is not presernt");
 											}
@@ -900,7 +962,7 @@ public class Controller {
 										do {
 											try {
 												reqBookId = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -908,16 +970,15 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
-
 
 										int reqUserId = 0;
 										System.out.println("Enter User-Id:");
 										do {
 											try {
 												reqUserId = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -925,17 +986,17 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
-										boolean requested = service1.request(reqUserId,reqBookId);
+										boolean requested = service1.request(reqUserId, reqBookId);
 										if (requested != false) {
 											System.out.println("-----------------------------------------------");
 											System.out.println("Book is Requested");
 										} else {
 											System.out.println("-----------------------------------------------");
 											System.out.println("Book is not Requested");
-										}	
+										}
 										break;
 									case 7:
 
@@ -944,7 +1005,7 @@ public class Controller {
 										do {
 											try {
 												user_Id = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -952,16 +1013,23 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
-										List<BorrowedBooks> borrowedBookList = service1.borrowedBook(user_Id);
-										for (BorrowedBooks bookBean : borrowedBookList) {
+										List<BorrowedBooksBean> borrowedBookList = service1.borrowedBook(user_Id);
+										System.out
+												.println(String.format("%-10s %-10s %s", "UserID", "BookId", "Email"));
+										for (BorrowedBooksBean bookBean : borrowedBookList) {
 
 											if (bookBean != null) {
-												System.out.println("-----------------------------------------------");
-												System.out.println("User_Id is-->"+bookBean.getuId());
-												System.out.println("Book_Id is-->"+bookBean.getbId());
-												System.out.println("Email Id is-->"+bookBean.getEmail());
+
+												System.out.println(String.format("%-10s %-10s %s", bookBean.getuId(),
+														bookBean.getbId(), bookBean.getEmail()));
+												System.out.println("------------------------------------------------------------");
+												/*
+												 * System.out.println("User_Id is-->" + bookBean.getuId());
+												 * System.out.println("Book_Id is-->" + bookBean.getbId());
+												 * System.out.println("Email Id is-->" + bookBean.getEmail());
+												 */
 											} else {
 												System.out.println("-----------------------------------------------");
 												System.out.println("No books are borrowed by the user");
@@ -977,7 +1045,7 @@ public class Controller {
 										do {
 											try {
 												returnId = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -985,16 +1053,15 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
-
 
 										int userId = 0;
 										System.out.println("Enter User-Id:");
 										do {
 											try {
 												userId = scanner.nextInt();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -1002,7 +1069,7 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 
 										String status = null;
@@ -1010,7 +1077,7 @@ public class Controller {
 										do {
 											try {
 												status = scanner.next();
-												flag = true ;
+												flag = true;
 											} catch (InputMismatchException e) {
 												flag = false;
 												System.err.println("Error on the input, try again. ");
@@ -1018,20 +1085,22 @@ public class Controller {
 											} catch (LMSException e) {
 												flag = false;
 												System.err.println(e.getMessage());
-											} 
+											}
 										} while (!flag);
 										try {
-											if (loginInfo.getuId()==userId) {
-												boolean returned = service1.returnBook(returnId,userId,status);
+											if (loginInfo.getuId() == userId) {
+												boolean returned = service1.returnBook(returnId, userId, status);
 												if (returned != false) {
-													System.out.println("-----------------------------------------------");
+													System.out
+															.println("-----------------------------------------------");
 													System.out.println("Book is Returned");
 												} else {
-													System.out.println("-----------------------------------------------");
+													System.out
+															.println("-----------------------------------------------");
 													System.out.println("Book is not Returned");
-												}	
+												}
 											} else {
-												System.out.println("Invalid userId");
+												System.err.println("Invalid userId");
 											}
 										} catch (LMSException e) {
 											System.err.println(e.getMessage());
@@ -1041,34 +1110,34 @@ public class Controller {
 									case 9:
 										doReg();
 									default:
+										System.err.println("Choose a valid number from above mentioned list");
 										break;
 									}
-								} catch (InputMismatchException ex)   {
-									System.out.println("Incorrect entry. Please input only a positive integer.");
+								} catch (InputMismatchException ex) {
+									System.err.println("Incorrect entry. Please input only a positive integer.");
 									scanner.nextLine();
 								}
 							} while (true);
 						}
 
 					} catch (Exception e) {
-						System.out.println("Invalid Credentials");
-						System.out.println("Try login again,Press 2 to login");
-						//scanner.nextLine();
+						System.err.println("Invalid Credentials");
+						System.err.println("Try login again,Press 2 to login");
+						// scanner.nextLine();
 					}
 					break;
-				case 3 :
-					System.out.println("EXIT");
-					System.out.println(0);
+				case 3:
+					doReg();
 				default:
+					System.err.println("Invalid Choice.Please choose a choise from above");
 					break;
 				}
-			} catch (InputMismatchException ex)   {
-				System.out.println("Incorrect entry. Please input only a positive integer.");
+			} catch (InputMismatchException ex) {
+				System.err.println("Incorrect entry. Please input only a positive integer.");
 				scanner.nextLine();
 			}
 
 		} while (loginStatus);
-		//	}while(true);
 
 	}
 }

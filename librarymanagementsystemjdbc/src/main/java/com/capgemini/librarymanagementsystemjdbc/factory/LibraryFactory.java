@@ -9,6 +9,7 @@ public class LibraryFactory {
 	public static UsersDAO getUsersDao() {
 		return new UsersDAOImplement();
 	}
+
 	public static UsersService getUsersService() {
 		return new UsersServiceImplement();
 	}
