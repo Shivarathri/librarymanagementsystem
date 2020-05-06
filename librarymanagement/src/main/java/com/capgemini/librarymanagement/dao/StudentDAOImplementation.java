@@ -30,16 +30,17 @@ public class StudentDAOImplementation implements StudentDAO {
 					// System.out.println("Login succssful");
 					return bean;
 				} else {
-					System.err.println("You have entered wrong Password");
+					throw new StudentException("You have entered wrong Password");
 				}
 			} else {
-				System.err.println("Email doesnot exist");
+				throw new StudentException("Email does not exist");
 			}
 
-			throw new AdminException("Please give a valid credintials");
 
 		}
-		return null;
+
+		throw new StudentException("Please give a valid credintials");
+		
 	}
 
 	public LinkedList<BookBean> searchBookTitle(String bname) {

@@ -91,6 +91,7 @@ public class Controller {
 							System.err.println(e.getMessage());
 						}
 					} while (!flag);
+					
 					do {
 						try {
 							System.out.println("Enter Last Name :");
@@ -188,25 +189,49 @@ public class Controller {
 					break;
 				case 2:
 
-					System.out.println("Enter Email for Login :");
-					String email = scanner.next();
+					String email = null;
+					do {
+						try {
+							System.out.println("Enter Email for login :");
+							email = scanner.next();
+							validation.validatedEmail(email);
+							flag = true;
+						} catch (InputMismatchException e) {
+							flag = false;
+							System.err.println("Email should be proper ");
+							scanner.nextLine();
+						} catch (LMSException e) {
+							flag = false;
+							System.err.println(e.getMessage());
+						}
+					} while (!flag);
 
-					System.out.println("Enter Password :");
-					String password = scanner.next();
-
+					String password = null;
+					do {
+						try {
+							System.out.println("Enter Password :");
+							password = scanner.next();
+							validation.validatedPassword(password);
+							flag = true;
+						} catch (InputMismatchException e) {
+							flag = false;
+							System.err.println("Enter correct Password ");
+							scanner.nextLine();
+						} catch (LMSException e) {
+							flag = false;
+							System.err.println(e.getMessage());
+						}
+					} while (!flag);
+					
+					UsersBean loginInfo = service1.login(email, password);
 					try {
-						UsersBean loginInfo = service1.login(email, password);
-						if (loginInfo.getEmail().equals(email)) {
-							if (loginInfo.getPassword().equals(password)) {
+
+						if (loginInfo.getEmail().equals(email) &&
+							loginInfo.getPassword().equals(password)) {
 
 								System.out.println("Logged In");
-							} else {
-								System.out.println("You have entered wrong Password");
-							}
-
-						} else {
-							System.out.println("Enter email doesnot exist");
 						}
+
 						if (loginInfo.getRole().equals("admin")) {
 							do {
 								try {
@@ -613,7 +638,8 @@ public class Controller {
 												 * System.out.println( "Book_PublisherName is-->" +
 												 * bookBean.getPublishername());
 												 */
-												System.out.println("----------------------------------------------------------");
+												System.out.println(
+														"----------------------------------------------------------");
 											} else {
 												System.out.println("Books info is not present");
 											}
@@ -689,7 +715,8 @@ public class Controller {
 													 * System.out.println("Mobile_No is-->" + bean.getMobile());
 													 * System.out.println("User's_Role is-->" + bean.getRole());
 													 */
-													System.out.println("-----------------------------------------------------");
+													System.out.println(
+															"-----------------------------------------------------");
 												} else {
 													System.out.println("No user are there");
 												}
@@ -706,7 +733,8 @@ public class Controller {
 											System.out.println(String.format("%-5s %s", "BookId", "UserId"));
 											for (RequestBookDetailsBean infos : requestInfos) {
 												System.out.println("---------------------------------------");
-												System.out.println(String.format("%-5s %s", infos.getbId(), infos.getuId()));
+												System.out.println(
+														String.format("%-5s %s", infos.getbId(), infos.getuId()));
 												/*
 												 * System.out.println("Book id ---------- " + infos.getbId());
 												 * System.out.println("User id----------- " + infos.getuId());
@@ -830,7 +858,8 @@ public class Controller {
 												 * System.out.println("Book_PublisherName is-->"+bookBean.
 												 * getPublishername());
 												 */
-												System.out.println("-----------------------------------------------------------------");
+												System.out.println(
+														"-----------------------------------------------------------------");
 											} else {
 												System.out.println("No books are available written by this author");
 											}
@@ -876,7 +905,8 @@ public class Controller {
 												 * System.out.println("Book_PublisherName is-->"+bookBean.
 												 * getPublishername());
 												 */
-												System.out.println("-----------------------------------------------------------");
+												System.out.println(
+														"-----------------------------------------------------------");
 											} else {
 												System.out.println("No books are available written by this author");
 											}
@@ -923,7 +953,8 @@ public class Controller {
 												 * System.out.println("Book_PublisherName is-->"+bookBean.
 												 * getPublishername());
 												 */
-												System.out.println("------------------------------------------------------------------");
+												System.out.println(
+														"------------------------------------------------------------------");
 											} else {
 												System.out.println("No books are available with this title.");
 											}
@@ -949,7 +980,8 @@ public class Controller {
 												 * System.out.println( "Book_PublisherName is-->" +
 												 * bookBean.getPublishername());
 												 */
-												System.out.println("------------------------------------------------------------");
+												System.out.println(
+														"------------------------------------------------------------");
 											} else {
 												System.out.println("Books info is not presernt");
 											}
@@ -989,15 +1021,26 @@ public class Controller {
 											}
 										} while (!flag);
 
-										boolean requested = service1.request(reqUserId, reqBookId);
-										if (requested != false) {
-											System.out.println("-----------------------------------------------");
-											System.out.println("Book is Requested");
-										} else {
-											System.out.println("-----------------------------------------------");
-											System.out.println("Book is not Requested");
+										try {
+											if (loginInfo.getuId() == reqUserId) {
+												boolean requested = service1.request(reqUserId, reqBookId);
+												if (requested != false) {
+													System.out
+															.println("-----------------------------------------------");
+													System.out.println("Book is Requested");
+												} else {
+													System.out
+															.println("-----------------------------------------------");
+													System.out.println("Book is not Requested");
+												}
+											} else {
+												System.err.println("Enter the correct UserId");
+											}
+										} catch (LMSException e) {
+											System.err.println(e.getMessage());
 										}
 										break;
+
 									case 7:
 
 										int user_Id = 0;
@@ -1024,7 +1067,8 @@ public class Controller {
 
 												System.out.println(String.format("%-10s %-10s %s", bookBean.getuId(),
 														bookBean.getbId(), bookBean.getEmail()));
-												System.out.println("------------------------------------------------------------");
+												System.out.println(
+														"------------------------------------------------------------");
 												/*
 												 * System.out.println("User_Id is-->" + bookBean.getuId());
 												 * System.out.println("Book_Id is-->" + bookBean.getbId());

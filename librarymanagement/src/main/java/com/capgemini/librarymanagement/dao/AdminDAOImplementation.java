@@ -32,16 +32,17 @@ public class AdminDAOImplementation implements AdminDAO {
 					// System.out.println("Login succssful");
 					return bean;
 				} else {
-					System.err.println("You have entered wrong Password");
+					throw new AdminException("You have entered wrong Password");
 				}
 			} else {
-				System.err.println("Email doesnot exist");
+				throw new AdminException("Email does not exist");
 			}
 
-			throw new AdminException("Please give a valid credintials");
 
 		}
-		return null;
+
+		throw new AdminException("Please give a valid credintials");
+		
 	}
 
 	public boolean delete(BookBean book) {

@@ -1,12 +1,11 @@
 package com.capgemini.librarymanagementsystemhibernate.dto;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -14,13 +13,17 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "users")
+
+@SequenceGenerator(name="sequence1", initialValue=100001, allocationSize=100)
 public class UsersBean {
 	@Id
 	@Column
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "sequence1")
 	private int uId;
 	@Column
 	private String name;
 	@Column
+	
 	private String email;
 	@Column
 	private String password;
@@ -29,12 +32,4 @@ public class UsersBean {
 	@Column
 	private String role;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
-	private List<BookIssueDetailsBean> issueDetails;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
-	private List<RequestBean> requests;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
-	private List<BorrowedBooksBean> borrowed;
 }

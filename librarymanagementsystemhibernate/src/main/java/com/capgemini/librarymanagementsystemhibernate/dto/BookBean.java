@@ -1,13 +1,13 @@
 package com.capgemini.librarymanagementsystemhibernate.dto;
 
 import java.io.Serializable;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -16,25 +16,21 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "bookbean")
+
+@SequenceGenerator(name="sequence2", initialValue=1001, allocationSize=100)
 public class BookBean implements Serializable {
+
 	@Id
-	@Column(unique = true, nullable = false)
+	@Column
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "sequence2")
 	private int bId;
 	@Column
 	private String bookName;
-	@Column(nullable = false)
+	@Column
 	private String author;
-	@Column(nullable = false)
+	@Column
 	private String category;
-	@Column(nullable = false)
+	@Column
 	private String publisher;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "books")
-	private List<BookIssueDetailsBean> issueDetails;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "books")
-	private List<RequestBean> requests;
-
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "books")
-	private List<BorrowedBooksBean> borrowed;
 }

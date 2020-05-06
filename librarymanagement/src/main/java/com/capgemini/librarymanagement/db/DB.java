@@ -9,9 +9,10 @@ import com.capgemini.librarymanagement.dto.StudentBean;
 
 public class DB {
 	public static final LinkedList<AdminBean> admin = new LinkedList<AdminBean>();
-
 	public static final LinkedList<BookBean> book = new LinkedList<BookBean>();
 	public static final LinkedList<StudentBean> student = new LinkedList<StudentBean>();
 	public static final LinkedList<RequestBean> request = new LinkedList<RequestBean>();
+	
+	
 
 }

@@ -60,12 +60,12 @@ public class Validation {
 		String emailRegEx = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
 		boolean result = false;
 		Pattern pattern = Pattern.compile(emailRegEx);
-		pattern = Pattern.compile(emailRegEx, Pattern.CASE_INSENSITIVE);
+		pattern = Pattern.compile(emailRegEx);
 		Matcher matcher = pattern.matcher(email);
 		if (matcher.matches()) {
 			result = true;
 		} else {
-			throw new LMSException("Enter proper email ");
+			throw new LMSException("Enter proper email with proper extentions");
 		}
 		return result;
 	}
@@ -77,7 +77,7 @@ public class Validation {
 			result = true;
 		} else {
 			throw new LMSException(
-					"Password should contain atleast 8 characters ,one uppercase,one lowercase,one symbol ");
+					"Password should contain atleast 8 characters and it contais one uppercase,one lowercase and one symbol ");
 		}
 
 		return result;

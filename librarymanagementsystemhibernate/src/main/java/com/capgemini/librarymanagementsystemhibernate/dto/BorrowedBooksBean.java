@@ -2,38 +2,33 @@ package com.capgemini.librarymanagementsystemhibernate.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode.Exclude;
 
 @SuppressWarnings("serial")
 @Entity
 @Data
 @Table(name = "borrowed_books")
+
+@SequenceGenerator(name="seq2", initialValue=1, allocationSize=100)
 public class BorrowedBooksBean implements Serializable {
-	@EmbeddedId
-	private CompositePrimaryKeyBean compositePrimaryKeyBean;
+	@Id
 	@Column
-	private String email;
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "seq2")
+	private int id;
+	@Column
+	private int uId;
+	@Column
+	private int bId;
+	@Column
+	private String bookName;
 
-	@Exclude
-	@MapsId("bId")
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "bId")
-	private BookBean books;
-
-	@Exclude
-	@MapsId("uId")
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "uId")
-	private UsersBean users;
 
 }
