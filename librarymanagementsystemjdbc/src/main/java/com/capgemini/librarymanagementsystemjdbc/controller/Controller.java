@@ -188,40 +188,27 @@ public class Controller {
 					}
 					break;
 				case 2:
-
-					String email = null;
-					do {
-						try {
-							System.out.println("Enter Email for login :");
-							email = scanner.next();
-							validation.validatedEmail(email);
-							flag = true;
-						} catch (InputMismatchException e) {
-							flag = false;
-							System.err.println("Email should be proper ");
-							scanner.nextLine();
-						} catch (LMSException e) {
-							flag = false;
-							System.err.println(e.getMessage());
-						}
-					} while (!flag);
-
-					String password = null;
-					do {
-						try {
-							System.out.println("Enter Password :");
-							password = scanner.next();
-							validation.validatedPassword(password);
-							flag = true;
-						} catch (InputMismatchException e) {
-							flag = false;
-							System.err.println("Enter correct Password ");
-							scanner.nextLine();
-						} catch (LMSException e) {
-							flag = false;
-							System.err.println(e.getMessage());
-						}
-					} while (!flag);
+					/*
+					 * String email = null; do { try {
+					 * System.out.println("Enter Email for login :"); email = scanner.next();
+					 * validation.validatedEmail(email); flag = true; } catch
+					 * (InputMismatchException e) { flag = false;
+					 * System.err.println("Email should be proper "); scanner.nextLine(); } catch
+					 * (LMSException e) { flag = false; System.err.println(e.getMessage()); } }
+					 * while (!flag);
+					 * 
+					 * String password = null; do { try { System.out.println("Enter Password :");
+					 * password = scanner.next(); validation.validatedPassword(password); flag =
+					 * true; } catch (InputMismatchException e) { flag = false;
+					 * System.err.println("Enter correct Password "); scanner.nextLine(); } catch
+					 * (LMSException e) { flag = false; System.err.println(e.getMessage()); } }
+					 * while (!flag);
+					 */
+					
+					System.out.println("Enter Email for login :");
+					String email = scanner.next();
+					 System.out.println("Enter Password :");
+					 String password = scanner.next();
 					
 					UsersBean loginInfo = service1.login(email, password);
 					try {
@@ -468,7 +455,7 @@ public class Controller {
 										break;
 
 									case 4:
-										LinkedList<BookBean> info = service1.getBookIds();
+										List<BookBean> info = service1.getBookIds();
 										for (BookBean bookBean : info) {
 
 											if (bookBean != null) {
@@ -619,7 +606,7 @@ public class Controller {
 										break;
 
 									case 8:
-										LinkedList<BookBean> info1 = service1.getBooksInfo();
+										LinkedList<BookBean> info1 = (LinkedList<BookBean>) service1.getBooksInfo();
 										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
 												"Name", "Author", "Category", "Publisher"));
 										for (BookBean bookBean : info1) {
@@ -806,7 +793,7 @@ public class Controller {
 									int choice2 = scanner.nextInt();
 									switch (choice2) {
 									case 1:
-										LinkedList<BookBean> info = service1.getBookIds();
+										List<BookBean> info = service1.getBookIds();
 										for (BookBean bookBean : info) {
 
 											if (bookBean != null) {
@@ -961,7 +948,7 @@ public class Controller {
 										}
 										break;
 									case 5:
-										LinkedList<BookBean> info1 = service1.getBooksInfo();
+										List<BookBean> info1 = service1.getBooksInfo();
 										System.out.println(String.format("%-10s %-15s %-15s %-10s %s", "Book-Id",
 												"Name", "Author", "Category", "Publisher"));
 										for (BookBean bookBean : info1) {

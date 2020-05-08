@@ -10,18 +10,16 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import lombok.Data;
-
 @SuppressWarnings("serial")
 @Entity
-@Data
+
 @Table(name = "borrowed_books")
 
-@SequenceGenerator(name="seq2", initialValue=1, allocationSize=100)
+@SequenceGenerator(name = "seq2", initialValue = 1, allocationSize = 100)
 public class BorrowedBooksBean implements Serializable {
 	@Id
 	@Column
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "seq2")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq2")
 	private int id;
 	@Column
 	private int uId;
@@ -30,5 +28,36 @@ public class BorrowedBooksBean implements Serializable {
 	@Column
 	private String bookName;
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getuId() {
+		return uId;
+	}
+
+	public void setuId(int uId) {
+		this.uId = uId;
+	}
+
+	public int getbId() {
+		return bId;
+	}
+
+	public void setbId(int bId) {
+		this.bId = bId;
+	}
+
+	public String getBookName() {
+		return bookName;
+	}
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
 
 }

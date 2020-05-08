@@ -1,8 +1,9 @@
 package com.capgemini.librarymanagement.dao;
 
 import java.util.LinkedList;
+import java.util.List;
+
 import com.capgemini.librarymanagement.db.DB;
-import com.capgemini.librarymanagement.dto.AdminBean;
 import com.capgemini.librarymanagement.dto.BookBean;
 import com.capgemini.librarymanagement.dto.RequestBean;
 import com.capgemini.librarymanagement.dto.StudentBean;
@@ -36,15 +37,14 @@ public class StudentDAOImplementation implements StudentDAO {
 				throw new StudentException("Email does not exist");
 			}
 
-
 		}
 
 		throw new StudentException("Please give a valid credintials");
-		
+
 	}
 
-	public LinkedList<BookBean> searchBookTitle(String bname) {
-		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+	public List<BookBean> searchBookTitle(String bname) {
+		List<BookBean> searchList = new LinkedList<BookBean>();
 		for (int i = 0; i <= DB.book.size() - 1; i++) {
 			BookBean retrievedBook = DB.book.get(i);
 			String retrievedBname = retrievedBook.getBname();
@@ -61,8 +61,8 @@ public class StudentDAOImplementation implements StudentDAO {
 		}
 	}
 
-	public LinkedList<BookBean> searchBookAuthor(String bAuthor) {
-		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+	public List<BookBean> searchBookAuthor(String bAuthor) {
+		List<BookBean> searchList = new LinkedList<BookBean>();
 		for (int i = 0; i <= DB.book.size() - 1; i++) {
 			BookBean retrievedBook = DB.book.get(i);
 			String retrievedBAuthor = retrievedBook.getBauthor();
@@ -77,8 +77,8 @@ public class StudentDAOImplementation implements StudentDAO {
 		}
 	}
 
-	public LinkedList<BookBean> searchBookType(String bookType) {
-		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+	public List<BookBean> searchBookType(String bookType) {
+		List<BookBean> searchList = new LinkedList<BookBean>();
 		for (int i = 0; i <= DB.book.size() - 1; i++) {
 			BookBean retrievedBook = DB.book.get(i);
 			String retrievedBookType = retrievedBook.getCategory();
@@ -93,8 +93,8 @@ public class StudentDAOImplementation implements StudentDAO {
 		}
 	}
 
-	public LinkedList<Integer> getBookIds() {
-		LinkedList<Integer> idList = new LinkedList<Integer>();
+	public List<Integer> getBookIds() {
+		List<Integer> idList = new LinkedList<Integer>();
 		for (int i = 0; i <= DB.book.size() - 1; i++) {
 			BookBean retrievedBook = DB.book.get(i);
 			int retrievedBookId = retrievedBook.getBid();
@@ -104,7 +104,7 @@ public class StudentDAOImplementation implements StudentDAO {
 
 	}
 
-	public LinkedList<BookBean> getBooksInfo() {
+	public List<BookBean> getBooksInfo() {
 		return DB.book;
 	}
 

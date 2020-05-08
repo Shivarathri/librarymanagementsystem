@@ -1,6 +1,7 @@
 package com.capgemini.librarymanagement.service;
 
-import java.util.LinkedList;
+import java.util.List;
+
 import com.capgemini.librarymanagement.dao.StudentDAO;
 import com.capgemini.librarymanagement.dto.BookBean;
 import com.capgemini.librarymanagement.dto.RequestBean;
@@ -19,23 +20,23 @@ public class StudentServiceImplementation implements StudentServiceDAO {
 		return dao.auth(email, password);
 	}
 
-	public LinkedList<BookBean> searchBookTitle(String bname) {
+	public List<BookBean> searchBookTitle(String bname) {
 		return dao.searchBookTitle(bname);
 	}
 
-	public LinkedList<BookBean> searchBookAuthor(String bAuthor) {
+	public List<BookBean> searchBookAuthor(String bAuthor) {
 		return dao.searchBookAuthor(bAuthor);
 	}
 
-	public LinkedList<BookBean> searchBookType(String bookType) {
+	public List<BookBean> searchBookType(String bookType) {
 		return dao.searchBookType(bookType);
 	}
 
-	public LinkedList<Integer> getBookIds() {
+	public List<Integer> getBookIds() {
 		return dao.getBookIds();
 	}
 
-	public LinkedList<BookBean> getBooksInfo() {
+	public 	List<BookBean> getBooksInfo() {
 		return dao.getBooksInfo();
 	}
 

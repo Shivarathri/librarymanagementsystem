@@ -29,8 +29,8 @@ public class LibraryManagementRestController {
 			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
 					MediaType.APPLICATION_ATOM_XML_VALUE })
 	@ResponseBody
-	public LibraryManagementResponce addUser(@RequestBody UsersBean userBean) {
-		boolean isAdded = sevice.register(userBean);
+	public LibraryManagementResponce addUser(@RequestBody UsersBean info) {
+		boolean isAdded = sevice.register(info);
 		LibraryManagementResponce responce = new LibraryManagementResponce();
 		if (isAdded) {
 
@@ -42,9 +42,24 @@ public class LibraryManagementRestController {
 		return responce;
 	}
 
-	@PostMapping(path = "/addBook", 
-			consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE },
-			produces = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_ATOM_XML_VALUE })
+	@PostMapping(path = "/login", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					MediaType.APPLICATION_XML_VALUE })
+	public LibraryManagementResponce authentication(@RequestBody String email, String password) {
+		UsersBean userLogin = sevice.auth(email, password);
+		LibraryManagementResponce response = new LibraryManagementResponce();
+		if (userLogin != null) {
+			response.setMessage("Login succesfully");
+		} else {
+			response.setError(true);
+			response.setMessage("Invalid credentials,Please try again");
+		}
+		return response;
+	}
+
+	@PostMapping(path = "/addBook", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					MediaType.APPLICATION_ATOM_XML_VALUE })
 	@ResponseBody
 	public LibraryManagementResponce addBook(@RequestBody BookBean bookBean) {
 		boolean isAdded = sevice.addBook(bookBean);
@@ -58,11 +73,11 @@ public class LibraryManagementRestController {
 		}
 		return responce;
 	}
-	
-	@DeleteMapping(path = "/deleteBook/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@DeleteMapping(path = "/deleteBook/{bId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public LibraryManagementResponce deleteEmployee(@PathVariable(name = "id") int id) {
-		boolean isDeleted = sevice.removeBook(id);
+	public LibraryManagementResponce deleteEmployee(@PathVariable(name = "bId") int bId) {
+		boolean isDeleted = sevice.removeBook(bId);
 		LibraryManagementResponce response = new LibraryManagementResponce();
 		if (isDeleted) {
 			response.setMessage("Record is  Deleted");
@@ -72,10 +87,10 @@ public class LibraryManagementRestController {
 		}
 		return response;
 	}
-	
+
 	@PutMapping(path = "/updateBook", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public LibraryManagementResponce updateBook(BookBean bookBean) {
+	public LibraryManagementResponce updateBook(@RequestBody BookBean bookBean) {
 		boolean isUpdated = sevice.updateBook(bookBean);
 		LibraryManagementResponce response = new LibraryManagementResponce();
 		if (isUpdated) {
@@ -86,92 +101,93 @@ public class LibraryManagementRestController {
 		}
 		return response;
 	}
-	
+
 	@GetMapping(path = "/getAllBooks", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public LibraryManagementResponce getAllBooks() {
 		List<BookBean> bookList = sevice.getBooksInfo();
 		LibraryManagementResponce response = new LibraryManagementResponce();
-		if (bookList != null && bookList.isEmpty() ) {
-			response.setBookList(bookList); 
+		if (bookList != null && !bookList.isEmpty()) {
+			response.setBookList(bookList);
 		} else {
 			response.setError(true);
 			response.setMessage("No data present");
 		}
 		return response;
 	}
-	
-	@GetMapping(path="/getBookByName", produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@GetMapping(path = "/getBookByName", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<BookBean> getBookByName(String bookName) {
 		List<BookBean> bookBean = sevice.searchBookByTitle(bookName);
 		return bookBean;
 	}
-	
-	@GetMapping(path="/getBookById", produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@GetMapping(path = "/getBookById", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<BookBean> getBook(int id) {
-		List<BookBean> bookBean = sevice.searchBookById(id);
+	public List<BookBean> getBook(int bId) {
+		List<BookBean> bookBean = sevice.searchBookById(bId);
 		return bookBean;
 	}
-	
-	@GetMapping(path="/getBookByAuthor", produces = MediaType.APPLICATION_JSON_VALUE)
+
+	@GetMapping(path = "/getBookByAuthor", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<BookBean> getBook(String author) {
 		List<BookBean> bookBean = sevice.searchBookByAuthor(author);
 		return bookBean;
 	}
-	
+
 	@GetMapping(path = "/getAllUsers", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public LibraryManagementResponce getAllUsers() {
 		List<UsersBean> userList = sevice.showUsers();
 		LibraryManagementResponce response = new LibraryManagementResponce();
-		if (userList != null && userList.isEmpty() ) {
-			response.setUserList(userList); 
+		if (userList != null && !userList.isEmpty()) {
+			response.setUserList(userList);
 		} else {
 			response.setError(true);
 			response.setMessage("No data present");
 		}
 		return response;
-		
+
 	}
+
 	@GetMapping(path = "/getAllRequest", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public LibraryManagementResponce getAllRequest() {
 		List<RequestBean> requestList = sevice.showRequest();
 		LibraryManagementResponce response = new LibraryManagementResponce();
-		if (requestList != null && requestList.isEmpty() ) {
-			response.setRequestList(requestList); 
+		if (requestList != null && !requestList.isEmpty()) {
+			response.setRequestList(requestList);
 		} else {
 			response.setError(true);
 			response.setMessage("No data present");
 		}
 		return response;
-		
+
 	}
-	
+
 	@GetMapping(path = "/getBookIds", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Integer> getBookIds() {
-	List<Integer> bookIds = sevice.getBookIds();
-	return bookIds;
+		List<Integer> bookIds = sevice.getBookIds();
+		return bookIds;
 	}
-	
+
 	@GetMapping(path = "/borrowedBooks", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public LibraryManagementResponce borrowedBoooks(int uId) {
 		List<BorrowedBooksBean> borrowedBooksList = sevice.borrowedBook(uId);
 		LibraryManagementResponce response = new LibraryManagementResponce();
-		if (borrowedBooksList != null && borrowedBooksList.isEmpty() ) {
-			response.setBorrowedBooksList(borrowedBooksList); 
+		if (borrowedBooksList != null && !borrowedBooksList.isEmpty()) {
+			response.setBorrowedBooksList(borrowedBooksList);
 		} else {
 			response.setError(true);
 			response.setMessage("No data present");
 		}
 		return response;
 	}
-	
+
 	@GetMapping(path = "/getBookIssueDetails", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Integer> getBookIssueDetails(int uId) {
@@ -179,9 +195,10 @@ public class LibraryManagementRestController {
 		return booksHistory;
 
 	}
-	@PostMapping(path = "/requestBook", 
-			consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE },
-			produces = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_ATOM_XML_VALUE })
+
+	@PostMapping(path = "/requestBook", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					MediaType.APPLICATION_ATOM_XML_VALUE })
 	@ResponseBody
 	public LibraryManagementResponce requestBook(int bId, int uId) {
 		boolean isRequested = sevice.request(uId, bId);
@@ -194,10 +211,10 @@ public class LibraryManagementRestController {
 		}
 		return response;
 	}
-	
-	@PostMapping(path = "/issueBook", 
-			consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE },
-			produces = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_ATOM_XML_VALUE })
+
+	@PostMapping(path = "/issueBook", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					MediaType.APPLICATION_ATOM_XML_VALUE })
 	@ResponseBody
 	public LibraryManagementResponce issueBook(int bId, int uId) {
 		boolean isIssued = sevice.issueBook(bId, uId);
@@ -210,13 +227,12 @@ public class LibraryManagementRestController {
 		}
 		return response;
 	}
-	
 
-	@PostMapping(path = "/returnBook", 
-			consumes = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_XML_VALUE },
-			produces = { MediaType.APPLICATION_JSON_VALUE,MediaType.APPLICATION_ATOM_XML_VALUE })
+	@PostMapping(path = "/returnBook", consumes = { MediaType.APPLICATION_JSON_VALUE,
+			MediaType.APPLICATION_XML_VALUE }, produces = { MediaType.APPLICATION_JSON_VALUE,
+					MediaType.APPLICATION_ATOM_XML_VALUE })
 	@ResponseBody
-	public LibraryManagementResponce returnBook(int bId, int uId,String status) {
+	public LibraryManagementResponce returnBook(int bId, int uId, String status) {
 		boolean isReturned = sevice.returnBook(bId, uId, status);
 		LibraryManagementResponce response = new LibraryManagementResponce();
 		if (isReturned) {
@@ -227,5 +243,5 @@ public class LibraryManagementRestController {
 		}
 		return response;
 	}
-	
+
 }

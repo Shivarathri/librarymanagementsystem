@@ -9,31 +9,33 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import javax.persistence.PersistenceUnit;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
 
-import com.capgemini.librarymanagementsystemspring.config.LibraryManagementConfig;
 import com.capgemini.librarymanagementsystemspring.dto.BookBean;
 import com.capgemini.librarymanagementsystemspring.dto.BookIssueDetailsBean;
 import com.capgemini.librarymanagementsystemspring.dto.BorrowedBooksBean;
 import com.capgemini.librarymanagementsystemspring.dto.RequestBean;
 import com.capgemini.librarymanagementsystemspring.dto.UsersBean;
 import com.capgemini.librarymanagementsystemspring.exception.LmsException;
+
 @Repository
 public class UsersDAOImp implements UsersDAO {
-	EntityManagerFactory factory = null;
+	// EntityManagerFactory factory = null;
 	EntityManager manager = null;
 	EntityTransaction transaction = null;
 	int noOfBooks;
- 
-	
+
+	@PersistenceUnit
+	private EntityManagerFactory factory;
+
 	public boolean register(UsersBean info) {
 
-		EntityManager manager = factory.createEntityManager();
-		EntityTransaction transaction = manager.getTransaction();
+		manager = factory.createEntityManager();
+		transaction = manager.getTransaction();
 		boolean isAdded = false;
 		try {
 			transaction.begin();
@@ -44,9 +46,8 @@ public class UsersDAOImp implements UsersDAO {
 		} catch (Exception e) {
 			// TODO: handle exceptionentityClass
 			e.printStackTrace();
-			throw new LmsException("Employee ID already exists!");
-		} finally {
-			manager.close();
+			// throw new LmsException("User is already exists!");
+			return false;
 		}
 		return isAdded;
 	}
@@ -54,7 +55,7 @@ public class UsersDAOImp implements UsersDAO {
 	public UsersBean auth(String email, String password) {
 
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			String jpql = "select u from UsersBean u where u.email=:email and u.password=:password";
 			TypedQuery<UsersBean> query = manager.createQuery(jpql, UsersBean.class);
@@ -73,8 +74,8 @@ public class UsersDAOImp implements UsersDAO {
 	}
 
 	public boolean addBook(BookBean book) {
-		EntityManager manager = factory.createEntityManager();
-		EntityTransaction transaction = manager.getTransaction();
+		manager = factory.createEntityManager();
+		transaction = manager.getTransaction();
 		boolean isAdded = false;
 		try {
 			transaction.begin();
@@ -82,12 +83,10 @@ public class UsersDAOImp implements UsersDAO {
 			transaction.commit();
 			isAdded = true;
 			System.out.println("Added");
-		} catch (Exception e) {
+		} catch (LmsException e) {
 			// TODO: handle exceptionentityClass
-			e.printStackTrace();
-			throw new LmsException("Book already exists!");
-		} finally {
-			manager.close();
+			System.err.println(e.getMessage());
+			// throw new LmsException("Book already exists!");
 		}
 		return isAdded;
 	}
@@ -97,7 +96,7 @@ public class UsersDAOImp implements UsersDAO {
 		List<BookBean> list = null;
 
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			String jpql = "select b from BookBean b where b.bookName=:bookName";
 			TypedQuery<BookBean> query = manager.createQuery(jpql, BookBean.class);
@@ -109,8 +108,8 @@ public class UsersDAOImp implements UsersDAO {
 
 		}
 
-		manager.close();
-		factory.close();
+		// manager.close();
+		// factory.close();
 		return list;
 
 	}
@@ -120,7 +119,7 @@ public class UsersDAOImp implements UsersDAO {
 		List<BookBean> list = null;
 
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			String jpql = "select b from BookBean b where b.author=:author";
 			TypedQuery<BookBean> query = manager.createQuery(jpql, BookBean.class);
@@ -132,8 +131,8 @@ public class UsersDAOImp implements UsersDAO {
 
 		}
 
-		manager.close();
-		factory.close();
+		// manager.close();
+		// factory.close();
 		return list;
 
 	}
@@ -142,7 +141,7 @@ public class UsersDAOImp implements UsersDAO {
 		List<BookBean> list = null;
 
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			String jpql = "select b from BookBean b where b.bId=:bId";
 			TypedQuery<BookBean> query = manager.createQuery(jpql, BookBean.class);
@@ -154,8 +153,8 @@ public class UsersDAOImp implements UsersDAO {
 
 		}
 
-		manager.close();
-		factory.close();
+		// manager.close();
+		// factory.close();
 		return list;
 
 	}
@@ -163,11 +162,11 @@ public class UsersDAOImp implements UsersDAO {
 	public boolean updateBook(BookBean bean) {
 
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
-			BookBean record = manager.find(BookBean.class, bean.getBId());
+			BookBean record = manager.find(BookBean.class, bean.getbId());
 			record.setBookName(bean.getBookName());
 			transaction.commit();
 			return true;
@@ -175,16 +174,14 @@ public class UsersDAOImp implements UsersDAO {
 			System.err.println(e.getMessage());
 			transaction.rollback();
 			return false;
-		} finally {
-			manager.close();
-			factory.close();
 		}
+		/* finally { manager.close(); factory.close(); } */
 	}
 
 	public boolean removeBook(int bid) {
 
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
@@ -196,40 +193,25 @@ public class UsersDAOImp implements UsersDAO {
 			System.err.println(e.getMessage());
 			transaction.rollback();
 			return false;
-		} finally {
-			manager.close();
-			factory.close();
-		}
+		} /*
+			 * finally { manager.close(); factory.close(); }
+			 */
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<BookBean> getBooksInfo() {
-		@SuppressWarnings("rawtypes")
-		List bookBeans = null;
-		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
-			manager = factory.createEntityManager();
-			transaction = manager.getTransaction();
-			transaction.begin();
-			manager.getTransaction();
-			Query q = manager.createQuery("from BookBean");
-			bookBeans = q.getResultList();
-			transaction.commit();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.rollback();
-		}
-		manager.close();
-		factory.close();
-		return bookBeans;
+		EntityManager manager = factory.createEntityManager();
+		String jpql = "Select p from BookBean p";
+		Query query = manager.createQuery(jpql);
+		List<BookBean> record = query.getResultList();
+		return record;
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<UsersBean> showUsers() {
 		List userBeans = null;
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
@@ -252,7 +234,7 @@ public class UsersDAOImp implements UsersDAO {
 
 		List userBeans = null;
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
@@ -265,16 +247,17 @@ public class UsersDAOImp implements UsersDAO {
 			e.printStackTrace();
 			transaction.rollback();
 		}
-		manager.close();
-		factory.close();
+		/*
+		 * manager.close(); factory.close();
+		 */
 		return userBeans;
 
 	}
 
-	@SuppressWarnings({ "rawtypes", "unused" })
+	@SuppressWarnings({ "rawtypes" })
 	public boolean issueBook(int bId, int uId) {
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			String jpql = "select b from BookBean b where b.bId=:bId";
@@ -295,8 +278,8 @@ public class UsersDAOImp implements UsersDAO {
 					cal.add(Calendar.DAY_OF_MONTH, 7);
 					String returnDate = sdf.format(cal.getTime());
 					BookIssueDetailsBean issueBook = new BookIssueDetailsBean();
-					issueBook.setUId(uId);
-					issueBook.setBId(bId);
+					issueBook.setuId(uId);
+					issueBook.setbId(bId);
 					issueBook.setIssueDate(java.sql.Date.valueOf(issueDate));
 					issueBook.setReturnDate(java.sql.Date.valueOf(returnDate));
 					manager.persist(issueBook);
@@ -307,8 +290,8 @@ public class UsersDAOImp implements UsersDAO {
 						bookName.setParameter("bId", bId);
 						List book = bookName.getResultList();
 						BorrowedBooksBean borrowedBooks = new BorrowedBooksBean();
-						borrowedBooks.setUId(uId);
-						borrowedBooks.setBId(bId);
+						borrowedBooks.setuId(uId);
+						borrowedBooks.setbId(bId);
 						borrowedBooks.setBookName(book.get(0).toString());
 						manager.persist(borrowedBooks);
 						transaction.commit();
@@ -326,18 +309,16 @@ public class UsersDAOImp implements UsersDAO {
 			System.err.println(e.getMessage());
 			transaction.rollback();
 			return false;
-		} finally {
-			manager.close();
-			factory.close();
-		}
+		} /*
+			 * finally { manager.close(); factory.close(); }
+			 */
 	}
 
 	@SuppressWarnings({ "rawtypes", "unused" })
 	public boolean request(int uId, int bId) {
 		int count = 0;
-
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			String jpql = "select b from BookBean b where b.bId=:bId";
@@ -391,15 +372,14 @@ public class UsersDAOImp implements UsersDAO {
 			System.err.println(e.getMessage());
 			transaction.rollback();
 			return false;
-		} finally {
-			manager.close();
-			factory.close();
-		}
+		} /*
+			 * finally { manager.close(); factory.close(); }
+			 */
 	}
 
 	public List<BorrowedBooksBean> borrowedBook(int uId) {
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			String jpql = "select b from BorrowedBooksBean b where b.uId=:uId";
 			TypedQuery<BorrowedBooksBean> query = manager.createQuery(jpql, BorrowedBooksBean.class);
@@ -417,7 +397,7 @@ public class UsersDAOImp implements UsersDAO {
 
 	public boolean returnBook(int bId, int uId, String status) {
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			String jpql = "select b from BookBean b where b.bId=:bId";
@@ -502,16 +482,15 @@ public class UsersDAOImp implements UsersDAO {
 			System.err.println(e.getMessage());
 			transaction.rollback();
 			return false;
-		} finally {
-			manager.close();
-			factory.close();
-		}
+		} /*
+			 * finally { manager.close(); factory.close(); }
+			 */
 	}
 
 	@SuppressWarnings("unused")
 	public LinkedList<Integer> bookHistoryDetails(int uId) {
 		int count = 0;
-		factory = Persistence.createEntityManagerFactory("TestPersistence");
+		// factory = Persistence.createEntityManagerFactory("TestPersistence");
 		manager = factory.createEntityManager();
 		String jpql = "select b from BookIssueDetailsBean b";
 		TypedQuery<BookIssueDetailsBean> query = manager.createQuery(jpql, BookIssueDetailsBean.class);
@@ -530,7 +509,7 @@ public class UsersDAOImp implements UsersDAO {
 	public List<Integer> getBookIds() {
 		List<Integer> bookBeans = null;
 		try {
-			factory = Persistence.createEntityManagerFactory("TestPersistence");
+			// factory = Persistence.createEntityManagerFactory("TestPersistence");
 			manager = factory.createEntityManager();
 			transaction = manager.getTransaction();
 			transaction.begin();
@@ -543,9 +522,9 @@ public class UsersDAOImp implements UsersDAO {
 			e.printStackTrace();
 			transaction.rollback();
 		}
-		manager.close();
-		factory.close();
-
+		/*
+		 * manager.close(); factory.close();
+		 */
 		return bookBeans;
 	}
 

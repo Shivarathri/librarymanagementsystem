@@ -1,6 +1,5 @@
 package com.capgemini.librarymanagement.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.capgemini.librarymanagement.dto.AdminBean;
@@ -16,17 +15,17 @@ public interface AdminServiceDAO {
 
 	boolean addBook(BookBean book);
 
-	LinkedList<BookBean> searchBookTitle(String bname);
+	List<BookBean> searchBookTitle(String bname);
 
-	LinkedList<BookBean> searchBookAuthor(String bAuthor);
+	List<BookBean> searchBookAuthor(String bAuthor);
 
-	LinkedList<BookBean> searchBookType(String bookType);
+	List<BookBean> searchBookType(String bookType);
 
 	boolean removeBook(int bid);
 
-	LinkedList<Integer> getBookIds();
+	List<Integer> getBookIds();
 
-	LinkedList<BookBean> getBooksInfo();
+	List<BookBean> getBooksInfo();
 
 	List<StudentBean> showUsers();
 

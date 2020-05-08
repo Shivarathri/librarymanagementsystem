@@ -2,6 +2,10 @@
 <section name="Workbench">
 	<section name="MavenProjectWizardLocationPage">
 		<list key="location">
+			<item value="C:\Users\shahensha\Desktop\New folder\project\librarymanagement"/>
+			<item value="C:\Users\shahensha\Desktop\New folder\project\librarymanagementsystemhibernate\src\main\java\com\capgemini\librarymanagementsystemhibernate\controller\Controller.java"/>
+			<item value="C:\Users\shahensha\Desktop\New folder\project\Servers"/>
+			<item value="C:\Users\shahensha\Desktop\New folder\project\librarymanagementsystemjdbc"/>
 			<item value="C:\Users\shahensha\Desktop\New folder\project\librarymanagementsystemjdbc\src\main\java\com\capgemini\librarymanagementsystemjdbc\dao\UsersDAOImplement.java"/>
 			<item value="C:\Users\shahensha\Desktop\New folder\project\librarymanagement\src\main\java\com\capgemini\librarymanagement\dao\AdminDAOImplementation.java"/>
 		</list>
@@ -27,19 +31,13 @@
 	</section>
 	<section name="Maven2ProjectWizardArchifactPage">
 		<list key="package">
-			<item value="com.capgemini.hibernate"/>
-			<item value="com.capgemini.librarymanagementsystemhibernate"/>
-			<item value="com.capgemini.librarymanagementjdbc"/>
-			<item value="com.capgemini.librarymanagement"/>
+			<item value="com.capgemini.librarymanagementsystemspring"/>
 		</list>
 		<list key="groupId">
 			<item value="com.capgemini"/>
 		</list>
 		<list key="artifactId">
-			<item value="hibernate"/>
-			<item value="librarymanagementsystemhibernate"/>
-			<item value="librarymanagementjdbc"/>
-			<item value="librarymanagement"/>
+			<item value="librarymanagementsystemspring"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>

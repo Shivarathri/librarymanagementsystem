@@ -1,6 +1,5 @@
 package com.capgemini.librarymanagement.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.capgemini.librarymanagement.dao.AdminDAO;
@@ -26,17 +25,17 @@ public class AdminServiceImplementation implements AdminServiceDAO {
 		return dao.addBook(book);
 	}
 
-	public LinkedList<BookBean> searchBookTitle(String bTitle) {
+	public List<BookBean> searchBookTitle(String bTitle) {
 
 		return dao.searchBookTitle(bTitle);
 	}
 
-	public LinkedList<BookBean> searchBookAuthor(String bAuthor) {
+	public List<BookBean> searchBookAuthor(String bAuthor) {
 
 		return dao.searchBookAuthor(bAuthor);
 	}
 
-	public LinkedList<BookBean> searchBookType(String bookType) {
+	public List<BookBean> searchBookType(String bookType) {
 		return dao.searchBookType(bookType);
 	}
 
@@ -45,12 +44,12 @@ public class AdminServiceImplementation implements AdminServiceDAO {
 		return dao.removeBook(bid);
 	}
 
-	public LinkedList<Integer> getBookIds() {
+	public List<Integer> getBookIds() {
 
 		return dao.getBookIds();
 	}
 
-	public LinkedList<BookBean> getBooksInfo() {
+	public List<BookBean> getBooksInfo() {
 
 		return dao.getBooksInfo();
 	}

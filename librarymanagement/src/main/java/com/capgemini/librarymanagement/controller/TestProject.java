@@ -1,7 +1,6 @@
 package com.capgemini.librarymanagement.controller;
 
 import java.util.InputMismatchException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -49,29 +48,9 @@ public class TestProject {
 		String bookReturndate = null;
 
 		DB dataBase = new DB();
+		dataBase.addDummyDetails();
 
-		AdminBean adminBean = new AdminBean();
-		adminBean.setEmail("prasant@gmail.com");
-		adminBean.setPassword("Password@123");
-		adminBean.setAname("Prasant");
-		adminBean.setAid(123456);
-		dataBase.admin.add(adminBean);
-
-		StudentBean student = new StudentBean();
-		student.setEmail("ravi@gmail.com");
-		student.setPassword("Password@123");
-		student.setSname("Ravi");
-		student.setSid(111111);
-		dataBase.student.add(student);
-
-		BookBean book = new BookBean();
-		book.setBid(1234);
-		book.setBname("java");
-		book.setBauthor("james");
-		book.setCategory("aaa");
-		book.setPublishername("aaa");
-		dataBase.book.add(book);
-
+		
 		ValidationAdminStudent validation = new ValidationAdminStudent();
 
 		Scanner scanner = new Scanner(System.in);
@@ -513,7 +492,7 @@ public class TestProject {
 												}
 												break;
 											case 6:
-												LinkedList<Integer> ids = service.getBookIds();
+												List<Integer> ids = service.getBookIds();
 												for (Integer integer : ids) {
 
 													if (integer != null) {
@@ -524,7 +503,7 @@ public class TestProject {
 												}
 												break;
 											case 7:
-												LinkedList<BookBean> info = service.getBooksInfo();
+												List<BookBean> info = service.getBooksInfo();
 												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
 														"Book-Id", "Name", "Author", "Category", "Publisher"));
 												for (BookBean bookBean : info) {
@@ -698,8 +677,8 @@ public class TestProject {
 													}
 												} while (!flag);
 
-												// StudentBean student = new StudentBean();
-												// BookBean book = new BookBean();
+												StudentBean student = new StudentBean();
+												BookBean book = new BookBean();
 												student.setSid(user1);
 												book.setBid(book1);
 												boolean isReceive = service.isBookReceived(student, book);
@@ -1026,7 +1005,7 @@ public class TestProject {
 												}
 												break;
 											case 4:
-												LinkedList<Integer> ids = service1.getBookIds();
+												List<Integer> ids = service1.getBookIds();
 												for (Integer integer : ids) {
 
 													if (integer != null) {
@@ -1037,7 +1016,7 @@ public class TestProject {
 												}
 												break;
 											case 5:
-												LinkedList<BookBean> info = service1.getBooksInfo();
+												List<BookBean> info = service1.getBooksInfo();
 												System.out.println(String.format("%-10s %-15s %-15s %-10s %s",
 														"Book-Id", "Name", "Author", "Category", "Publisher"));
 												for (BookBean bookBean : info) {

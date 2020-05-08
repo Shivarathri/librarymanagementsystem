@@ -1,6 +1,7 @@
 package com.capgemini.librarymanagement.service;
 
-import java.util.LinkedList;
+import java.util.List;
+
 import com.capgemini.librarymanagement.dto.BookBean;
 import com.capgemini.librarymanagement.dto.RequestBean;
 import com.capgemini.librarymanagement.dto.StudentBean;
@@ -11,15 +12,15 @@ public interface StudentServiceDAO {
 
 	StudentBean auth(String email, String password);
 
-	LinkedList<BookBean> searchBookTitle(String bname);
+	List<BookBean> searchBookTitle(String bname);
 
-	LinkedList<BookBean> searchBookAuthor(String bAuthor);
+	List<BookBean> searchBookAuthor(String bAuthor);
 
-	LinkedList<BookBean> searchBookType(String bookType);
+	List<BookBean> searchBookType(String bookType);
 
-	LinkedList<Integer> getBookIds();
+	List<Integer> getBookIds();
 
-	LinkedList<BookBean> getBooksInfo();
+	List<BookBean> getBooksInfo();
 
 	public RequestBean bookRequest(StudentBean student, BookBean book);
 

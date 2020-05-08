@@ -1,11 +1,10 @@
 package com.capgemini.librarymanagementsystemjdbc.dao;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.capgemini.librarymanagementsystemjdbc.dto.BookBean;
-import com.capgemini.librarymanagementsystemjdbc.dto.IssueBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.BorrowedBooksBean;
+import com.capgemini.librarymanagementsystemjdbc.dto.IssueBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.RequestBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.UsersBean;
 
@@ -20,15 +19,15 @@ public interface UsersDAO {
 
 	boolean removeBook(int bId);
 
-	LinkedList<BookBean> getBookIds();
+	List<BookBean> getBookIds();
 
-	LinkedList<BookBean> searchBookById(int bId);
+	List<BookBean> searchBookById(int bId);
 
-	LinkedList<BookBean> searchBookByTitle(String bookName);
+	List<BookBean> searchBookByTitle(String bookName);
 
-	LinkedList<BookBean> searchBookByAuthor(String author);
+	List<BookBean> searchBookByAuthor(String author);
 
-	LinkedList<BookBean> getBooksInfo();
+	List<BookBean> getBooksInfo();
 
 	boolean request(int uId, int bId);
 
@@ -42,5 +41,5 @@ public interface UsersDAO {
 
 	List<UsersBean> showUsers();
 
-	LinkedList<IssueBookDetailsBean> bookHistoryDetails(int uId);
+	List<IssueBookDetailsBean> bookHistoryDetails(int uId);
 }

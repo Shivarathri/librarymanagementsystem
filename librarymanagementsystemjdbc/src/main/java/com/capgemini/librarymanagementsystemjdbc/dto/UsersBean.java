@@ -7,7 +7,6 @@ public class UsersBean {
 	private String email;
 	private String password;
 	private String mobile;
-	
 	private String role;
 
 	public int getuId() {

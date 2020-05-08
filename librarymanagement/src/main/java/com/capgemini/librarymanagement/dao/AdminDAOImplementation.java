@@ -38,11 +38,9 @@ public class AdminDAOImplementation implements AdminDAO {
 				throw new AdminException("Email does not exist");
 			}
 
-
 		}
-
 		throw new AdminException("Please give a valid credintials");
-		
+
 	}
 
 	public boolean delete(BookBean book) {
@@ -66,8 +64,8 @@ public class AdminDAOImplementation implements AdminDAO {
 		return true;
 	}
 
-	public LinkedList<BookBean> searchBookTitle(String bname) {
-		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+	public List<BookBean> searchBookTitle(String bname) {
+		List<BookBean> searchList = new LinkedList<BookBean>();
 		for (int i = 0; i <= DB.book.size() - 1; i++) {
 			BookBean retrievedBook = DB.book.get(i);
 			String retrievedBname = retrievedBook.getBname();
@@ -84,9 +82,9 @@ public class AdminDAOImplementation implements AdminDAO {
 
 	}
 
-	public LinkedList<BookBean> searchBookAuthor(String bAuthor) {
+	public List<BookBean> searchBookAuthor(String bAuthor) {
 
-		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+		List<BookBean> searchList = new LinkedList<BookBean>();
 		for (int i = 0; i <= DB.book.size() - 1; i++) {
 			BookBean retrievedBook = DB.book.get(i);
 			String retrievedBAuthor = retrievedBook.getBauthor();
@@ -102,8 +100,8 @@ public class AdminDAOImplementation implements AdminDAO {
 
 	}
 
-	public LinkedList<BookBean> searchBookType(String bookType) {
-		LinkedList<BookBean> searchList = new LinkedList<BookBean>();
+	public List<BookBean> searchBookType(String bookType) {
+		List<BookBean> searchList = new LinkedList<BookBean>();
 		for (int i = 0; i <= DB.book.size() - 1; i++) {
 			BookBean retrievedBook = DB.book.get(i);
 			String retrievedBookType = retrievedBook.getCategory();
@@ -133,8 +131,8 @@ public class AdminDAOImplementation implements AdminDAO {
 
 	}
 
-	public LinkedList<Integer> getBookIds() {
-		LinkedList<Integer> idList = new LinkedList<Integer>();
+	public List<Integer> getBookIds() {
+		List<Integer> idList = new LinkedList<Integer>();
 		for (int i = 0; i <= DB.book.size() - 1; i++) {
 			BookBean retrievedBook = DB.book.get(i);
 			int retrievedBookId = retrievedBook.getBid();
@@ -143,7 +141,7 @@ public class AdminDAOImplementation implements AdminDAO {
 		return idList;
 	}
 
-	public LinkedList<BookBean> getBooksInfo() {
+	public List<BookBean> getBooksInfo() {
 		return DB.book;
 	}
 

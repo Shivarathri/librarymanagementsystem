@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Properties;
 
 import com.capgemini.librarymanagementsystemjdbc.dto.BookBean;
-import com.capgemini.librarymanagementsystemjdbc.dto.IssueBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.BorrowedBooksBean;
+import com.capgemini.librarymanagementsystemjdbc.dto.IssueBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.RequestBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.UsersBean;
 import com.capgemini.librarymanagementsystemjdbc.exception.LMSException;
@@ -59,7 +59,8 @@ public class UsersDAOImplement implements UsersDAO {
 			Properties pro = new Properties();
 			pro.load(info);
 			try (Connection conn = DriverManager.getConnection(pro.getProperty("dburl"), pro);) {
-				try (PreparedStatement pstmt = conn.prepareStatement("select * from users where email=? and password=?");) {
+				try (PreparedStatement pstmt = conn
+						.prepareStatement("select * from users where email=? and password=?");) {
 					Class.forName(pro.getProperty("path"));
 
 					pstmt.setString(1, email);
@@ -175,7 +176,7 @@ public class UsersDAOImplement implements UsersDAO {
 	}
 
 	@Override
-	public LinkedList<BookBean> getBookIds() {
+	public List<BookBean> getBookIds() {
 		try (FileInputStream info = new FileInputStream("db.properties");) {
 			Properties pro = new Properties();
 			pro.load(info);
@@ -202,7 +203,7 @@ public class UsersDAOImplement implements UsersDAO {
 	}
 
 	@Override
-	public LinkedList<BookBean> searchBookById(int bId) {
+	public List<BookBean> searchBookById(int bId) {
 		try (FileInputStream info = new FileInputStream("db.properties");) {
 			Properties pro = new Properties();
 			pro.load(info);
@@ -235,7 +236,7 @@ public class UsersDAOImplement implements UsersDAO {
 	}
 
 	@Override
-	public LinkedList<BookBean> searchBookByTitle(String bookName) {
+	public List<BookBean> searchBookByTitle(String bookName) {
 		try (FileInputStream info = new FileInputStream("db.properties");) {
 			Properties pro = new Properties();
 			pro.load(info);
@@ -265,7 +266,7 @@ public class UsersDAOImplement implements UsersDAO {
 	}
 
 	@Override
-	public LinkedList<BookBean> searchBookByAuthor(String author) {
+	public List<BookBean> searchBookByAuthor(String author) {
 		try (FileInputStream info = new FileInputStream("db.properties");) {
 			Properties pro = new Properties();
 			pro.load(info);
@@ -295,7 +296,7 @@ public class UsersDAOImplement implements UsersDAO {
 	}
 
 	@Override
-	public LinkedList<BookBean> getBooksInfo() {
+	public List<BookBean> getBooksInfo() {
 		try (FileInputStream info = new FileInputStream("db.properties");) {
 			Properties pro = new Properties();
 			pro.load(info);
@@ -582,7 +583,7 @@ public class UsersDAOImplement implements UsersDAO {
 	}
 
 	@Override
-	public LinkedList<IssueBookDetailsBean> bookHistoryDetails(int uId) {
+	public List<IssueBookDetailsBean> bookHistoryDetails(int uId) {
 		try (FileInputStream info = new FileInputStream("db.properties");) {
 			Properties pro = new Properties();
 			pro.load(info);

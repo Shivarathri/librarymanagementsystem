@@ -11,17 +11,15 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import lombok.Data;
-
 @SuppressWarnings("serial")
 @Entity
-@Data
+
 @Table(name = "book_issue_details")
-@SequenceGenerator(name="sequence4", initialValue=1, allocationSize=100)
+@SequenceGenerator(name = "sequence4", initialValue = 1, allocationSize = 100)
 public class BookIssueDetailsBean implements Serializable {
 	@Id
 	@Column
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator = "sequence4")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence4")
 	private int id;
 	@Column
 	private int uId;
@@ -31,5 +29,45 @@ public class BookIssueDetailsBean implements Serializable {
 	private Date issueDate;
 	@Column
 	private Date returnDate;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getuId() {
+		return uId;
+	}
+
+	public void setuId(int uId) {
+		this.uId = uId;
+	}
+
+	public int getbId() {
+		return bId;
+	}
+
+	public void setbId(int bId) {
+		this.bId = bId;
+	}
+
+	public Date getIssueDate() {
+		return issueDate;
+	}
+
+	public void setIssueDate(Date issueDate) {
+		this.issueDate = issueDate;
+	}
+
+	public Date getReturnDate() {
+		return returnDate;
+	}
+
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
+	}
 
 }

@@ -1,12 +1,11 @@
 package com.capgemini.librarymanagementsystemjdbc.service;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.capgemini.librarymanagementsystemjdbc.dao.UsersDAO;
 import com.capgemini.librarymanagementsystemjdbc.dto.BookBean;
-import com.capgemini.librarymanagementsystemjdbc.dto.IssueBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.BorrowedBooksBean;
+import com.capgemini.librarymanagementsystemjdbc.dto.IssueBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.RequestBookDetailsBean;
 import com.capgemini.librarymanagementsystemjdbc.dto.UsersBean;
 import com.capgemini.librarymanagementsystemjdbc.factory.LibraryFactory;
@@ -39,31 +38,31 @@ public class UsersServiceImplement implements UsersService {
 	}
 
 	@Override
-	public LinkedList<BookBean> getBookIds() {
+	public List<BookBean> getBookIds() {
 		// TODO Auto-generated method stub
 		return dao.getBookIds();
 	}
 
 	@Override
-	public LinkedList<BookBean> searchBookById(int bId) {
+	public List<BookBean> searchBookById(int bId) {
 		// TODO Auto-generated method stub
 		return dao.searchBookById(bId);
 	}
 
 	@Override
-	public LinkedList<BookBean> searchBookByTitle(String bookName) {
+	public List<BookBean> searchBookByTitle(String bookName) {
 		// TODO Auto-generated method stub
 		return dao.searchBookByTitle(bookName);
 	}
 
 	@Override
-	public LinkedList<BookBean> searchBookByAuthor(String author) {
+	public List<BookBean> searchBookByAuthor(String author) {
 		// TODO Auto-generated method stub
 		return dao.searchBookByAuthor(author);
 	}
 
 	@Override
-	public LinkedList<BookBean> getBooksInfo() {
+	public List<BookBean> getBooksInfo() {
 		// TODO Auto-generated method stub
 		return dao.getBooksInfo();
 	}
@@ -111,7 +110,7 @@ public class UsersServiceImplement implements UsersService {
 	}
 
 	@Override
-	public LinkedList<IssueBookDetailsBean> bookHistoryDetails(int uId) {
+	public List<IssueBookDetailsBean> bookHistoryDetails(int uId) {
 		// TODO Auto-generated method stub
 		return dao.bookHistoryDetails(uId);
 	}
